@@ -120,7 +120,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1g10wx1k625g30a00dcb29.gif">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g10xt1g94rj31ks0p878h.jpg">
-<meta property="og:updated_time" content="2019-03-13T02:45:56.331Z">
+<meta property="og:updated_time" content="2019-03-13T02:50:18.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JYAuthorization的说明使用">
 <meta name="twitter:description" content="综述在iOS开发中，我们总会用到许多iOS的隐私功能，例如定位，相机，麦克风等。在编写这些功能代码的时候，我们都要先判断是否拥有权限，然后根据有无代码执行不同的操作，功能一多的话就会显得繁琐。为了解决这个问题，我自己编写了JYAuthorization这一个框架，旨在快速获取以及查询iOS的功能权限，将更多的精力放在业务上。  支持的类型及要求 ARC iOS 8.0+ OC  目前支持的隐私类型">
@@ -384,9 +384,13 @@
                 
               
 
-              <time title="创建时间：2019-03-13 10:45:56" itemprop="dateCreated datePublished" datetime="2019-03-13T10:45:56+08:00">2019-03-13</time>
+              <time title="创建时间：2019-03-13 10:45:56 / 修改时间：10:50:18" itemprop="dateCreated datePublished" datetime="2019-03-13T10:45:56+08:00">2019-03-13</time>
             
 
+            
+              
+
+              
             
           </span>
 
@@ -452,7 +456,7 @@
 <li>如果想要显示查询的Error，你可以调用实例方法<code>jy_showErrorDetail:(NSError *)error viewController:(UIViewController *)viewController</code>，效果就跟上面的gif图中的效果一样</li>
 <li><code>JYAuthorization</code>支持多语言，你可以在<code>JYAuthorization.bundle</code>里面的<code>Localizable.strings</code>的文件中修改不同的提示语。<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g10xt1g94rj31ks0p878h.jpg" alt="语言国际化"></li>
 </ol>
-<h4 id="NSError的使用"><a href="#NSError的使用" class="headerlink" title="NSError的使用"></a>NSError的使用</h4><p><code>NSError</code>如果有不明白的可以看我的另一篇博客<a href="www.baidu.com">未发布</a>，在这里简单说明下：</p>
+<h4 id="NSError的使用"><a href="#NSError的使用" class="headerlink" title="NSError的使用"></a>NSError的使用</h4><p><code>NSError</code>如果有不明白的可以看我的另一篇博客<a href="https://kikido.github.io/2019/03/13/NSError%E4%BA%86%E8%A7%A3%E4%B8%80%E5%93%88/" target="_blank" rel="noopener">NSError</a>，在这里简单说明下：</p>
 <ul>
 <li>error.domain为自定义的错误域<code>JYAuthErrorDomain</code></li>
 <li><p>error.code为自定义的值</p>

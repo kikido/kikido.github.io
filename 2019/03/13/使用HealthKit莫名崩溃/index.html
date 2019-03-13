@@ -111,17 +111,17 @@
 
 
 
-  <meta name="description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试·HealthKit·权限的时候老是莫名的闪退，下面是系统的log：  ··· Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealt">
+  <meta name="description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试`HealthKit`权限的时候老是莫名的闪退，下面是系统的log：  1Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealthSh">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用HealthKit莫名崩溃">
 <meta property="og:url" content="http://yoursite.com/2019/03/13/使用HealthKit莫名崩溃/index.html">
 <meta property="og:site_name" content="kikido&#39;s blog">
-<meta property="og:description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试·HealthKit·权限的时候老是莫名的闪退，下面是系统的log：  ··· Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealt">
+<meta property="og:description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试`HealthKit`权限的时候老是莫名的闪退，下面是系统的log：  1Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealthSh">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-13T02:46:34.039Z">
+<meta property="og:updated_time" content="2019-03-13T02:48:53.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用HealthKit莫名崩溃">
-<meta name="twitter:description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试·HealthKit·权限的时候老是莫名的闪退，下面是系统的log：  ··· Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealt">
+<meta name="twitter:description" content="今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试`HealthKit`权限的时候老是莫名的闪退，下面是系统的log：  1Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;, reason: &amp;apos;NSHealthSh">
 
 
 
@@ -381,9 +381,13 @@
                 
               
 
-              <time title="创建时间：2019-03-13 10:46:34" itemprop="dateCreated datePublished" datetime="2019-03-13T10:46:34+08:00">2019-03-13</time>
+              <time title="创建时间：2019-03-13 10:46:34 / 修改时间：10:48:53" itemprop="dateCreated datePublished" datetime="2019-03-13T10:46:34+08:00">2019-03-13</time>
             
 
+            
+              
+
+              
             
           </span>
 
@@ -433,11 +437,10 @@
       
 
       
-        <pre><code>今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试·HealthKit·权限的时候老是莫名的闪退，下面是系统的log：
+        <pre><code>今天在测试自己写的框架，[JYAuthorizationManager](www.baidu.com)，然后在测试`HealthKit`权限的时候老是莫名的闪退，下面是系统的log：
 
-···
-Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;, reason: &apos;NSHealthShareUsageDescription must be set in the app&apos;s Info.plist in order to request read authorization for the following types: HKQuantityTypeIdentifierStepCount&apos;
-···
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;, reason: &apos;NSHealthShareUsageDescription must be set in the app&apos;s Info.plist in order to request read authorization for the following types: HKQuantityTypeIdentifierStepCount&apos;</span><br></pre></td></tr></table></figure>
+
 
 原因指的是plist文件里面没有加权限描述，但其实我已经加过了。于是各种找原因，才发现了解决方法：
 
