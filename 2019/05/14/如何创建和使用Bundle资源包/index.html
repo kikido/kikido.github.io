@@ -111,24 +111,31 @@
 
 
 
-  <meta name="description" content="苹果开发者账号好像今天就过期了，虽然昨天续费了，但是在真机测试的时候，遇到了一下的错误：1Command /usr/bin/codesign failed with exit code 1 以往对于这种证书签名错误，xcode会弹出提示框，然后点fix来解决，但这次没有弹框，网上查了一下，如下方法可以解决。点击xcode偏好设置-&amp;gt;Locations-&amp;gt;Derived Data，点击箭">
+  <meta name="description" content="说来惭愧，虽然已经创建过好几次了，但是偶尔还是会忘记步骤，所以在这里记录一下子，方便查阅。  简单来说，bundle就是一个文件，里面包含很多资源子文件，例如图片，音频，视频等。这些子文件是静态的，不参与编译。  创建及设置 创建bundle   将base sdk改成iOS样式，默认是macOS样式   将COMBINE_HIDPI_IMAGES设置为NO，否则打包完成之后的png图片将变为ti">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" Command &#x2F;usr&#x2F;bin&#x2F;codesign failed with exit code 1 解决办法">
-<meta property="og:url" content="http://yoursite.com/2018/12/13/Command-usr-bin-codesign-failed-with-exit-code-1-解决办法/index.html">
+<meta property="og:title" content="如何创建和使用Bundle资源包">
+<meta property="og:url" content="http://yoursite.com/2019/05/14/如何创建和使用Bundle资源包/index.html">
 <meta property="og:site_name" content="kikido&#39;s blog">
-<meta property="og:description" content="苹果开发者账号好像今天就过期了，虽然昨天续费了，但是在真机测试的时候，遇到了一下的错误：1Command /usr/bin/codesign failed with exit code 1 以往对于这种证书签名错误，xcode会弹出提示框，然后点fix来解决，但这次没有弹框，网上查了一下，如下方法可以解决。点击xcode偏好设置-&amp;gt;Locations-&amp;gt;Derived Data，点击箭">
+<meta property="og:description" content="说来惭愧，虽然已经创建过好几次了，但是偶尔还是会忘记步骤，所以在这里记录一下子，方便查阅。  简单来说，bundle就是一个文件，里面包含很多资源子文件，例如图片，音频，视频等。这些子文件是静态的，不参与编译。  创建及设置 创建bundle   将base sdk改成iOS样式，默认是macOS样式   将COMBINE_HIDPI_IMAGES设置为NO，否则打包完成之后的png图片将变为ti">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-13T02:43:48.899Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30l3yuog3j314e0t4q4g.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g30ky46kufj31dq0dkwfu.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g30ky46kufj31dq0dkwfu.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30l5hhgh3j316q0u0wgd.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30l85if3rj31rk0hc75l.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30l96efpgj31es0q0dh7.jpg">
+<meta property="og:updated_time" content="2019-05-14T01:52:13.079Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" Command &#x2F;usr&#x2F;bin&#x2F;codesign failed with exit code 1 解决办法">
-<meta name="twitter:description" content="苹果开发者账号好像今天就过期了，虽然昨天续费了，但是在真机测试的时候，遇到了一下的错误：1Command /usr/bin/codesign failed with exit code 1 以往对于这种证书签名错误，xcode会弹出提示框，然后点fix来解决，但这次没有弹框，网上查了一下，如下方法可以解决。点击xcode偏好设置-&amp;gt;Locations-&amp;gt;Derived Data，点击箭">
+<meta name="twitter:title" content="如何创建和使用Bundle资源包">
+<meta name="twitter:description" content="说来惭愧，虽然已经创建过好几次了，但是偶尔还是会忘记步骤，所以在这里记录一下子，方便查阅。  简单来说，bundle就是一个文件，里面包含很多资源子文件，例如图片，音频，视频等。这些子文件是静态的，不参与编译。  创建及设置 创建bundle   将base sdk改成iOS样式，默认是macOS样式   将COMBINE_HIDPI_IMAGES设置为NO，否则打包完成之后的png图片将变为ti">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g30l3yuog3j314e0t4q4g.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/13/Command-usr-bin-codesign-failed-with-exit-code-1-解决办法/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/14/如何创建和使用Bundle资源包/">
 
 
 
@@ -138,7 +145,7 @@
   };
 </script>
 
-  <title> Command /usr/bin/codesign failed with exit code 1 解决办法 | kikido's blog</title>
+  <title>如何创建和使用Bundle资源包 | kikido's blog</title>
   
 
 
@@ -338,7 +345,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/Command-usr-bin-codesign-failed-with-exit-code-1-解决办法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/14/如何创建和使用Bundle资源包/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kikido">
@@ -355,7 +362,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"> Command /usr/bin/codesign failed with exit code 1 解决办法
+          <h1 class="post-title" itemprop="name headline">如何创建和使用Bundle资源包
 
               
             
@@ -381,46 +388,12 @@
                 
               
 
-              <time title="创建时间：2018-12-13 16:22:54" itemprop="dateCreated datePublished" datetime="2018-12-13T16:22:54+08:00">2018-12-13</time>
+              <time title="创建时间：2019-05-14 09:52:13" itemprop="dateCreated datePublished" datetime="2019-05-14T09:52:13+08:00">2019-05-14</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-03-13 10:43:48" itemprop="dateModified" datetime="2019-03-13T10:43:48+08:00">2019-03-13</time>
-              
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/bug/" itemprop="url" rel="index"><span itemprop="name">bug</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -449,9 +422,29 @@
       
 
       
-        <p>苹果开发者账号好像今天就过期了，虽然昨天续费了，但是在真机测试的时候，遇到了一下的错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command /usr/bin/codesign failed with exit code 1</span><br></pre></td></tr></table></figure></p>
-<p>以往对于这种证书签名错误，xcode会弹出提示框，然后点fix来解决，但这次没有弹框，网上查了一下，如下方法可以解决。<br>点击xcode偏好设置-&gt;Locations-&gt;Derived Data，点击箭头定位到目标文件夹，将此文件夹清空并清空回收站，然后重启下电脑即可。</p>
-<p>参考：<a href="https://segmentfault.com/a/1190000000712103" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000712103</a></p>
+        <p>说来惭愧，虽然已经创建过好几次了，但是偶尔还是会忘记步骤，所以在这里记录一下子，方便查阅。</p>
+<blockquote>
+<p>简单来说，bundle就是一个文件，里面包含很多资源子文件，例如图片，音频，视频等。这些子文件是静态的，不参与编译。</p>
+</blockquote>
+<h3 id="创建及设置"><a href="#创建及设置" class="headerlink" title="创建及设置"></a>创建及设置</h3><p> 创建bundle</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g30l3yuog3j314e0t4q4g.jpg" alt="创建bundle项目"></p>
+<p> 将<code>base sdk</code>改成<code>iOS</code>样式，默认是<code>macOS</code>样式</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g30ky46kufj31dq0dkwfu.jpg" alt="设置平台版本"></p>
+<p> 将<code>COMBINE_HIDPI_IMAGES</code>设置为NO，否则打包完成之后的png图片将变为tiff格式<br><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g30ky46kufj31dq0dkwfu.jpg" alt="设置COMBINE_HIDPI_IMAGES为NO"></p>
+<h3 id="添加多语言"><a href="#添加多语言" class="headerlink" title="添加多语言"></a>添加多语言</h3><ol>
+<li><p>添加文字文件，文件名字为<code>Localizable.strings</code><br><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g30l5hhgh3j316q0u0wgd.jpg" alt="添加多语言文件"></p>
+</li>
+<li><p>文件本地化，点击按钮后选择english<br><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g30l85if3rj31rk0hc75l.jpg" alt="文件本地化"></p>
+</li>
+<li><p>添加其他语言类型，例如<code>chinese-simplified</code><br><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g30l96efpgj31es0q0dh7.jpg" alt="添加其他语言类型"></p>
+</li>
+</ol>
+<h3 id="添加图片等文件资源"><a href="#添加图片等文件资源" class="headerlink" title="添加图片等文件资源"></a>添加图片等文件资源</h3><p>目前我的操作是将这些文件直接拖到项目中</p>
+<h3 id="如何调用bundle里面的资源"><a href="#如何调用bundle里面的资源" class="headerlink" title="如何调用bundle里面的资源"></a>如何调用bundle里面的资源</h3><p>将bundle拖到项目中，并且添加到<code>build phases</code>的<code>Copy Bundle Resource</code>中</p>
+<h4 id="图片类资源"><a href="#图片类资源" class="headerlink" title="图片类资源"></a>图片类资源</h4><p><code>UIImage *image = [UIImage imageNamed:@&quot;bundleName/picName&quot;]</code></p>
+<p>bundleName: 包名<br>picName: 图片名</p>
+<h4 id="语言本地化"><a href="#语言本地化" class="headerlink" title="语言本地化"></a>语言本地化</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NSURL *url = [[NSBundle mainBundle] URLForResource:@&quot;bundleName&quot; withExtension:@&quot;bundle&quot;];</span><br><span class="line">NSBundle *bundle = [NSBundle bundleWithURL:url];</span><br><span class="line">NSString *language = [NSLocale preferredLanguages].firstObject;</span><br><span class="line">bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@&quot;lproj&quot;]];</span><br><span class="line">NSString *value = [bundle localizedStringForKey:key value:key table:nil];</span><br></pre></td></tr></table></figure>
+<p>bundleName：包名</p>
 
       
     </div>
@@ -492,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/13/使用mac终端在阿里云服务器上搭建JDK-Tomcat/" rel="next" title="使用mac终端在阿里云服务器上搭建JDK Tomcat">
-                <i class="fa fa-chevron-left"></i> 使用mac终端在阿里云服务器上搭建JDK Tomcat
+              <a href="/2019/03/13/使用HealthKit莫名崩溃/" rel="next" title="使用HealthKit莫名崩溃">
+                <i class="fa fa-chevron-left"></i> 使用HealthKit莫名崩溃
               </a>
             
           </div>
@@ -502,8 +495,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/01/iOS-EventKit日历提醒/" rel="prev" title="iOS EventKit日历提醒">
-                iOS EventKit日历提醒 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/05/14/大牛博客/" rel="prev" title="大牛博客">
+                大牛博客 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -554,8 +547,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -642,6 +644,22 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建及设置"><span class="nav-number">1.</span> <span class="nav-text">创建及设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加多语言"><span class="nav-number">2.</span> <span class="nav-text">添加多语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加图片等文件资源"><span class="nav-number">3.</span> <span class="nav-text">添加图片等文件资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何调用bundle里面的资源"><span class="nav-number">4.</span> <span class="nav-text">如何调用bundle里面的资源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#图片类资源"><span class="nav-number">4.1.</span> <span class="nav-text">图片类资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语言本地化"><span class="nav-number">4.2.</span> <span class="nav-text">语言本地化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -795,7 +813,7 @@
   
     <script>
       window.livereOptions = {
-        refer: '2018/12/13/Command-usr-bin-codesign-failed-with-exit-code-1-解决办法/'
+        refer: '2019/05/14/如何创建和使用Bundle资源包/'
       };
       (function(d, s) {
         var j, e = d.getElementsByTagName(s)[0];
