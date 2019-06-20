@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="JTForm是一个能简单快速的搭建流畅复杂表单的库，灵感来自于XLForm与Texture。JTForm能帮助你像html一样创建表单。不同于XLForm是一个UIViewController的子类，JTForm是UIView的子类，也就是说，你可以像使用UIView一样使用JTForm，应用范围更广，更方便。JTForm也可以用来创建列表，而不仅仅是表单。 JTForm使用Texture完成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用JTForm">
+<meta property="og:url" content="http://yoursite.com/2019/05/16/如何使用JTForm/index.html">
+<meta property="og:site_name" content="kikido&#39;s blog">
+<meta property="og:description" content="JTForm是一个能简单快速的搭建流畅复杂表单的库，灵感来自于XLForm与Texture。JTForm能帮助你像html一样创建表单。不同于XLForm是一个UIViewController的子类，JTForm是UIView的子类，也就是说，你可以像使用UIView一样使用JTForm，应用范围更广，更方便。JTForm也可以用来创建列表，而不仅仅是表单。 JTForm使用Texture完成">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.shields.io/badge/plateform-iOS9.0%2B-orange.svg">
+<meta property="og:image" content="https://img.shields.io/badge/language-OC-orange.svg">
+<meta property="og:image" content="https://img.shields.io/badge/pod-0.0.1-blue.svg">
+<meta property="og:image" content="https://img.shields.io/badge/license-MIT-green.svg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g325b2cv3cg30a00dce84.gif">
+<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbdf7c76a0541205.gif">
+<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbdf7c76a0541205.gif">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g338qy6tc3g30a00dckjl.gif">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1g339l0w8gdg30a00dcwph.gif">
+<meta property="og:updated_time" content="2019-05-17T02:31:29.253Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用JTForm">
+<meta name="twitter:description" content="JTForm是一个能简单快速的搭建流畅复杂表单的库，灵感来自于XLForm与Texture。JTForm能帮助你像html一样创建表单。不同于XLForm是一个UIViewController的子类，JTForm是UIView的子类，也就是说，你可以像使用UIView一样使用JTForm，应用范围更广，更方便。JTForm也可以用来创建列表，而不仅仅是表单。 JTForm使用Texture完成">
+<meta name="twitter:image" content="https://img.shields.io/badge/plateform-iOS9.0%2B-orange.svg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/16/如何使用JTForm/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>如何使用JTForm | kikido's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/kikido" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kikido's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/16/如何使用JTForm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kikido">
+      <meta itemprop="description" content="no pain no gain">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kikido's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何使用JTForm
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-16 15:30:04" itemprop="dateCreated datePublished" datetime="2019-05-16T15:30:04+08:00">2019-05-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-17 10:31:29" itemprop="dateModified" datetime="2019-05-17T10:31:29+08:00">2019-05-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS杂/" itemprop="url" rel="index"><span itemprop="name">iOS杂</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://img.shields.io/badge/plateform-iOS9.0%2B-orange.svg" alt=""><br><img src="https://img.shields.io/badge/language-OC-orange.svg" alt=""></p>
+<p><img src="https://img.shields.io/badge/pod-0.0.1-blue.svg" alt=""><br><img src="https://img.shields.io/badge/license-MIT-green.svg" alt=""></p>
+<p><code>JTForm</code>是一个能简单快速的搭建流畅复杂表单的库，灵感来自于<a href="https://github.com/xmartlabs/XLForm" target="_blank" rel="noopener">XLForm</a>与<a href="https://github.com/TextureGroup/Texture" target="_blank" rel="noopener">Texture</a>。JTForm能帮助你像html一样创建表单。不同于<code>XLForm</code>是一个<code>UIViewController</code>的子类，<code>JTForm</code>是<code>UIView</code>的子类，也就是说，你可以像使用UIView一样使用JTForm，应用范围更广，更方便。JTForm也可以用来创建列表，而不仅仅是表单。</p>
+<p>JTForm使用<code>Texture</code>完成视图的布局与加载，所以集成了Texture的优点：异步渲染，极度流畅。使用JTForm，你可以忘记许多原生控件时需要注意的东西：高度设置，单元行复用等。为了避免<code>ASTableNode</code>重载时图片闪烁的问题，自定义了<code>JTNetworkImageNode</code>代替<code>ASNetworkImageNode</code>。</p>
+<p>下面是demo运行在公司老旧设备5s的截图，可以看到fps基本保持在60左右。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1g325b2cv3cg30a00dce84.gif" alt="fps基本保持在60"><br><img src="https://i.loli.net/2019/05/15/5cdbdf7c76a0541205.gif" alt="text输入表单"></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><ul>
+<li>使用cocoapods：<code>pod &#39;JTForm&#39;, &#39;~&gt; 0.0.1&#39;</code></li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>如果库自带的单元行满足不了需求，需要自定义单元行的时候，需要了解<a href="https://github.com/TextureGroup/Texture" target="_blank" rel="noopener">Texture</a>的相关知识。</li>
+<li>如果你的项目中有类似<code>‎IQKeyboardManager</code>的第三方，请在使用JTForm的时候禁用他们，不然会跟库的键盘弹起相冲突。如果你想禁用JTForm的键盘弹起，你可以设置<code>JTForm</code>的属性<code>showInputAccessoryView</code>为NO</li>
+</ul>
+<h3 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h3><p><img src="https://i.loli.net/2019/05/15/5cdbdf7c76a0541205.gif" alt="简单的表单1"></p>
+<p>下面是构建该表单一部分的代码以及注释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">// 构建表描述</span><br><span class="line">JTFormDescriptor *formDescriptor = [JTFormDescriptor formDescriptor];</span><br><span class="line">// 是否在必填行的title前面添加一个红色的*</span><br><span class="line">formDescriptor.addAsteriskToRequiredRowsTitle = YES;</span><br><span class="line">JTSectionDescriptor *section = nil;</span><br><span class="line">JTRowDescriptor *row = nil;</span><br><span class="line">       </span><br><span class="line">#pragma mark - float text</span><br><span class="line">// 创建节描述    </span><br><span class="line">section = [JTSectionDescriptor formSection];</span><br><span class="line">// 为section创建header title，目前需要手动输入header view的height</span><br><span class="line">section.headerAttributedString = [NSAttributedString attributedStringWithString:@&quot;float text&quot; font:nil color:nil firstWordColor:nil];</span><br><span class="line">// 目前需要手动输入header view的height，不然是默认值，可能会出现排版显示问题</span><br><span class="line">section.headerHeight = 30.;</span><br><span class="line">// 将节描述添加到表描述中</span><br><span class="line">[formDescriptor addFormSection:section];</span><br><span class="line">    </span><br><span class="line">// 创建行描述，rowType为必填项，创建单元行时根据rowType来选择创建不同的单元行    </span><br><span class="line">row = [JTRowDescriptor formRowDescriptorWithTag:JTFormRowTypeFloatText rowType:JTFormRowTypeFloatText title:@&quot;测试&quot;];</span><br><span class="line">// 是否必填</span><br><span class="line">row.required = YES;</span><br><span class="line">// 将行描述添加到表描述中</span><br><span class="line">[section addFormRow:row];</span><br><span class="line">    </span><br><span class="line">#pragma mark - formatter</span><br><span class="line">    </span><br><span class="line">row = [JTRowDescriptor formRowDescriptorWithTag:@&quot;20&quot; rowType:JTFormRowTypeNumber title:@&quot;百分比&quot;];</span><br><span class="line">NSNumberFormatter *numberFormatter = [NSNumberFormatter new];</span><br><span class="line">numberFormatter.numberStyle = NSNumberFormatterPercentStyle;</span><br><span class="line">// 添加valueFormatter，是NSFormatter的子类，能将value转换成不同的文本。常用的有nsdateformatter</span><br><span class="line">// 这里valueFormatter的作用是将数字转换成百分数，例如10-&gt;1000%</span><br><span class="line">row.valueFormatter = numberFormatter;</span><br><span class="line">row.value = @(100);</span><br><span class="line">row.required = YES;</span><br><span class="line">// 在title前面添加图片</span><br><span class="line">row.image = [UIImage imageNamed:@&quot;jt_money&quot;];</span><br><span class="line">[section addFormRow:row];</span><br><span class="line">    </span><br><span class="line">row = [JTRowDescriptor formRowDescriptorWithTag:@&quot;21&quot; rowType:JTFormRowTypeNumber title:@&quot;人民币&quot;];</span><br><span class="line">NSNumberFormatter *numberFormatter1 = [NSNumberFormatter new];</span><br><span class="line">numberFormatter1.numberStyle = NSNumberFormatterCurrencyStyle;</span><br><span class="line">// 这里valueFormatter的作用是将数字转换成货币，例如10-&gt;￥10</span><br><span class="line">row.valueFormatter = numberFormatter1;</span><br><span class="line">row.value = @(100);</span><br><span class="line">row.required = YES;</span><br><span class="line">row.image = [UIImage imageNamed:@&quot;jt_money&quot;];</span><br><span class="line">[section addFormRow:row];</span><br><span class="line">       </span><br><span class="line">#pragma mark - common</span><br><span class="line"> </span><br><span class="line">    </span><br><span class="line">row = [JTRowDescriptor formRowDescriptorWithTag:JTFormRowTypeName rowType:JTFormRowTypeName title:@&quot;JTFormRowTypeName&quot;];</span><br><span class="line">// 占位符</span><br><span class="line">row.placeHolder = @&quot;请输入姓名...&quot;;</span><br><span class="line">// 赋值</span><br><span class="line">row.value = @&quot;djdjd&quot;;</span><br><span class="line">row.required = YES;</span><br><span class="line">[section addFormRow:row];</span><br><span class="line"></span><br><span class="line">// 创建JTForm，formDescriptor不能为空</span><br><span class="line">JTForm *form = [[JTForm alloc] initWithFormDescriptor:formDescriptor];</span><br><span class="line">form.frame = CGRectMake(0, 0, kJTScreenWidth, kJTScreenHeight-64.);</span><br><span class="line">[self.view addSubview:form];</span><br><span class="line">self.form = form;</span><br></pre></td></tr></table></figure>
+<h3 id="行描述-JTRowDescriptor"><a href="#行描述-JTRowDescriptor" class="headerlink" title="行描述 JTRowDescriptor"></a>行描述 JTRowDescriptor</h3><p>行描述<code>JTRowDescriptor</code>是单元行的数据源，我们通过修改行描述来控制着单元行的行为，例如：是否显示，是否可编辑，高度。<br>下面是JTRowDescriptor的主要属性和常用方法</p>
+<h4 id="configMode"><a href="#configMode" class="headerlink" title="configMode"></a>configMode</h4><p>配置模型。</p>
+<ul>
+<li>titleColor：标题颜色</li>
+<li>contentColor：详情颜色</li>
+<li>placeHolderColor：占位符颜色</li>
+<li>disabledTitleColor：禁用时标题颜色</li>
+<li>disabledContentColor：禁用时详情颜色</li>
+<li>bgColor：控件背景颜色</li>
+<li>titleFont：标题字体 </li>
+<li>contentFont：详情字体</li>
+<li>placeHlderFont：占位符字体</li>
+<li>disabledTitleFont：禁用时标题字体</li>
+<li>disabledContentFont：禁用时详情字体</li>
+</ul>
+<p><code>JTSectionDescriptor</code>和<code>JTFormDescriptor</code>同样具有这些属性，作用也类似。优先级JTRowDescriptor &gt; JTSectionDescriptor &gt; JTFormDescriptor</p>
+<h4 id="image-amp-imageUrl"><a href="#image-amp-imageUrl" class="headerlink" title="image &amp; imageUrl"></a>image &amp; imageUrl</h4><p>用于加载图片，样式类似于UITableViewCell的imageView。image应用于静态图片，imageUrl用于加载网络图片。</p>
+<h4 id="rowType"><a href="#rowType" class="headerlink" title="rowType"></a>rowType</h4><p>创建表单时，根据<code>rowType</code>来创建不同类型的单元行。目前库自带的<code>rowType</code>都已经添加到了<code>[JTForm cellClassesForRowTypes]</code>字典中，其中<code>rowType</code>为key，单元行类型Class为value。在创建时单元行时，你就可以通过字典根据<code>rowType</code>得到相应单元行的Class。</p>
+<p>所以当你自定义单元行时，你需要在<code>+ (void)load</code>中，将相应的rowType以及对应的Class添加到<code>[JTForm cellClassesForRowTypes]</code>字典中。</p>
+<h4 id="tag"><a href="#tag" class="headerlink" title="tag"></a>tag</h4><p>nullable，若不为空，表单将其添加到字典中，其中key为tag，value为<code>JTRowDescriptor</code>实例。所以如果创建表单时有多个行描述tag值一样的话，字典中将只会保存最后添加进去的JTRowDescriptor。</p>
+<p>你可以在表单中，根据tag值找到相对应的行描述。且在获取整个表单值的时候也会派上用场。</p>
+<h4 id="height"><a href="#height" class="headerlink" title="height"></a>height</h4><p>该属性控制着单元行高度。默认值为<code>JTFormUnspecifiedCellHeight</code>，即不指定高度(自动调节高度)。</p>
+<p>单元行高度的优先级：</p>
+<ul>
+<li>JTRowDescriptor的height属性</li>
+<li>JTBaseCellDelegate的方法<code>+ (CGFloat)formCellHeightForRowDescriptor:(JTRowDescriptor *)row;</code></li>
+<li>自动调节高度</li>
+</ul>
+<h4 id="action"><a href="#action" class="headerlink" title="action"></a>action</h4><p>响应事件，目前仅用于点击单元行。如果单元行上有多个控件有响应事件时，建议使用<code>- (JTBaseCell *)cellInForm;</code>得到当前的单元行cell，然后用<code>[cell.button addTarget:self action:action forControlEvents:UIControlEvents]</code>添加响应事件。</p>
+<h4 id="hidden-amp-disabled"><a href="#hidden-amp-disabled" class="headerlink" title="hidden &amp; disabled"></a>hidden &amp; disabled</h4><p>hidden：bool值，控制隐藏或者显示当前单元行<br>disabled：bool值，控制当前单元行是否接受响应事件</p>
+<p><code>JTSectionDescriptor</code>和<code>JTFormDescriptor</code>同样具有这些属性，作用也类似。优先级JTRowDescriptor &gt; JTSectionDescriptor &gt; JTFormDescriptor</p>
+<h4 id="cellConfigAfterUpdate-amp-cellConfigWhenDisabled-amp-cellConfigAtConfigure-amp-cellDataDictionary"><a href="#cellConfigAfterUpdate-amp-cellConfigWhenDisabled-amp-cellConfigAtConfigure-amp-cellDataDictionary" class="headerlink" title="cellConfigAfterUpdate &amp; cellConfigWhenDisabled &amp; cellConfigAtConfigure &amp; cellDataDictionary"></a>cellConfigAfterUpdate &amp; cellConfigWhenDisabled &amp; cellConfigAtConfigure &amp; cellDataDictionary</h4><ul>
+<li>cellConfigAfterUpdate：配置cell，在‘update’方法后使用</li>
+<li>cellConfigWhenDisabled：配置cell，当’update’方法后，且disabled属性为Yes时被使用</li>
+<li>cellConfigAtConfigure：配置cell，当cell调用config之后，update方法之前调用</li>
+<li>cellDataDictionary：预留，你可以选择使用时机</li>
+</ul>
+<h4 id="text"><a href="#text" class="headerlink" title="text"></a>text</h4><p>文本方面的，属性比较多，统一放到这里讲</p>
+<ul>
+<li>valueFormatter：文本格式转换，可以将数据格式化为一种易读的格式。‘NSFormatter’是一个抽象类，我们只使用它的子类，类似’NSDateFormatter’和‘NSNumberFormatter’</li>
+<li>placeHolder：占位符，当value为空时显示该内容</li>
+<li>maxNumberOfCharacters：文本类单元行能输入最大字符数</li>
+<li><code>- (nullable NSString *)displayContentValue;</code>:在未编辑状态时，详情的显示内容</li>
+<li><code>- (nullable NSString *)editTextValue;</code>：在编辑状态时，详情的显示内容</li>
+</ul>
+<h4 id="验证器"><a href="#验证器" class="headerlink" title="验证器"></a>验证器</h4><p>你可以通过<code>- (void)addValidator:(nonnull id&lt;JTFormValidateProtocol&gt;)validator;</code>添加一个或多个验证器，验证器的作用是对单元行的值进行验证，来判断是否符合你的要求，例如：身份证格式，密码的复杂程度，字数长度等。</p>
+<p>当然，除了库自带的验证器外，你可以自定义自己的验证器，注意需要实现代理<code>JTFormValidateProtocol</code>。</p>
+<h3 id="单元行类型"><a href="#单元行类型" class="headerlink" title="单元行类型"></a>单元行类型</h3><h4 id="文本类"><a href="#文本类" class="headerlink" title="文本类"></a>文本类</h4><ul>
+<li>JTFormRowTypeFloatText</li>
+<li>JTFormRowTypeText</li>
+<li>JTFormRowTypeName</li>
+<li>JTFormRowTypeEmail</li>
+<li>JTFormRowTypeNumber</li>
+<li>JTFormRowTypeInteger</li>
+<li>JTFormRowTypeDecimal</li>
+<li>JTFormRowTypePassword</li>
+<li>JTFormRowTypePhone</li>
+<li>JTFormRowTypeURL</li>
+<li>JTFormRowTypeTextView</li>
+<li>JTFormRowTypeInfo</li>
+</ul>
+<p>主要的区别是键盘不同，需要注意的是：<code>JTFormRowTypeTextView</code>和<code>JTFormRowTypeInfo</code>是<code>textview</code>，而其它几种是<code>textfield</code>。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g338qy6tc3g30a00dckjl.gif" alt="text"></p>
+<h4 id="select类"><a href="#select类" class="headerlink" title="select类"></a>select类</h4><ul>
+<li>JTFormRowTypePushSelect</li>
+</ul>
+<p>push到另一个vc中，仅可选择一个</p>
+<ul>
+<li>JTFormRowTypeMultipleSelect</li>
+</ul>
+<p>push到另一个vc中，可选择多个</p>
+<ul>
+<li>JTFormRowTypeSheetSelect</li>
+</ul>
+<p>UIAlertController，样式为UIAlertControllerStyleActionSheet</p>
+<ul>
+<li>JTFormRowTypeAlertSelect</li>
+</ul>
+<p>UIAlertController，样式为UIAlertControllerStyleAlert</p>
+<ul>
+<li>JTFormRowTypePickerSelect</li>
+</ul>
+<p>类似于弹出键盘，inputview为UIPickeraaa</p>
+<p>选择项通常会拥有一个展示文本，一个是代表value的id。例如你在选择汽车型号的时候，展示给你的是不同汽车的型号的文本，当你选中之后传给后台的是代表该型号的文本。</p>
+<p>在选择类的单元行中，我们使用的选择项类型是<code>JTOptionObject</code>，主要由两个属性<code>formDisplayText</code>和<code>formValue</code>，含义顾名思义。选择项可以通过<code>selectorOptions</code>赋值得到，在单元行选中之后，单元行的value也是<code>JTOptionObject</code>类型(单选)或者为<code>NSArray&lt;JTOptionObject *&gt; *</code>类型(多选)，你可以使用NSObject类目方法<code>- (id)cellValue;</code>得到value。</p>
+<h4 id="date类"><a href="#date类" class="headerlink" title="date类"></a>date类</h4><ul>
+<li>JTFormRowTypeDate</li>
+<li>JTFormRowTypeTime</li>
+<li>JTFormRowTypeDateTime</li>
+<li>JTFormRowTypeCountDownTimer</li>
+<li>JTFormRowTypeDateInline</li>
+</ul>
+<p>除了<code>JTFormRowTypeDateInline</code>，其余集中的区别只是<code>UIDatePicker</code>中<code>timeStyle</code>和<code>timeStyle</code>的区别。<code>JTFormRowTypeDateInline</code>的效果如下：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1g339l0w8gdg30a00dcwph.gif" alt="JTFormRowTypeDateInline"></p>
+<h4 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h4><ul>
+<li>JTFormRowTypeSwitch</li>
+<li>JTFormRowTypeCheck</li>
+<li>JTFormRowTypeStepCounter</li>
+<li>JTFormRowTypeSegmentedControl</li>
+<li>JTFormRowTypeSlider</li>
+</ul>
+<p>具体样式可以看demo</p>
+<h3 id="JTBaseCell"><a href="#JTBaseCell" class="headerlink" title="JTBaseCell"></a>JTBaseCell</h3><p>单元行的基类，如果你需要自定义单元行的话需要继承它。<code>JTBaseCell</code>里面的属性和方法都比较简单，需要注意的是<code>JTBaseCellDelegate</code>，下面来我来说明一下它的几个方法：</p>
+<h4 id="config"><a href="#config" class="headerlink" title="config"></a>config</h4><p>required。初始化控件，在这个方法里只需要创建需要的控件，但不需要为控件添加内容，因为这个时候并没有添加进去数据源<code>JTRowDescriptor</code>。在生命周期内该方法只会被调用一次，除非调用<code>JTRowDescriptor</code>的方法<code>reloadCell</code>，该方法会重新创建单元行。</p>
+<p>子类中实现时需要调用<code>[super config]</code></p>
+<h4 id="update"><a href="#update" class="headerlink" title="update"></a>update</h4><p>required。更新视图内容，在生命周期中会被多次调用。在这个方法中，我们可以为已经创建好的内容添加内容。</p>
+<p>子类中实现时需要调用<code>[super update]</code></p>
+<h4 id="其它-1"><a href="#其它-1" class="headerlink" title="其它"></a>其它</h4><blockquote>
+<p>剩下的几个方法都是@optional</p>
+</blockquote>
+<ul>
+<li><code>+ (CGFloat)formCellHeightForRowDescriptor:(JTRowDescriptor *)row</code></li>
+</ul>
+<p>指定单元行的高度</p>
+<ul>
+<li><code>- (BOOL)formCellCanBecomeFirstResponder</code></li>
+</ul>
+<p>指示单元行是否能够成为第一响应者, 默认返回NO</p>
+<ul>
+<li><code>- (BOOL)formCellBecomeFirstResponder</code></li>
+</ul>
+<p>单元行成为第一响应者</p>
+<ul>
+<li><code>- (BOOL)formCellResignFirstResponder</code></li>
+</ul>
+<p>单元行放弃第一响应者</p>
+<ul>
+<li><code>- (void)formCellDidSelected</code></li>
+</ul>
+<p>当前的单元行被选中了</p>
+<ul>
+<li><code>- (NSString *)formDescriptorHttpParameterName</code></li>
+</ul>
+<p>为单元行设置一个参数名称。若不为空，当调用<code>JTFormDescriptor</code>的方法<code>httpParameters</code>返回的表单字典中，key为该参数名称，value为JTRowDescriptor的value。</p>
+<ul>
+<li><code>- (void)formCellHighlight</code></li>
+</ul>
+<p>单元行高亮</p>
+<ul>
+<li><code>- (void)formCellUnhighlight</code></li>
+</ul>
+<p>单元行不高亮</p>
+<h3 id="自定义单元行"><a href="#自定义单元行" class="headerlink" title="自定义单元行"></a>自定义单元行</h3><p>以demo中我自定义的单元行<code>IGCell</code>为例。</p>
+<h4 id="void-load"><a href="#void-load" class="headerlink" title="+ (void)load"></a>+ (void)load</h4><p>首先，你需要一个rowType来代表该行。然后在<code>+ (void)load</code>方法中<code>[[JTForm cellClassesForRowTypes] setObject:self forKey:JTFormRowTypeIGCell];</code>将rowType与单元行关联起来。</p>
+<h4 id="config-1"><a href="#config-1" class="headerlink" title="config"></a>config</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)config</span><br><span class="line">&#123;</span><br><span class="line">  [super config];  </span><br><span class="line">  // 你的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里你可以创建好控件，但不需要为控件添加内容。注意需要调用<code>[super config];</code>。</p>
+<h4 id="update-1"><a href="#update-1" class="headerlink" title="update"></a>update</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)update</span><br><span class="line">&#123;</span><br><span class="line">  [super update];  </span><br><span class="line">  // 你的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个方法中，我们可以为已经创建好的内容添加内容。。注意需要调用<code>[super update];</code></p>
+<h4 id="layoutSpecThatFits"><a href="#layoutSpecThatFits" class="headerlink" title="layoutSpecThatFits"></a>layoutSpecThatFits</h4><p><code>- (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize</code>。在这个方法中，你需要创建好布局。对此，你需要额外学习<code>Texture</code>(原AsyncDisplayKit)的布局系统。</p>
+<h3 id="表单行为控制"><a href="#表单行为控制" class="headerlink" title="表单行为控制"></a>表单行为控制</h3><h4 id="hidden"><a href="#hidden" class="headerlink" title="hidden"></a>hidden</h4><p>当表单完成之后，你可以通过改变<code>JTRowDescriptor</code>,<code>JTSectionDescriptor</code>,<code>JTFormDescriptor</code> hidden的值来隐藏或者显示相应的单元行，单元节，表单。</p>
+<h4 id="disabled"><a href="#disabled" class="headerlink" title="disabled"></a>disabled</h4><p>你可以通过改变<code>JTRowDescriptor</code>,<code>JTSectionDescriptor</code>,<code>JTFormDescriptor</code> disabled的值来决定相应的单元行，单元节，表单是否可以被编辑。</p>
+<h4 id="delete-row"><a href="#delete-row" class="headerlink" title="delete row"></a>delete row</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JTSectionDescriptor *section = [JTSectionDescriptor formSection];</span><br><span class="line">section.sectionOptions = JTFormSectionOptionCanDelete;</span><br></pre></td></tr></table></figure>
+<p>你可以这样创建节描述，就可以让单元节具有删除单元行功能。</p>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><h4 id="如何给section自定义-header-footer"><a href="#如何给section自定义-header-footer" class="headerlink" title="如何给section自定义 header/footer"></a>如何给section自定义 header/footer</h4><p>你也可以通过设置<code>JTSectionDescriptor</code>的<code>headerHieght</code>和<code>headerView</code>或者<code>footerHieght</code>和<code>footerView</code>属性来自定义header/footer。目前需要手动设置高度…</p>
+<h4 id="如何拿到表单的值"><a href="#如何拿到表单的值" class="headerlink" title="如何拿到表单的值"></a>如何拿到表单的值</h4><p>你可以通过<code>JTForm</code>的<code>- (NSDictionary *)formValues</code>获取表单值。如果设置了验证器或者有必填项，可以先调用<code>- (NSArray&lt;NSError *&gt; *)formValidationErrors</code>来获取错误集合，再获取表单值进行其它操作。</p>
+<h4 id="如何给日期行设置最大，最小日期"><a href="#如何给日期行设置最大，最小日期" class="headerlink" title="如何给日期行设置最大，最小日期"></a>如何给日期行设置最大，最小日期</h4><p>你可以通过下面的代码这样设置，虽然丑陋，但是能用…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[row.cellConfigAtConfigure setObject:[NSDate date] forKey:@&quot;minimumDate&quot;];</span><br><span class="line">[row.cellConfigAtConfigure setObject:[NSDate dateWithTimeIntervalSinceNow:(60*60*24*3)] forKey:@&quot;maximumDate&quot;];</span><br></pre></td></tr></table></figure>
+<h4 id="如何改变cell的高度"><a href="#如何改变cell的高度" class="headerlink" title="如何改变cell的高度"></a>如何改变cell的高度</h4><p>单元行高度的优先级：</p>
+<ul>
+<li>JTRowDescriptor的height属性</li>
+<li>JTBaseCellDelegate的方法<code>+ (CGFloat)formCellHeightForRowDescriptor:(JTRowDescriptor *)row;</code></li>
+<li>根据布局来生成高度</li>
+</ul>
+<h4 id="如何自定义类似于JTFormRowTypeDateInline的内联行"><a href="#如何自定义类似于JTFormRowTypeDateInline的内联行" class="headerlink" title="如何自定义类似于JTFormRowTypeDateInline的内联行"></a>如何自定义类似于JTFormRowTypeDateInline的内联行</h4><p>如果你想要创建类似<code>JTFormRowTypeDateInline</code>的内联行，就意味着你需要自定义两种单元行。拿JTFormRowTypeDateInline举个例子，A：JTFormDateCell，B：JTFormDateInlineCell。当你选中A时，B显示出来，再选中A，B消失。</p>
+<ul>
+<li>首先，创建两种单元行A, B</li>
+<li>B在<code>load</code>方法中，还需要额外添加<code>[[JTForm inlineRowTypesForRowTypes] setObject: A.rowType forKey:B.rowType]</code></li>
+<li>剩下的操作为以下代码，你可以照着写。这里简单说明以下，当你选择A时，会调用<code>formCellCanBecomeFirstResponder</code>和<code>formCellBecomeFirstResponder</code>方法。随后调用<code>canBecomeFirstResponder</code>和<code>becomeFirstResponder</code>，注意这里必须调用super的方法，不然当前单元行无法成为第一响应者。在<code>becomeFirstResponder</code>中，我们创建B，并且添加到A后面。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)formCellCanBecomeFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    return [self canBecomeFirstResponder];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)formCellBecomeFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    if ([self isFirstResponder]) &#123;</span><br><span class="line">        return [self resignFirstResponder];</span><br><span class="line">    &#125;</span><br><span class="line">    return [self becomeFirstResponder];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)canBecomeFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    [super canBecomeFirstResponder];</span><br><span class="line">    return !self.rowDescriptor.disabled;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)becomeFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    [super becomeFirstResponder];</span><br><span class="line"></span><br><span class="line">    NSIndexPath *currentIndexPath = [self.rowDescriptor.sectionDescriptor.formDescriptor indexPathForRowDescriptor:self.rowDescriptor];</span><br><span class="line">    JTSectionDescriptor *section = [self.rowDescriptor.sectionDescriptor.formDescriptor.formSections objectAtIndex:currentIndexPath.section];</span><br><span class="line">    JTRowDescriptor *inlineRow = [JTRowDescriptor formRowDescriptorWithTag:nil rowType:JTFormRowTypeInlineDatePicker title:nil];</span><br><span class="line">    JTFormDateInlineCell *inlineCell = (JTFormDateInlineCell *)[inlineRow cellInForm];</span><br><span class="line"></span><br><span class="line">    NSAssert([inlineCell conformsToProtocol:@protocol(JTFormInlineCellDelegate)], @&quot;inline cell must conform to protocol &apos;JTFormInlineCellDelegate&apos;&quot;);</span><br><span class="line">    inlineCell.connectedRowDescriptor = self.rowDescriptor;</span><br><span class="line"></span><br><span class="line">    [section addFormRow:inlineRow afterRow:self.rowDescriptor];</span><br><span class="line">    [self.findForm ensureRowIsVisible:inlineRow];</span><br><span class="line"></span><br><span class="line">    BOOL result = [super becomeFirstResponder];</span><br><span class="line">    if (result) &#123;</span><br><span class="line">        [self.findForm beginEditing:self.rowDescriptor];</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)canResignFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    BOOL result = [super canResignFirstResponder];</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)resignFirstResponder</span><br><span class="line">&#123;</span><br><span class="line">    BOOL result = [super resignFirstResponder];</span><br><span class="line">    if ([self.rowDescriptor.rowType isEqualToString:JTFormRowTypeDateInline]) &#123;</span><br><span class="line">        NSIndexPath *currentIndexPath = [self.rowDescriptor.sectionDescriptor.formDescriptor indexPathForRowDescriptor:self.rowDescriptor];</span><br><span class="line">        NSIndexPath *nextRowPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:currentIndexPath.section];</span><br><span class="line">        JTRowDescriptor *inlineRow = [self.rowDescriptor.sectionDescriptor.formDescriptor formRowAtIndex:nextRowPath];</span><br><span class="line">        if ([inlineRow.rowType isEqualToString:JTFormRowTypeInlineDatePicker]) &#123;</span><br><span class="line">            [self.rowDescriptor.sectionDescriptor removeFormRow:inlineRow];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束, 感谢您的阅读!-------------</div>
+    
+</div>
+      
+    </div>
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/15/如何将自己的库上传到cocoapods/" rel="next" title="如何将自己的库上传到cocoapods">
+                <i class="fa fa-chevron-left"></i> 如何将自己的库上传到cocoapods
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/13/self-class-和-super-class/" rel="prev" title="[self class]和[super class]">
+                [self class]和[super class] <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTYxMy8xODE2MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kikido</p>
+              <p class="site-description motion-element" itemprop="description">no pain no gain</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yourname" title="GitHub &rarr; https://github.com/yourname" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yourname@gmail.com" title="E-Mail &rarr; mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单使用"><span class="nav-number">3.</span> <span class="nav-text">简单使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行描述-JTRowDescriptor"><span class="nav-number">4.</span> <span class="nav-text">行描述 JTRowDescriptor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#configMode"><span class="nav-number">4.1.</span> <span class="nav-text">configMode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#image-amp-imageUrl"><span class="nav-number">4.2.</span> <span class="nav-text">image &amp; imageUrl</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rowType"><span class="nav-number">4.3.</span> <span class="nav-text">rowType</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tag"><span class="nav-number">4.4.</span> <span class="nav-text">tag</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#height"><span class="nav-number">4.5.</span> <span class="nav-text">height</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#action"><span class="nav-number">4.6.</span> <span class="nav-text">action</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hidden-amp-disabled"><span class="nav-number">4.7.</span> <span class="nav-text">hidden &amp; disabled</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cellConfigAfterUpdate-amp-cellConfigWhenDisabled-amp-cellConfigAtConfigure-amp-cellDataDictionary"><span class="nav-number">4.8.</span> <span class="nav-text">cellConfigAfterUpdate &amp; cellConfigWhenDisabled &amp; cellConfigAtConfigure &amp; cellDataDictionary</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#text"><span class="nav-number">4.9.</span> <span class="nav-text">text</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证器"><span class="nav-number">4.10.</span> <span class="nav-text">验证器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单元行类型"><span class="nav-number">5.</span> <span class="nav-text">单元行类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文本类"><span class="nav-number">5.1.</span> <span class="nav-text">文本类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#select类"><span class="nav-number">5.2.</span> <span class="nav-text">select类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#date类"><span class="nav-number">5.3.</span> <span class="nav-text">date类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它"><span class="nav-number">5.4.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JTBaseCell"><span class="nav-number">6.</span> <span class="nav-text">JTBaseCell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#config"><span class="nav-number">6.1.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#update"><span class="nav-number">6.2.</span> <span class="nav-text">update</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它-1"><span class="nav-number">6.3.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义单元行"><span class="nav-number">7.</span> <span class="nav-text">自定义单元行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#void-load"><span class="nav-number">7.1.</span> <span class="nav-text">+ (void)load</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#config-1"><span class="nav-number">7.2.</span> <span class="nav-text">config</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#update-1"><span class="nav-number">7.3.</span> <span class="nav-text">update</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#layoutSpecThatFits"><span class="nav-number">7.4.</span> <span class="nav-text">layoutSpecThatFits</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表单行为控制"><span class="nav-number">8.</span> <span class="nav-text">表单行为控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#hidden"><span class="nav-number">8.1.</span> <span class="nav-text">hidden</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#disabled"><span class="nav-number">8.2.</span> <span class="nav-text">disabled</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delete-row"><span class="nav-number">8.3.</span> <span class="nav-text">delete row</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FAQ"><span class="nav-number">9.</span> <span class="nav-text">FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何给section自定义-header-footer"><span class="nav-number">9.1.</span> <span class="nav-text">如何给section自定义 header/footer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何拿到表单的值"><span class="nav-number">9.2.</span> <span class="nav-text">如何拿到表单的值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何给日期行设置最大，最小日期"><span class="nav-number">9.3.</span> <span class="nav-text">如何给日期行设置最大，最小日期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何改变cell的高度"><span class="nav-number">9.4.</span> <span class="nav-text">如何改变cell的高度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何自定义类似于JTFormRowTypeDateInline的内联行"><span class="nav-number">9.5.</span> <span class="nav-text">如何自定义类似于JTFormRowTypeDateInline的内联行</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kikido</span>
+
+  
+
+  
+</div>
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.6.0</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共 17.8k 字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+    <script>
+      window.livereOptions = {
+        refer: '2019/05/16/如何使用JTForm/'
+      };
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
