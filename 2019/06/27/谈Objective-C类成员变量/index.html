@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="#我是前言Objective-C 是一门动态语言，所以它总是将一些决定工作从编译延迟到运行时，也就是说只有编译器是不够的，还需要一个运行时系统来执行编译后的代码。这就是 runtime 存在的意义，它是 Objective-C 框架的一块基石。runtime 有两个版本：modeen 和 leagcy，我们现在使用的是 modern 版的。本文 runtime 源码为objc4-646.tar.g">
+<meta name="keywords" content="runtime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈Objective-C类成员变量">
+<meta property="og:url" content="http://yoursite.com/2019/06/27/谈Objective-C类成员变量/index.html">
+<meta property="og:site_name" content="kikido&#39;s blog">
+<meta property="og:description" content="#我是前言Objective-C 是一门动态语言，所以它总是将一些决定工作从编译延迟到运行时，也就是说只有编译器是不够的，还需要一个运行时系统来执行编译后的代码。这就是 runtime 存在的意义，它是 Objective-C 框架的一块基石。runtime 有两个版本：modeen 和 leagcy，我们现在使用的是 modern 版的。本文 runtime 源码为objc4-646.tar.g">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-219c2766ce55391a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-942f44645b55d4db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-d2066360f2d34303.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-b36c474739eb695c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-1d1973f499e8eae5.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-06-28T03:36:41.846Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="谈Objective-C类成员变量">
+<meta name="twitter:description" content="#我是前言Objective-C 是一门动态语言，所以它总是将一些决定工作从编译延迟到运行时，也就是说只有编译器是不够的，还需要一个运行时系统来执行编译后的代码。这就是 runtime 存在的意义，它是 Objective-C 框架的一块基石。runtime 有两个版本：modeen 和 leagcy，我们现在使用的是 modern 版的。本文 runtime 源码为objc4-646.tar.g">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1929756-219c2766ce55391a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/27/谈Objective-C类成员变量/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>谈Objective-C类成员变量 | kikido's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/kikido" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kikido's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/27/谈Objective-C类成员变量/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kikido">
+      <meta itemprop="description" content="no pain no gain">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kikido's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">谈Objective-C类成员变量
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-27 14:39:18" itemprop="dateCreated datePublished" datetime="2019-06-27T14:39:18+08:00">2019-06-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-28 11:36:41" itemprop="dateModified" datetime="2019-06-28T11:36:41+08:00">2019-06-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS杂/" itemprop="url" rel="index"><span itemprop="name">iOS杂</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="我是前言"><a href="#我是前言" class="headerlink" title="#我是前言"></a>#我是前言</h3><p>Objective-C 是一门动态语言，所以它总是将一些决定工作从编译延迟到运行时，也就是说只有编译器是不够的，还需要一个运行时系统来执行编译后的代码。这就是 runtime 存在的意义，它是 Objective-C 框架的一块基石。<br>runtime 有两个版本：modeen 和 leagcy，我们现在使用的是 modern 版的。<br>本文 runtime 源码为<a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">objc4-646.tar.gz版本</a></p>
+<p>在老版本的 runtime 中，如果修改了<em>基类</em>的成员变量布局（比如增加成员变量），<em>子类</em>需要重新编译。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1929756-219c2766ce55391a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="父类NSObject，子类MyObject成员变量布局"></p>
+<p>如果苹果发布了新的 iOS SDK，NSObject 增加了几个成员变量，那么我们原先的代码将无法运行。因为 MyObject 成员变量布局在编译时就确定了，父类新增的成员变量的地址跟子类成员变量的内存区域重叠了。此时，我们只能重新编译 MyObject 的代码，程序才能在新版本系统上运行。如果 MyObject 存在于别人编写的静态库，那我们只能希望作者快点发布新版本了。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1929756-942f44645b55d4db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="新版本后NSObject，MyObject的成员变量布局"></p>
+<p><code>非脆弱[Non-fragile]</code>实例变量是新版 Objective-C 的一个新功能，应用于iPhone和64位Mac上。它们提供给框架开发者更多的灵活性，且不会失去二进制的兼容性</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1929756-d2066360f2d34303.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="非脆弱成员变量"></p>
+<h3 id="如何寻址成员变量"><a href="#如何寻址成员变量" class="headerlink" title="#如何寻址成员变量"></a>#如何寻址成员变量</h3><p>点开 runtime 的源码，让我们找到 ivar 的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_class *Class;</span><br><span class="line">typedef struct objc_object *id;</span><br><span class="line"></span><br><span class="line">// 类实例</span><br><span class="line">struct objc_object &#123;</span><br><span class="line">private:</span><br><span class="line">    isa_t isa;</span><br><span class="line">// ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">union isa_t </span><br><span class="line">&#123;</span><br><span class="line">    isa_t() &#123; &#125;</span><br><span class="line">    isa_t(uintptr_t value) : bits(value) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    Class cls;</span><br><span class="line">    uintptr_t bits;</span><br><span class="line">    // ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 类定义</span><br><span class="line">struct objc_class : objc_object &#123;</span><br><span class="line">    // Class ISA;</span><br><span class="line">    Class superclass;</span><br><span class="line">    cache_t cache;             // formerly cache pointer and vtable</span><br><span class="line">    class_data_bits_t bits;  </span><br><span class="line">    // ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct class_data_bits_t &#123;</span><br><span class="line"></span><br><span class="line">    // ...省略</span><br><span class="line">public:</span><br><span class="line">    class_rw_t* data() &#123;</span><br><span class="line">        return (class_rw_t *)(bits &amp; FAST_DATA_MASK);</span><br><span class="line">    &#125;</span><br><span class="line">    // ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct class_rw_t &#123;</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t version;</span><br><span class="line"></span><br><span class="line">    const class_ro_t *ro;</span><br><span class="line">    // ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct class_ro_t &#123;</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t instanceStart;</span><br><span class="line">    uint32_t instanceSize;</span><br><span class="line">#ifdef __LP64__</span><br><span class="line">    uint32_t reserved;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">    const uint8_t * ivarLayout;</span><br><span class="line">    </span><br><span class="line">    const char * name;</span><br><span class="line">    const method_list_t * baseMethods;</span><br><span class="line">    const protocol_list_t * baseProtocols;</span><br><span class="line">    const ivar_list_t * ivars;</span><br><span class="line"></span><br><span class="line">    const uint8_t * weakIvarLayout;</span><br><span class="line">    const property_list_t *baseProperties;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/1929756-b36c474739eb695c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<ul>
+<li>每个 OC 类实例实际上都是一个内存上指向<code>objc_object</code>结构体的指针，成员变量 isa 有指向<code>objc_class</code>结构体的指针<code>Class cls;</code></li>
+<li>在<code>class_ro_t</code>结构体中可以找到成员变量<code>const ivar_list_t * ivars</code>，这个就是存储类所有成员变量的列表</li>
+<li>在<code>class_ro_t</code>结构体中成员变量<code>const uint8_t * ivarLayout;</code>和<code>const uint8_t * weakIvarLayout;</code>的作用可以看一下<a href="http://blog.sunnyxx.com/2015/09/13/class-ivar-layout/" target="_blank" rel="noopener">孙源的这篇博客</a></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@interface MyObject : NSObject &#123;</span><br><span class="line">    NSString *_age;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>使用 <code>clang -rewrite-objc MyObject.h</code> 将代码转化成 C++ 实现，你可以看到编译后的 MyObject 实例的内存布局：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct MyObject_IMPL &#123;</span><br><span class="line">	struct NSObject_IMPL NSObject_IVARS;</span><br><span class="line">	NSString *__strong _age;</span><br><span class="line">&#125;;</span><br><span class="line">struct NSObject_IMPL &#123;</span><br><span class="line">	__unsafe_unretained Class isa;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1929756-1d1973f499e8eae5.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="类实例内存布局"></p>
+<p><code>ivar_list_t</code> 结构体的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">struct ivar_list_t &#123;</span><br><span class="line">    uint32_t entsize;</span><br><span class="line">    uint32_t count;</span><br><span class="line">    ivar_t first;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct ivar_t &#123;</span><br><span class="line">    int32_t *offset;</span><br><span class="line">    const char *name;</span><br><span class="line">    const char *type;</span><br><span class="line">    // ...省略</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到<code>ivar_t</code>有名为<code>offset</code>的成员变量，这个就是成员变量在对象中的位置偏移量。在应用启动时，如果父类size变大时，runtime 会通过修改 offset，更新成员变量的偏移量，来正确的找到成员变量的地址。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@interface MyObject : NSObject &#123;</span><br><span class="line">    NSString *_age;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation MyObject</span><br><span class="line">- (void)test</span><br><span class="line">&#123;</span><br><span class="line">	self -&gt; _age = @&quot;hhh&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>使用命令行<code>clang -F -cc1 -S -emit-llvm -fblocks MyObject.m</code>，将代码编译成 IR(intermediate representation)。<br>注意要加<em>-F</em>，好多人的博客里面都少了这个标志，会报错。在 <a href="https://stackoverflow.com/questions/18060469/fatal-error-foundation-foundation-h-no-such-file-or-directory" target="_blank" rel="noopener">stackoverflow</a> 找到答案。<br>下面是编译后的代码：</p>
+<!--fixme 分析ir代码-->
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@&quot;OBJC_IVAR_$_MyObject._age&quot; = hidden global i64 8, section &quot;__DATA, __objc_ivar&quot;, align 8</span><br><span class="line">// ...</span><br><span class="line">%6 = load i64, i64* @&quot;OBJC_IVAR_$_MyObject._age&quot;, align 8, !invariant.load !8</span><br><span class="line">%7 = bitcast %0* %5 to i8*</span><br><span class="line">%8 = getelementptr inbounds i8, i8* %7, i64 %6</span><br><span class="line">%9 = bitcast i8* %8 to %1**</span><br><span class="line">store %1* bitcast (%struct.__NSConstantString_tag* @_unnamed_cfstring_ to %1*), %1** %9, align 8</span><br></pre></td></tr></table></figure>
+<p>可以简化成如下的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int32_t g_ivar_MyClass_age = 8;  // 全局变量</span><br><span class="line">*(NSString *)((uint8_t *)obj + g_ivar_MyObject_age) = @&quot;hhh&quot;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译时，LLVM 为每各类的每一个成员变量定义一个全局变量，用于存储该成员变量的偏移量</li>
+<li>根据成员变量的偏移量，可以直接找到成员变量的地址并赋值</li>
+</ul>
+<p>这也是为什么结构体<code>ivar_t</code>的成员变量<code>offset</code>是<code>int32_t *</code>类型，因为保存的是该全局变量的地址。</p>
+<h3 id="Non-Fragile-ivars"><a href="#Non-Fragile-ivars" class="headerlink" title="#Non Fragile ivars"></a>#Non Fragile ivars</h3><p>在前面部分我们已经知道该如何寻址成员变量，那么当基类的size变化时，runtime 是如何更新子类成员变量的offset呢？</p>
+<p>在应用程序启动后，main 函数执行之前，runtime 在加载类的时候，会使用<code>static Class realizeClass(Class cls)</code>函数对类进行初始化，分配其读写数据的内存，返回类的真实结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">/* realizeClass</span><br><span class="line">* Performs first-time initialization on class cls, </span><br><span class="line">* including allocating its read-write data.</span><br><span class="line">* Returns the real class structure for the class. </span><br><span class="line">* Locking: runtimeLock must be write-locked by the caller</span><br><span class="line">*/</span><br><span class="line">static Class realizeClass(Class cls) &#123;</span><br><span class="line">	class_rw_t *rw = cls-&gt;data();</span><br><span class="line">	//...省略</span><br><span class="line">	if (ro-&gt;instanceStart &lt; super_ro-&gt;instanceSize) &#123;</span><br><span class="line">        // Superclass has changed size. This class&apos;s ivars must move.</span><br><span class="line">        // Also slide layout bits in parallel.</span><br><span class="line">        // This code is incapable of compacting the subclass to </span><br><span class="line">        //   compensate for a superclass that shrunk, so don&apos;t do that.</span><br><span class="line">        class_ro_t *ro_w = make_ro_writeable(rw);</span><br><span class="line">        ro = rw-&gt;ro;</span><br><span class="line">        moveIvars(ro_w, super_ro-&gt;instanceSize, </span><br><span class="line">                  mergeLayouts ? &amp;ivarBitmap : nil, </span><br><span class="line">                  mergeLayouts ? &amp;weakBitmap : nil);</span><br><span class="line">        gdb_objc_class_changed(cls, OBJC_CLASS_IVARS_CHANGED, ro-&gt;name);</span><br><span class="line">        layoutsChanged = YES;</span><br><span class="line">    &#125; </span><br><span class="line">	// ...省略</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct class_ro_t &#123;</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t instanceStart;</span><br><span class="line">    uint32_t instanceSize;</span><br><span class="line">    const ivar_list_t * ivars;</span><br><span class="line">    // ...省略</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>rw 是当前类的可读数据，ro 是类的 Ivar Layout，ro 的结构体定义在上面</li>
+<li>在初始化类时，如果父类 ro 的<code>instanceSize</code>比子类的<code>instanceStart</code>大的话，那么会调用<code>moveIvars</code>函数更新子类的<code>instanceSize</code>以及子类成员变量的偏移量</li>
+</ul>
+<p>再让我们看一下 <code>moveIvars</code> 的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">/***********************************************************************</span><br><span class="line">* moveIvars</span><br><span class="line">* Slides a class&apos;s ivars to accommodate the given superclass size.</span><br><span class="line">* Also slides ivar and weak GC layouts if provided.</span><br><span class="line">* Ivars are NOT compacted to compensate for a superclass that shrunk.</span><br><span class="line">* Locking: runtimeLock must be held by the caller.</span><br><span class="line">**********************************************************************/</span><br><span class="line">static void moveIvars(class_ro_t *ro, uint32_t superSize, </span><br><span class="line">                      layout_bitmap *ivarBitmap, layout_bitmap *weakBitmap)</span><br><span class="line">&#123;</span><br><span class="line">    rwlock_assert_writing(&amp;runtimeLock);</span><br><span class="line"></span><br><span class="line">    uint32_t diff;</span><br><span class="line">    uint32_t i;</span><br><span class="line"></span><br><span class="line">    assert(superSize &gt; ro-&gt;instanceStart);</span><br><span class="line">    diff = superSize - ro-&gt;instanceStart;</span><br><span class="line"></span><br><span class="line">    if (ro-&gt;ivars) &#123;</span><br><span class="line">        // Find maximum alignment in this class&apos;s ivars</span><br><span class="line">        uint32_t maxAlignment = 1;</span><br><span class="line">        for (i = 0; i &lt; ro-&gt;ivars-&gt;count; i++) &#123;</span><br><span class="line">            ivar_t *ivar = ivar_list_nth(ro-&gt;ivars, i);</span><br><span class="line">            if (!ivar-&gt;offset) continue;  // anonymous bitfield</span><br><span class="line"></span><br><span class="line">            uint32_t alignment = ivar-&gt;alignment();</span><br><span class="line">            if (alignment &gt; maxAlignment) maxAlignment = alignment;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // Compute a slide value that preserves that alignment</span><br><span class="line">        uint32_t alignMask = maxAlignment - 1;</span><br><span class="line">        if (diff &amp; alignMask) diff = (diff + alignMask) &amp; ~alignMask;</span><br><span class="line"></span><br><span class="line">        // Slide all of this class&apos;s ivars en masse</span><br><span class="line">        for (i = 0; i &lt; ro-&gt;ivars-&gt;count; i++) &#123;</span><br><span class="line">            ivar_t *ivar = ivar_list_nth(ro-&gt;ivars, i);</span><br><span class="line">            if (!ivar-&gt;offset) continue;  // anonymous bitfield</span><br><span class="line"></span><br><span class="line">            uint32_t oldOffset = (uint32_t)*ivar-&gt;offset;</span><br><span class="line">            uint32_t newOffset = oldOffset + diff;</span><br><span class="line">            *ivar-&gt;offset = newOffset;</span><br><span class="line"></span><br><span class="line">            if (PrintIvars) &#123;</span><br><span class="line">                _objc_inform(&quot;IVARS:    offset %u -&gt; %u for %s (size %u, align %u)&quot;, </span><br><span class="line">                             oldOffset, newOffset, ivar-&gt;name, </span><br><span class="line">                             ivar-&gt;size, ivar-&gt;alignment());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // Slide GC layouts</span><br><span class="line">        uint32_t oldOffset = ro-&gt;instanceStart;</span><br><span class="line">        uint32_t newOffset = ro-&gt;instanceStart + diff;</span><br><span class="line"></span><br><span class="line">        if (ivarBitmap) &#123;</span><br><span class="line">            layout_bitmap_slide(ivarBitmap, </span><br><span class="line">                                oldOffset &gt;&gt; WORD_SHIFT, </span><br><span class="line">                                newOffset &gt;&gt; WORD_SHIFT);</span><br><span class="line">        &#125;</span><br><span class="line">        if (weakBitmap) &#123;</span><br><span class="line">            layout_bitmap_slide(weakBitmap, </span><br><span class="line">                                oldOffset &gt;&gt; WORD_SHIFT, </span><br><span class="line">                                newOffset &gt;&gt; WORD_SHIFT);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *(uint32_t *)&amp;ro-&gt;instanceStart += diff;</span><br><span class="line">    *(uint32_t *)&amp;ro-&gt;instanceSize += diff;</span><br><span class="line"></span><br><span class="line">    if (!ro-&gt;ivars) &#123;</span><br><span class="line">        // No ivars slid, but superclass changed size. </span><br><span class="line">        // Expand bitmap in preparation for layout_bitmap_splat().</span><br><span class="line">        if (ivarBitmap) layout_bitmap_grow(ivarBitmap, ro-&gt;instanceSize &gt;&gt; WORD_SHIFT);</span><br><span class="line">        if (weakBitmap) layout_bitmap_grow(weakBitmap, ro-&gt;instanceSize &gt;&gt; WORD_SHIFT);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先计算 superSize 与 instanceStart 之间的差值 diff</li>
+<li>得到结构体中最大的成员变量的size：maxAlignment， 然后赋值：alignMask = maxAlignment - 1</li>
+<li>比较 diff 和 alignMask，通过算法 <code>if (diff &amp; alignMask) diff = (diff + alignMask) &amp; ~alignMask;</code> 对diff重新赋值</li>
+</ul>
+<blockquote>
+<p>编译器在给结构体开辟空间时，首先找到结构体中最大的基本数据类型，然后寻找内存地址能是该基本数据类型的整倍的位置，作为结构体的首地址。将这个最宽的基本数据类型的大小作为对齐模数。<br>为结构体的一个成员开辟空间之前，编译器首先检查预开辟空间的首地址相对于结构体首地址的偏移是否是本成员的整数倍，若是，则存放本成员，反之，则在本成员和上一个成员之间填充一定的字节，以达到整数倍的要求，也就是将预开辟空间的首地址后移几个字节。了解更多可以看这篇<a href="https://blog.csdn.net/qq_27909209/article/details/80814324" target="_blank" rel="noopener">博客</a></p>
+</blockquote>
+<ul>
+<li>更新成员变量的 offset，<code>ivar.newOffset = diff + ivar.oldOffset</code></li>
+<li>更新子类 ro 的 instanceStart 和 instanceSize，ro.newinstanceStart = ro.oldinstanceStart + diff，ro.newinstanceSize = ro.oldinstanceSize + diff</li>
+<li>当父类变大时会调用该函数来移动子类ivar，当父类变小时则子类ivar不变化</li>
+</ul>
+<blockquote>
+<p>通过这个函数，即使父类size变大了，我们还是可以通过子类的 ro.instanceStart + ivar.offset 访问到成员变量</p>
+</blockquote>
+<h3 id="不能动态添加成员变量"><a href="#不能动态添加成员变量" class="headerlink" title="#不能动态添加成员变量"></a>#不能动态添加成员变量</h3><p>在 runtime 中有一个函数 <code>class_addIvar()</code>可以为类添加成员变量, 下面是该方法的一部分注释：</p>
+<blockquote>
+<p>his function may only be called after objc_allocateClassPair and before objc_registerClassPair. Adding an instance variable to an existing class is not supported.<br>The class must not be a metaclass. Adding an instance variable to a metaclass is not supported.</p>
+</blockquote>
+<p>上面的大致意思是该函数只能在类注册之前使用，且不能为元类添加成员变量。</p>
+<p>让我们设想一下如果 OC 允许动态增加成员变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@interface Father : NSObject</span><br><span class="line">@property (nonatomic, strong) NSString *name;</span><br><span class="line">@property (nonatomic, strong) NSString *age;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface Son : Father</span><br><span class="line">@property (nonatomic, copy) NSArray *toys;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure></p>
+<p> 当Father初始化之后，instanceStart，instanceSize，offset已经<em>确定</em>。<br> 为 Father 添加新的成员变量 sex，则使用 Son 的实例对象 son 会出错误，因为 son.instanceStart &lt; Father.instanceSize，即 father 成员变量的 sex 的内存区域会跟 son 的一部分重合</p>
+<!--fixme 更新下一篇博客-->
+<p>我们有时会在类目中动态的为类添加关联对象(添加对象)，那这是为什么呢?<br>因为方法和属性并<em>不属于</em>类实例，而成员变量<em>属于</em>类实例。我们所说的<code>类实例</code>，指的是一块内存区域，包含了isa指针和所有的成员变量。所以假如允许动态修改类成员变量布局，已经创建出的类实例就不符合类定义了，变成了无效对象。但方法定义是在objc_class中管理的，不管如何增删类方法，都不影响类实例的内存布局，已经创建出的类实例仍然可正常使用。</p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="#引用"></a>#引用</h3><p><a href="http://quotation.github.io/objc/2015/05/21/objc-runtime-ivar-access.html" target="_blank" rel="noopener">Objective-C类成员变量深度剖析</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束, 感谢您的阅读!-------------</div>
+    
+</div>
+      
+    </div>
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/runtime/" rel="tag"># runtime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/24/探究ARC下dealloc实现/" rel="next" title="探究ARC下dealloc实现">
+                <i class="fa fa-chevron-left"></i> 探究ARC下dealloc实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/28/谈Objective-C关联对象/" rel="prev" title="谈Objective-C关联对象">
+                谈Objective-C关联对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTYxMy8xODE2MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">kikido</p>
+              <p class="site-description motion-element" itemprop="description">no pain no gain</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yourname" title="GitHub &rarr; https://github.com/yourname" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yourname@gmail.com" title="E-Mail &rarr; mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#我是前言"><span class="nav-number">1.</span> <span class="nav-text">#我是前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何寻址成员变量"><span class="nav-number">2.</span> <span class="nav-text">#如何寻址成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Non-Fragile-ivars"><span class="nav-number">3.</span> <span class="nav-text">#Non Fragile ivars</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能动态添加成员变量"><span class="nav-number">4.</span> <span class="nav-text">#不能动态添加成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用"><span class="nav-number">5.</span> <span class="nav-text">#引用</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kikido</span>
+
+  
+
+  
+</div>
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.6.0</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共 25.2k 字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+    <script>
+      window.livereOptions = {
+        refer: '2019/06/27/谈Objective-C类成员变量/'
+      };
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
