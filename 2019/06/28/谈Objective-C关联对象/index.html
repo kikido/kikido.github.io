@@ -111,19 +111,19 @@
 
 
 
-  <meta name="description" content="#前言 前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已">
+  <meta name="description" content="#前言前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已经">
 <meta name="keywords" content="runtime">
 <meta property="og:type" content="article">
 <meta property="og:title" content="谈Objective-C关联对象">
 <meta property="og:url" content="http://yoursite.com/2019/06/28/谈Objective-C关联对象/index.html">
 <meta property="og:site_name" content="kikido&#39;s blog">
-<meta property="og:description" content="#前言 前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已">
+<meta property="og:description" content="#前言前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已经">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2019/06/28/5d15d6bfbe06f14691.png">
-<meta property="og:updated_time" content="2019-07-01T02:27:29.509Z">
+<meta property="og:updated_time" content="2019-07-01T02:33:14.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈Objective-C关联对象">
-<meta name="twitter:description" content="#前言 前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已">
+<meta name="twitter:description" content="#前言前不久刚写了 谈Objective-C类成员变量 ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  objc4-646.tar.gz版本 源码来谈一下 Objective-C 关联对象的实现原理。 关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已经">
 <meta name="twitter:image" content="https://i.loli.net/2019/06/28/5d15d6bfbe06f14691.png">
 
 
@@ -401,7 +401,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-01 10:27:29" itemprop="dateModified" datetime="2019-07-01T10:27:29+08:00">2019-07-01</time>
+                <time title="修改时间：2019-07-01 10:33:14" itemprop="dateModified" datetime="2019-07-01T10:33:14+08:00">2019-07-01</time>
               
             
           </span>
@@ -452,8 +452,7 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="#前言"></a>#前言</h3><!--fixme添加链接-->
-<p>前不久刚写了 <a href="">谈Objective-C类成员变量</a> ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  <a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">objc4-646.tar.gz版本</a> 源码来谈一下 Objective-C 关联对象的实现原理。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="#前言"></a>#前言</h3><p>前不久刚写了 <a href="https://kikido.github.io/2019/06/27/%E8%B0%88Objective-C%E7%B1%BB%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" target="_blank" rel="noopener">谈Objective-C类成员变量</a> ，分析了成员变量的实现原理以及不能动态添加的原因，在这篇文章里我们来根据  <a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">objc4-646.tar.gz版本</a> 源码来谈一下 Objective-C 关联对象的实现原理。</p>
 <p>关联对象(Associated Objects) Objective-C 2.0运行时的一个特性，起始于OS X Snow Leopard和iOS 4。它允许开发者对已经存在的类在扩展中添加自定义的属性。相关参考可以查看 <code>&lt;objc/runtime.h&gt;</code> 中定义的三个允许你将任何键值在运行时关联到对象上的函数：</p>
 <ul>
 <li>void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy) 用于给对象添加关联属性，传入nil则移除已有的关联对象</li>
@@ -552,8 +551,7 @@
 <h3 id="给类对象关联对象"><a href="#给类对象关联对象" class="headerlink" title="#给类对象关联对象"></a>#给类对象关联对象</h3><p>看完源代码后，我们知道实例对象地址与 ObjectAssociationMap map是一一对应的。那么是否可以给类对象添加关联对象呢？<br>答案是<em>可以</em>，因为Class也是一个对象，我们完全可以用同样的方式给类对象添加关联对象，只不过我们一般情况下不会这样做，因为更多时候可以通过 static 变量来实现类级别的变量。</p>
 <p>你可以通过下面的代码这样操作</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@implementation NSObject (AssociatedObject)</span><br><span class="line">+ (NSString *)associatedObject &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, @selector(associatedObject));</span><br><span class="line">&#125;</span><br><span class="line">+ (void)setAssociatedObject:(NSString *)associatedObject &#123;</span><br><span class="line">    objc_setAssociatedObject(self, @selector(associatedObject), associatedObject, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">- (void) foo &#123;</span><br><span class="line">    NSObject.associatedObject = @&quot;associatedObject&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="何时释放关联对象"><a href="#何时释放关联对象" class="headerlink" title="#何时释放关联对象"></a>#何时释放关联对象</h3> <!--fixme dealloc的链接-->
-<p>在 <a href="">探究ARC下dealloc实现</a> 中我们研究过，当对象引用计数变为0时会调用 dealloc 方法，然后最终调用 <code>objc_destructInstance</code> 方法来执行释放所有<code>__weak</code>修饰的指向该对象的指针，释放关联对象，释放该对象成员变量的操作</p>
+<h3 id="何时释放关联对象"><a href="#何时释放关联对象" class="headerlink" title="#何时释放关联对象"></a>#何时释放关联对象</h3><p>在 <a href="https://kikido.github.io/2019/06/24/%E6%8E%A2%E7%A9%B6ARC%E4%B8%8Bdealloc%E5%AE%9E%E7%8E%B0/" target="_blank" rel="noopener">探究ARC下dealloc实现</a> 中我们研究过，当对象引用计数变为0时会调用 dealloc 方法，然后最终调用 <code>objc_destructInstance</code> 方法来执行释放所有<code>__weak</code>修饰的指向该对象的指针，释放关联对象，释放该对象成员变量的操作</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> *objc_destructInstance(<span class="keyword">id</span> obj) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (obj) &#123;</span><br><span class="line">        <span class="comment">// Read all of the flags at once for performance.</span></span><br><span class="line">        <span class="keyword">bool</span> cxx = obj-&gt;hasCxxDtor();</span><br><span class="line">        <span class="keyword">bool</span> assoc = !UseGC &amp;&amp; obj-&gt;hasAssociatedObjects();</span><br><span class="line">        <span class="keyword">bool</span> dealloc = !UseGC;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// This order is important.</span></span><br><span class="line">        <span class="keyword">if</span> (cxx) object_cxxDestruct(obj);</span><br><span class="line">        <span class="keyword">if</span> (assoc) _object_remove_assocations(obj);</span><br><span class="line">        <span class="keyword">if</span> (dealloc) obj-&gt;clearDeallocating();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> _object_remove_assocations(<span class="keyword">id</span> object) &#123;</span><br><span class="line">    vector&lt; ObjcAssociation,ObjcAllocator&lt;ObjcAssociation&gt; &gt; elements;</span><br><span class="line">    &#123;</span><br><span class="line">        AssociationsManager manager;</span><br><span class="line">        AssociationsHashMap &amp;associations(manager.associations());</span><br><span class="line">        <span class="keyword">if</span> (associations.size() == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        disguised_ptr_t disguised_object = DISGUISE(object);</span><br><span class="line">        AssociationsHashMap::iterator i = associations.find(disguised_object);</span><br><span class="line">        <span class="keyword">if</span> (i != associations.end()) &#123;</span><br><span class="line">            <span class="comment">// copy all of the associations that need to be removed.</span></span><br><span class="line">            ObjectAssociationMap *refs = i-&gt;second;</span><br><span class="line">            <span class="keyword">for</span> (ObjectAssociationMap::iterator j = refs-&gt;begin(), end = refs-&gt;end(); j != end; ++j) &#123;</span><br><span class="line">                elements.push_back(j-&gt;second);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// remove the secondary table.</span></span><br><span class="line">            delete refs;</span><br><span class="line">            associations.erase(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// the calls to releaseValue() happen outside of the lock.</span></span><br><span class="line">    for_each(elements.begin(), elements.end(), ReleaseValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>是不是有点熟悉呢，在上上节中我们刚刚分析过这个方法。当对象 dealloc 时，会自动调用 <code>objc_removeAssociatedObjects</code> 方法来释放所有的关联对象。</p>
 <h3 id="总结一下"><a href="#总结一下" class="headerlink" title="#总结一下"></a>#总结一下</h3><ul>
@@ -717,7 +715,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -744,7 +742,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -853,7 +851,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共 25.2k 字</span>
+  <span class="post-count">博客全站共 25.1k 字</span>
 </div>
 
         

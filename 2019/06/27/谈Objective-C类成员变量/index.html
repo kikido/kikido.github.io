@@ -124,7 +124,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-d2066360f2d34303.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-b36c474739eb695c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1929756-1d1973f499e8eae5.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-06-28T03:36:41.846Z">
+<meta property="og:updated_time" content="2019-07-01T02:37:30.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈Objective-C类成员变量">
 <meta name="twitter:description" content="#我是前言Objective-C 是一门动态语言，所以它总是将一些决定工作从编译延迟到运行时，也就是说只有编译器是不够的，还需要一个运行时系统来执行编译后的代码。这就是 runtime 存在的意义，它是 Objective-C 框架的一块基石。runtime 有两个版本：modeen 和 leagcy，我们现在使用的是 modern 版的。本文 runtime 源码为objc4-646.tar.g">
@@ -405,7 +405,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-28 11:36:41" itemprop="dateModified" datetime="2019-06-28T11:36:41+08:00">2019-06-28</time>
+                <time title="修改时间：2019-07-01 10:37:30" itemprop="dateModified" datetime="2019-07-01T10:37:30+08:00">2019-07-01</time>
               
             
           </span>
@@ -521,8 +521,7 @@
 <p>上面的大致意思是该函数只能在类注册之前使用，且不能为元类添加成员变量。</p>
 <p>让我们设想一下如果 OC 允许动态增加成员变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@interface Father : NSObject</span><br><span class="line">@property (nonatomic, strong) NSString *name;</span><br><span class="line">@property (nonatomic, strong) NSString *age;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface Son : Father</span><br><span class="line">@property (nonatomic, copy) NSArray *toys;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure></p>
 <p> 当Father初始化之后，instanceStart，instanceSize，offset已经<em>确定</em>。<br> 为 Father 添加新的成员变量 sex，则使用 Son 的实例对象 son 会出错误，因为 son.instanceStart &lt; Father.instanceSize，即 father 成员变量的 sex 的内存区域会跟 son 的一部分重合</p>
-<!--fixme 更新下一篇博客-->
-<p>我们有时会在类目中动态的为类添加关联对象(添加对象)，那这是为什么呢?<br>因为方法和属性并<em>不属于</em>类实例，而成员变量<em>属于</em>类实例。我们所说的<code>类实例</code>，指的是一块内存区域，包含了isa指针和所有的成员变量。所以假如允许动态修改类成员变量布局，已经创建出的类实例就不符合类定义了，变成了无效对象。但方法定义是在objc_class中管理的，不管如何增删类方法，都不影响类实例的内存布局，已经创建出的类实例仍然可正常使用。</p>
+<p>我们有时会在类目中动态的为类添加关联对象(添加对象)，那这是为什么呢?<br>具体的你可以看一下我的另一篇博客 <a href="https://kikido.github.io/2019/06/28/%E8%B0%88Objective-C%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/" target="_blank" rel="noopener">谈Objective-C关联对象</a>。<br>这里我简单解释一下：关联对象被保存在一个静态的map 中，以类实例的指针地址为映射，而不是保存在类实例的结构体中。</p>
 <h3 id="引用"><a href="#引用" class="headerlink" title="#引用"></a>#引用</h3><p><a href="http://quotation.github.io/objc/2015/05/21/objc-runtime-ivar-access.html" target="_blank" rel="noopener">Objective-C类成员变量深度剖析</a></p>
 
       
@@ -680,7 +679,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -707,7 +706,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -816,7 +815,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共 25.2k 字</span>
+  <span class="post-count">博客全站共 25.1k 字</span>
 </div>
 
         
