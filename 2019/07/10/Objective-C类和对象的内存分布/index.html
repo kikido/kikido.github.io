@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next gemini" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/new_favicon_large_cat.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/new_favicon_medium_cat.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/new_favicon_small_cat.png?v=6.6.0">
+
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="之前在别人博客下面看到了一个问题，觉得挺有意思的。但是自己想回答的时候又发现好像有一些知识点还不是很熟悉，觉得有点迷糊，所以准备再研究一下底层再来回答问题。现在把这个坑填上吧。 OC对象的指针类型Objective-C是一门动态语言，而动态语言是在运行时确定数据类型，变量使用之前不需要类型声明。但是我们在写代码的时候还是要给对象一个类型或者使用id的，我自己觉得这么做是为了通过编译（例如声明了类型">
+<meta name="keywords" content="runtime,内存分布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Objective-C类和对象的内存分布">
+<meta property="og:url" content="http://yoursite.com/2019/07/10/Objective-C类和对象的内存分布/index.html">
+<meta property="og:site_name" content="千行的博客">
+<meta property="og:description" content="之前在别人博客下面看到了一个问题，觉得挺有意思的。但是自己想回答的时候又发现好像有一些知识点还不是很熟悉，觉得有点迷糊，所以准备再研究一下底层再来回答问题。现在把这个坑填上吧。 OC对象的指针类型Objective-C是一门动态语言，而动态语言是在运行时确定数据类型，变量使用之前不需要类型声明。但是我们在写代码的时候还是要给对象一个类型或者使用id的，我自己觉得这么做是为了通过编译（例如声明了类型">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/07/10/5d25955c660d280691.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/10/5d2597437203257924.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/10/5d25a602083b146585.png">
+<meta property="og:updated_time" content="2019-07-10T08:52:26.414Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Objective-C类和对象的内存分布">
+<meta name="twitter:description" content="之前在别人博客下面看到了一个问题，觉得挺有意思的。但是自己想回答的时候又发现好像有一些知识点还不是很熟悉，觉得有点迷糊，所以准备再研究一下底层再来回答问题。现在把这个坑填上吧。 OC对象的指针类型Objective-C是一门动态语言，而动态语言是在运行时确定数据类型，变量使用之前不需要类型声明。但是我们在写代码的时候还是要给对象一个类型或者使用id的，我自己觉得这么做是为了通过编译（例如声明了类型">
+<meta name="twitter:image" content="https://i.loli.net/2019/07/10/5d25955c660d280691.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/10/Objective-C类和对象的内存分布/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Objective-C类和对象的内存分布 | 千行的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/kikido" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">千行的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/10/Objective-C类和对象的内存分布/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杜倩杭">
+      <meta itemprop="description" content="no pain no gain">
+      <meta itemprop="image" content="https://i.loli.net/2019/07/01/5d19ac59385e986191.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="千行的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Objective-C类和对象的内存分布
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-10 15:34:15 / 修改时间：16:52:26" itemprop="dateCreated datePublished" datetime="2019-07-10T15:34:15+08:00">2019-07-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS杂/" itemprop="url" rel="index"><span itemprop="name">iOS杂</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前在别人博客下面看到了一个问题，觉得挺有意思的。但是自己想回答的时候又发现好像有一些知识点还不是很熟悉，觉得有点迷糊，所以准备再研究一下底层再来回答问题。现在把这个坑填上吧。<br><img src="https://i.loli.net/2019/07/10/5d25955c660d280691.png" alt=""></p>
+<h3 id="OC对象的指针类型"><a href="#OC对象的指针类型" class="headerlink" title="OC对象的指针类型"></a>OC对象的指针类型</h3><p><code>Objective-C</code>是一门动态语言，而动态语言是在运行时确定数据类型，变量使用之前不需要类型声明。但是我们在写代码的时候还是要给对象一个类型或者使用<code>id</code>的，我自己觉得这么做是为了通过编译（例如声明了类型为NSObject的实例sark，却调用了方法foo，那么编译就通不过了）。<br>实际上动态语言的一个特性<code>多态</code>就是这么实现的，即用父类的指针指向子类的实例。</p>
+<h3 id="对象的内存分布"><a href="#对象的内存分布" class="headerlink" title="对象的内存分布"></a>对象的内存分布</h3><p>还是举个例子会明白一点。需要注意的是需要在<code>模拟器</code>上调试，在<code>真机</code>调试会有问题的。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Father</span> : <span class="title">NSObject</span></span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></span><br><span class="line">- (<span class="keyword">void</span>)foo &#123;</span><br><span class="line">    Father *father1 = [Father new];</span><br><span class="line">    father1.name = <span class="string">@"001"</span>;</span><br><span class="line">    <span class="keyword">id</span> father2 = [Father new];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>调试之前，我们要明白几点常识。在计算机中每个字节都是有一个地址的，每个字节有8个bit，每个bit可以存储1或者0，这8个bit就是这个字节的值。在小端系统中，低位的值存储在低地址上。<br>使用 x 命令调试。格式：<code>x/&lt;n/f/u&gt;  &lt;addr&gt;</code></p>
+<ul>
+<li>x 显示内存</li>
+<li>n 正整数，表示需要显示的内存单元的个数</li>
+<li>f 表示addr指向的内存内容的输出格式<ul>
+<li>s: 对应输出字符串</li>
+<li>x: 按十六进制格式显示变量</li>
+<li>d: 按十进制格式显示变量</li>
+<li>c: 按字符格式显示变量</li>
+</ul>
+</li>
+<li>u 以多少个字节作为一个内存单元<ul>
+<li>b: 1 byte</li>
+<li>h: 2 bytes</li>
+<li>w: 4 bytes</li>
+<li>g: 8 bytes</li>
+</ul>
+</li>
+</ul>
+<p>打断点，然后输入命令: <code>x/8xg father1</code>, 即：以8个字节为一个单元，从 father1 指针的地址开始起8个单元的值</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(lldb) x/<span class="number">8</span>xg father1</span><br><span class="line"><span class="number">0</span>x6<span class="number">000000128f0</span>: <span class="number">0</span>x000000010be34050 <span class="number">0</span>x000000010bdcc058</span><br><span class="line">                Class              name</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000012900</span>: <span class="number">0</span>x00006<span class="number">000000128a0</span> <span class="number">0</span>x0000<span class="number">000100000002</span></span><br><span class="line"><span class="number">0</span>x6<span class="number">00000012910</span>: <span class="number">0</span>x0000000<span class="number">10f8f8e58</span> <span class="number">0</span>x00000<span class="number">00000000000</span></span><br><span class="line"><span class="number">0</span>x6<span class="number">00000012920</span>: <span class="number">0</span>x00000<span class="number">00000000000</span> <span class="number">0</span>x00000<span class="number">00000000000</span></span><br><span class="line"></span><br><span class="line">(lldb) x/<span class="number">8</span>xg father2</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000012490</span>: <span class="number">0</span>x000000010be34050 <span class="number">0</span>x00000<span class="number">00000000000</span></span><br><span class="line">                Class              name</span><br><span class="line"><span class="number">0</span>x6<span class="number">000000124a0</span>: <span class="number">0</span>xbadd2dcdc19dbead <span class="number">0</span>x00006<span class="number">000000124f0</span></span><br><span class="line"><span class="number">0</span>x6<span class="number">000000124b0</span>: <span class="number">0</span>x00000<span class="number">00000000000</span> <span class="number">0</span>x00000<span class="number">00000000000</span></span><br><span class="line"><span class="number">0</span>x6<span class="number">000000124c0</span>: <span class="number">0</span>x00007f8ae<span class="number">3c140c0</span> <span class="number">0</span>x000060<span class="number">80000092b0</span></span><br></pre></td></tr></table></figure>
+<p>这里我提前将这些地址代表的意思标注好了。<br><code>father2</code>虽然是<code>id</code>类型的，但是它跟<code>father1</code>第一个8字节所存储的地址是相同的，都是<code>0x000000010be34050</code>。其实这个地址就是 <code>Father</code>类的地址。我们可以使用下面的方法验证：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">lldb</span>) po (<span class="name">Class</span>)<span class="number">0</span>x000000010be34050</span><br><span class="line">Father</span><br></pre></td></tr></table></figure>
+<p>所以一个实例对象第一个8字节存储的是这个类的指针，那么后面的字节存储的是什么呢？答案是这个实例的成员变量，在上面的例子中我们给实例<code>father1</code>的成员变量<code>name</code>赋值了<code>001</code>, 现在让我们验证一下：<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">lldb</span>) po (<span class="name">id</span>)<span class="number">0</span>x000000010bdcc058</span><br><span class="line"><span class="number">001</span></span><br></pre></td></tr></table></figure></p>
+<p>因为我们没有对<code>father2</code>的成员变量 name 赋值，所以这8个字节的值是空的。</p>
+<hr>
+<p>打开 <a href="https://opensource.apple.com/tarballs/objc4/" target="_blank" rel="noopener">runtime 750版本源码</a>，查看 id 和 Class 的定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">objc_class</span> *<span class="title">Class</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">objc_object</span> *<span class="title">id</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">objc_object</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">isa_t</span> isa;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">union</span> <span class="keyword">isa_t</span> &#123;</span><br><span class="line">    <span class="keyword">isa_t</span>() &#123; &#125;</span><br><span class="line">    <span class="keyword">isa_t</span>(<span class="keyword">uintptr_t</span> value) : bits(value) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    Class cls;</span><br><span class="line">    <span class="keyword">uintptr_t</span> bits;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(ISA_BITFIELD)</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        ISA_BITFIELD;  <span class="comment">// defined in isa.h</span></span><br><span class="line">    &#125;;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">objc_class</span> :</span> objc_object &#123;</span><br><span class="line">    <span class="comment">// Class ISA;</span></span><br><span class="line">    Class superclass;</span><br><span class="line">    <span class="keyword">cache_t</span> cache;             <span class="comment">// formerly cache pointer and vtable</span></span><br><span class="line">    <span class="keyword">class_data_bits_t</span> bits;    <span class="comment">// class_rw_t * plus custom rr/alloc flags</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">class_rw_t</span> *data() &#123; </span><br><span class="line">        <span class="keyword">return</span> bits.data();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>id的定义很简单，是一个指向 objc_object 的指针，而 objc_object 只有一个私有成员变量 isa。objc_class 继承于 objc_object，所以你也可以用 id 来声明 Class 的变量，例如<code>id foo = [NSObject class];</code>。</li>
+<li>isa是一个联合体，里面的 struct 在不同架构的CPU中定义是不同的。在 64 位CPU中，isa 可以用来存储更多的信息，例如引用计数，是否有关联对象等，可以看我的这篇博客<a href="https://kikido.github.io/2019/07/03/Objective-C%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E5%8E%9F%E7%90%86/" target="_blank" rel="noopener">Objective-C引用计数原理</a></li>
+</ol>
+<p>使用<code>clang rewrite-objc ViewController.m</code>将代码转化成C++实现，可以看到 Father 这个类变成了如下的结构体</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> Father_IMPL &#123;</span><br><span class="line">	<span class="keyword">struct</span> <span class="built_in">NSObject_IMPL</span> <span class="built_in">NSObject_IVARS</span>;</span><br><span class="line">	<span class="built_in">NSString</span> *_name;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="built_in">NSObject_IMPL</span> &#123;</span><br><span class="line">	Class isa;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>看到这个结构体你是不是就明白了为什么对象的内存分布是下图这个样子的？<br>需要<code>注意</code>的是，NSObject 的实例虽然理论上只有8个字节，但是它的实例实际上有 16 个字节，后面8个字节是空的。</p>
+<p><img src="https://i.loli.net/2019/07/10/5d2597437203257924.png" alt="实例内存分布图"></p>
+<p>研究到这里，我们就可以回答开头的那个问题了。</p>
+<ol>
+<li>指针的类型是id类型，而指针指向的类型可以是别的类。因为 OC 是动态语言，变量的类型需要在运行时才能够确定。</li>
+<li>指针保存的是对象内存的首地址</li>
+<li>64位平台中，对象首地址开始的8个字节存储的是类的指针。也就是通过这个才能确定该类的类型</li>
+</ol>
+<p>是不是很简单！下面继续让我们研究下 Class 的内存分布问题</p>
+<h3 id="Class的内存分布"><a href="#Class的内存分布" class="headerlink" title="Class的内存分布"></a>Class的内存分布</h3><p>让我们继续回到之前的代码调试。上一节中我们已经知道了<code>Father</code>类的地址了</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(lldb) x/16xg <span class="number">0x000000010be34050</span></span><br><span class="line"><span class="number">0x10be34050</span>: <span class="number">0x000000010be34028</span> <span class="number">0x000000010f8f8e58</span></span><br><span class="line">             meta-class         superClass</span><br><span class="line"><span class="number">0x10be34060</span>: <span class="number">0x00006000000972f0</span> <span class="number">0x0000000200000003</span></span><br><span class="line">             bucket_t *_buckets _mask    _occupied   </span><br><span class="line"><span class="number">0x10be34070</span>: <span class="number">0x0000600000074302</span> <span class="number">0x000000010f8f8e08</span></span><br><span class="line"><span class="number">0x10be34080</span>: <span class="number">0x000000010f8f8e08</span> <span class="number">0x000000010f548520</span></span><br><span class="line"><span class="number">0x10be34090</span>: <span class="number">0x0000000000000000</span> <span class="number">0x000000010bdd7df0</span></span><br><span class="line"><span class="number">0x10be340a0</span>: <span class="number">0x000000010be34078</span> <span class="number">0x000000010f8f8e58</span></span><br><span class="line"><span class="number">0x10be340b0</span>: <span class="number">0x000000010f548520</span> <span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x10be340c0</span>: <span class="number">0x000000010bdd7e38</span> <span class="number">0x000000010f8f8e08</span></span><br></pre></td></tr></table></figure>
+<p>PS: 注意不要使用<code>真机</code>来调试，因为我调试的时候发现跳不到那个内存地址中，但在<code>模拟器</code>中没这个问题…</p>
+<p>配套的我们把 objc_class 的定义放到下面。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">objc_class</span> :</span> objc_object &#123;</span><br><span class="line">    <span class="comment">// Class ISA;</span></span><br><span class="line">    Class superclass;</span><br><span class="line">    <span class="keyword">cache_t</span> cache;             <span class="comment">// formerly cache pointer and vtable</span></span><br><span class="line">    <span class="keyword">class_data_bits_t</span> bits;    <span class="comment">// class_rw_t * plus custom rr/alloc flags</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">class_rw_t</span> *data() &#123; </span><br><span class="line">        <span class="keyword">return</span> bits.data();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为 objc_class 继承于 objc_object，所以 Class 的第一个8字节还是 isa 指针，也就是一个指向元类(meta-Class)的指针。如果你不知道元类是什么意思的话就去百度，我也懒得讲了。第2个8字节储存的是指向父类的指针。先让我们验证一下</p>
+<figure class="highlight monkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lldb) po (<span class="class"><span class="keyword">Class</span>)0<span class="title">x000000010be34028</span></span></span><br><span class="line">Father</span><br><span class="line"></span><br><span class="line">(lldb) po (<span class="class"><span class="keyword">Class</span>)0<span class="title">x000000010f8f8e58</span></span></span><br><span class="line">NSObject</span><br></pre></td></tr></table></figure>
+<p>结论正确。让我们接着看<code>cache_t</code>的定义：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cache_t</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket_t</span> *_<span class="title">buckets</span>;</span></span><br><span class="line">    <span class="keyword">mask_t</span> _mask;</span><br><span class="line">    <span class="keyword">mask_t</span> _occupied;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">bucket_t</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// IMP-first is better for arm64e ptrauth and no worse for arm64.</span></span><br><span class="line">    <span class="comment">// SEL-first is better for armv7* and i386 and x86_64.</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __arm64__</span></span><br><span class="line">    MethodCacheIMP _imp;</span><br><span class="line">    <span class="keyword">cache_key_t</span> _key;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    <span class="keyword">cache_key_t</span> _key;</span><br><span class="line">    MethodCacheIMP _imp;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>cache_t</code>关系到方法查找的缓存。当对实例发送消息后，会先到Class的缓存中查找有没有该方法的缓存，如果有则直接调用方法的实现，提高效率。<br> 大致可以看出，<code>bucket_t</code>是一个哈希表，根据<code>_key</code>找到其映射的方法实现<code>_imp</code>，而<code>_key</code>就是 SEL(方法的名字 const char <em>)。<code>cache_t</code>是中的<code>_mask</code>和<code>_occupied</code>是两个4字节的变量，应该代表的是缓存的数量。所以，Class 第三个8字节存储的是`bucket_t </em><code>类型的指针，第4个8字节保存的是 _mask 和 _occupied。因为是小端，低位地址存储低位的数据，所以 _mask 的值是</code>0x00000003<code>，而 _occupied 的值是</code>0x00000002`</p>
+<p>接下来看 Class 的第3个成员变量<code>class_data_bits_t bits;</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_data_bits_t</span> &#123;</span></span><br><span class="line">    <span class="comment">// Values are the FAST_ flags above.</span></span><br><span class="line">    <span class="keyword">uintptr_t</span> bits;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">class_rw_t</span>* data() &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">class_rw_t</span> *)(bits &amp; FAST_DATA_MASK);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在64位下，uintptr_t 为8个字节。class_data_bits_t 的公共方法有很多，主要是配合掩码进行一些读写操作。<br>继续看<code>class_rw_t</code>的定义</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_rw_t</span> &#123;</span></span><br><span class="line">    <span class="comment">// Be warned that Symbolication knows the layout of this structure.</span></span><br><span class="line">    <span class="keyword">uint32_t</span> flags;</span><br><span class="line">    <span class="keyword">uint32_t</span> version;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">class_ro_t</span> *ro;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">method_array_t</span> methods;</span><br><span class="line">    <span class="keyword">property_array_t</span> properties;</span><br><span class="line">    <span class="keyword">protocol_array_t</span> protocols;</span><br><span class="line"></span><br><span class="line">    Class firstSubclass;</span><br><span class="line">    Class nextSiblingClass;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *demangledName;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> SUPPORT_INDEXED_ISA</span></span><br><span class="line">    <span class="keyword">uint32_t</span> index;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在结构体中，你可以看到有一个成员变量的类型是<code>class_ro_t</code>，是不是很像<code>class_rw_t</code>。从字面意思上可以猜测，一个是readwriite，一个是readonly。因为 OC 是动态语言，可以在运行时添加方法和成员变量，运行时添加的方法或者成员变量就是添加到<code>class_rw_t</code>上的，而<code>class_ro_t</code>存储的是一些编译后Class的信息。<br>在<code>class_data_bits_t</code>的定义中，我们知道了需要掩码<code>FAST_DATA_MASK</code>才能得到 class_rw_t 的地址。下面是 <code>class_rw_t</code>的内存分布</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 得到class_rw_t的内存地址</span><br><span class="line"><span class="number">0</span>x00006<span class="number">00000074302</span> &amp; <span class="number">0</span>x00007ffffffffff8 = <span class="number">0</span>x6<span class="number">00000074300</span><span class="comment">;</span></span><br><span class="line"></span><br><span class="line">(lldb) x/<span class="number">16</span>xg <span class="number">0</span>x6<span class="number">00000074300</span></span><br><span class="line"><span class="number">0</span>x6<span class="number">00000074300</span>: <span class="number">0</span>x000000<span class="number">00800a0000</span> <span class="number">0</span>x000000010bdd7da8</span><br><span class="line">                flags      version ro</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000074310</span>: <span class="number">0</span>x000000010bdd7d18 <span class="number">0</span>x000000010bdd7d90</span><br><span class="line">                methods            properties</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000074320</span>: <span class="number">0</span>x00000<span class="number">00000000000</span> <span class="number">0</span>x000000010be33f60</span><br><span class="line">                protocols          firstSubclass</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000074330</span>: <span class="number">0</span>x000000010ee88c68 <span class="number">0</span>x00000<span class="number">00000000000</span></span><br><span class="line">                nextSiblingClass   demangledName</span><br><span class="line"><span class="number">0</span>x6<span class="number">00000074340</span>: <span class="number">0</span>xbadd2dcdc19dbead <span class="number">0</span>x0000<span class="number">600000074240</span></span><br></pre></td></tr></table></figure>
+<p>因为在代码中我还声明了一个 Father 的子类 Son，没想到在这里出现，没错，就是这个 firstSubclass。至于如果有多个子类，确定哪个是 firstSubclass 我就不清楚了。。。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">lldb</span>) po (<span class="name">Class</span>)<span class="number">0</span>x000000010be33f60</span><br><span class="line">Son</span><br></pre></td></tr></table></figure>
+<p>再来看一下<code>class_ro_t</code>的定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">class_ro_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span> flags;</span><br><span class="line">    <span class="keyword">uint32_t</span> instanceStart;</span><br><span class="line">    <span class="keyword">uint32_t</span> instanceSize;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __LP64__</span></span><br><span class="line">    <span class="keyword">uint32_t</span> reserved;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">uint8_t</span> * ivarLayout;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * name;</span><br><span class="line">    <span class="keyword">method_list_t</span> * baseMethodList;</span><br><span class="line">    <span class="keyword">protocol_list_t</span> * baseProtocols;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">ivar_list_t</span> * ivars;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">uint8_t</span> * weakIvarLayout;</span><br><span class="line">    <span class="keyword">property_list_t</span> *baseProperties;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后是它的内存分布：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(lldb) x/<span class="number">16</span>xg <span class="number">0x000000010bdd7d</span>a8</span><br><span class="line"><span class="number">0x10bdd7d</span>a8: <span class="number">0x0000000800000184</span> <span class="number">0x0000000000000010</span></span><br><span class="line">            flags instanceStart instanceSize reserved</span><br><span class="line"><span class="number">0x10bdd7d</span>b8: <span class="number">0x000000010bd</span>3ea79 <span class="number">0x000000010bd3eaf</span>c</span><br><span class="line">             ivarLayout         name</span><br><span class="line"><span class="number">0x10bdd7d</span>c8: <span class="number">0x000000010bdd7d</span>18 <span class="number">0x0000000000000000</span></span><br><span class="line">             baseMethodList     baseProtocols</span><br><span class="line"><span class="number">0x10bdd7dd</span>8: <span class="number">0x000000010bdd7d</span>68 <span class="number">0x0000000000000000</span></span><br><span class="line">             ivars              weakIvarLayout</span><br><span class="line"><span class="number">0x10bdd7d</span>e8: <span class="number">0x000000010bdd7d</span>90 <span class="number">0x0000002800000081</span></span><br><span class="line">             baseProperties</span><br></pre></td></tr></table></figure>
+<ol>
+<li>可以看到 ro 的成员变量中有<code>instanceStart</code>和<code>instanceSize</code>。这两个值的作用是<code>非脆弱成员变量</code>。即如果基类如果增加了成员变量，不需要重新编译，只需要在初始化系统自动修改<code>instanceStart</code>和<code>instanceSize</code>的值，就能够继续使用子类。具体你可以看我的这篇博客 <a href="https://kikido.github.io/2019/06/27/%E8%B0%88Objective-C%E7%B1%BB%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" target="_blank" rel="noopener">谈Objective-C类成员变量</a></li>
+<li>ivarLayout 记录了那些是 storng 的ivar</li>
+<li>name 存储的是这个类的名字，你可以使用<code>po (char *)0x000000010bd3eafc</code>打印该名字</li>
+<li>ivars 存储的是该类的成员变量(不包括关联对象)</li>
+<li><p>weakIvarLayout  记录了哪一些是 weak 的ivar</p>
+<p>还可以看到 ro 的<code>baseMethodList</code>和rw的<code>methods</code>的地址都是<code>0x000000010bdd7d18</code>，ro 的<code>baseProperties</code>和rw的<code>properties</code>的地址都是<code>0x000000010bdd7d90</code></p>
+<blockquote>
+<p>实际上 rw 的三个成员变量，<code>methods</code>, <code>properties</code>, <code>protocols</code>的类型都继承于<code>list_array_tt</code>，这个列表可能有以下3中值：1. 空值 2. 指向列表的指针 3. 指向列表的指针的数组。所以这就是为什么Class可以在类目中添加方法和协议，只需要在这个列表数组中再添加一个指向类目中方法和协议列表的指针就好了。<br>因为在这个实例中没有使用类目添加方法，所以rw中methods数组仅有一个值，这个值等于ro的baseMethodList。</p>
+</blockquote>
+<p>先来研究<code>methods</code>。</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> struct method_t &#123;</span><br><span class="line">    SEL name<span class="comment">;</span></span><br><span class="line">    const char *types<span class="comment">;</span></span><br><span class="line">    MethodListIMP imp<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct method_list_t &#123;</span><br><span class="line">	uint32_t entsizeAndFlags<span class="comment">;</span></span><br><span class="line">   uint32_t count<span class="comment">;</span></span><br><span class="line">   method_t first<span class="comment">;</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">(lldb) x/16xg <span class="number">0x000000010bdd7d18</span></span><br><span class="line"><span class="number">0x10bdd7d18</span>: <span class="number">0x000000030000001a</span> <span class="number">0x000000010f547965</span></span><br><span class="line">          entsizeAndFlags count name</span><br><span class="line"><span class="number">0x10bdd7d28</span>: <span class="number">0x000000010bd41271</span> <span class="number">0x000000010b7e01e0</span></span><br><span class="line">             types              imp</span><br><span class="line"><span class="number">0x10bdd7d38</span>: <span class="number">0x000000010fd3a28e</span> <span class="number">0x000000010bd41284</span></span><br><span class="line">             name               types</span><br><span class="line"><span class="number">0x10bdd7d48</span>: <span class="number">0x000000010b7e0180</span> <span class="number">0x0000000112f11912</span></span><br><span class="line">             imp                name</span><br><span class="line"><span class="number">0x10bdd7d58</span>: <span class="number">0x000000010bd4128c</span> <span class="number">0x000000010b7e01a0</span></span><br><span class="line">             types              imp</span><br><span class="line"><span class="number">0x10bdd7d68</span>: <span class="number">0x0000000100000020</span> <span class="number">0x000000010be30c50</span></span><br><span class="line"><span class="number">0x10bdd7d78</span>: <span class="number">0x000000010bd19fc8</span> <span class="number">0x000000010bd4130b</span></span><br><span class="line"><span class="number">0x10bdd7d88</span>: <span class="number">0x0000000800000003</span> <span class="number">0x0000000100000010</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>entsizeAndFlags</code> 第一个4字节保存的是 entsize 和标记, entsize 我的理解好像是method_t的长度。第二个4字节保存的是方法的数量，在上面的例子中我们可以知道一共保存了3个方法。后面保存了3个method_t的实例，每个实例占用了24个字节。每个 method_t 实例，第一个8字节为 sel，即方法名字；第二个8自己保存了方法的参数类型；第3个8字节是方法的函数指针。我们把上面保存的3个方法的信息按顺序打印出来</p>
+<ul>
+<li>.cxx_destruct  v16@0:8</li>
+<li>name @16@0:8</li>
+<li>setName: v24@0:8@16</li>
+</ul>
+<p>第2和第3个方法比较好理解，系统为我们自动生成了属性 name 的 getter 和 setter 方法。<br>第1个方法<code>cxx_destruct</code> 的作用是在delloc时释放该类的成员变量的，具体你可以看这篇博客 <a href="https://kikido.github.io/2019/06/24/%E6%8E%A2%E7%A9%B6ARC%E4%B8%8Bdealloc%E5%AE%9E%E7%8E%B0/" target="_blank" rel="noopener">探究ARC下dealloc实现</a></p>
+<p>properties 与 methods 类似，因为继承与同一个结构体。这里简单分析一下，内存分布为 <code>entsizeAndFlags</code>(4字节), count(4字节)，property_t数组。property_t里面有两个成员变量，一个是属性的名字，一个是属性的属性。。。</p>
+<hr>
+<p>大致上这就是 Class 的内存分布了，下面这张图能够简要的概括了：</p>
+<p><img src="https://i.loli.net/2019/07/10/5d25a602083b146585.png" alt="类的内存分布"></p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p><a href="http://melonteam.com/posts/objectc_dui_xiang_nei_cun_bu_ju_fen_xi/" target="_blank" rel="noopener">ObjectC对象内存布局分析</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+    	<br>
+    	<br>
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束, 感谢您的阅读!-------------</div>
+    
+</div>
+      
+    </div>
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/runtime/" rel="tag"># runtime</a>
+          
+            <a href="/tags/内存分布/" rel="tag"># 内存分布</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/03/Objective-C引用计数原理/" rel="next" title="Objective-C引用计数原理">
+                <i class="fa fa-chevron-left"></i> Objective-C引用计数原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTYxMy8xODE2MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://i.loli.net/2019/07/01/5d19ac59385e986191.jpg" alt="杜倩杭">
+            
+              <p class="site-author-name" itemprop="name">杜倩杭</p>
+              <p class="site-description motion-element" itemprop="description">no pain no gain</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kikido" title="GitHub &rarr; https://github.com/kikido" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:kikido1992@gmail.com" title="E-Mail &rarr; mailto:kikido1992@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OC对象的指针类型"><span class="nav-text">OC对象的指针类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的内存分布"><span class="nav-text">对象的内存分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class的内存分布"><span class="nav-text">Class的内存分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用"><span class="nav-text">引用</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">  <a href="http://www.miitbeian.gov.cn" rel="noopener" target="_blank"> </a>&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杜倩杭</span>
+
+  
+
+  
+</div>
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共 31.8k 字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+    <script>
+      window.livereOptions = {
+        refer: '2019/07/10/Objective-C类和对象的内存分布/'
+      };
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
