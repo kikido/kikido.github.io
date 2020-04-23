@@ -107,21 +107,21 @@
 
 
 
-  <meta name="description" content="本文着重讲解 Bulgy 如何配置符号表.  符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方法已无法上传符号表. 上网找过一">
+  <meta name="description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
 <meta name="keywords" content="工具">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS如何配置Bugly符号表(2020年最新)">
 <meta property="og:url" content="http://yoursite.com/2020/04/20/iOS如何配置Bugly符号表-2020年有效/index.html">
 <meta property="og:site_name" content="千行的博客">
-<meta property="og:description" content="本文着重讲解 Bulgy 如何配置符号表.  符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方法已无法上传符号表. 上网找过一">
+<meta property="og:description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538">
 <meta property="og:image" content="https://i.loli.net/2020/04/20/EmPNnc9RQUy8X7W.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/04/20/h72tVKX4LQlcYHO.jpg">
-<meta property="og:updated_time" content="2020-04-20T03:04:20.258Z">
+<meta property="og:updated_time" content="2020-04-20T03:07:25.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS如何配置Bugly符号表(2020年最新)">
-<meta name="twitter:description" content="本文着重讲解 Bulgy 如何配置符号表.  符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方法已无法上传符号表. 上网找过一">
+<meta name="twitter:description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
 <meta name="twitter:image" content="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538">
 
 
@@ -382,7 +382,7 @@
                 
               
 
-              <time title="创建时间：2020-04-20 11:02:49 / 修改时间：11:04:20" itemprop="dateCreated datePublished" datetime="2020-04-20T11:02:49+08:00">2020-04-20</time>
+              <time title="创建时间：2020-04-20 11:02:49 / 修改时间：11:07:25" itemprop="dateCreated datePublished" datetime="2020-04-20T11:02:49+08:00">2020-04-20</time>
             
 
             
@@ -438,11 +438,10 @@
       
 
       
-        <p>本文着重讲解 Bulgy 如何配置符号表. </p>
+        <p>本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点</p>
 <p>符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.</p>
 <p><img src="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538" alt=""></p>
 <p>Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.<br>之前一直使用<code>Xcode + sh</code>方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方法已无法上传符号表. 上网找过一些解决方法, 大致就是找到符号表后延迟以后再上传, 但也没什么效果. 随后再上官网查看文档, 使用官方手动配置的方法, 成功的上传了符号表和解析堆栈.</p>
-<p>下面会粗略的讲解 Bugly 的集成工程, 其中配置符号表部分会说的仔细一点</p>
 <h3 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h3><p>上 <a href="https://bugly.qq.com/v2/workbench/myapp" target="_blank" rel="noopener">官网</a> 创建产品.<br>创建成功后获取应用的 App ID </p>
 <h3 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h3><p>使用<code>Cocoapods</code>集成<br><code>pod &#39;Bugly&#39;</code></p>
 <h3 id="初始化-SDK"><a href="#初始化-SDK" class="headerlink" title="初始化 SDK"></a>初始化 SDK</h3><p>在工程<code>AppDelegate.m</code>的<code>application:didFinishLaunchingWithOptions:</code>方法中初始化：</p>
@@ -569,6 +568,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/04/23/iOS-weak弱引用底层实现/" rel="prev" title="iOS weak弱引用底层实现">
+                iOS weak弱引用底层实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -644,7 +647,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-count">26</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -712,7 +715,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -821,7 +826,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共 62.7k 字</span>
+  <span class="post-count">博客全站共 66.1k 字</span>
 </div>
 
         
