@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/04/23/8QNjCHvP9tTeBkM.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/04/23/hmsPVcvUInRi3ok.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/04/23/bVIg4rULXSHxyu8.jpg">
-<meta property="og:updated_time" content="2020-04-23T07:30:47.108Z">
+<meta property="og:updated_time" content="2020-04-23T08:02:44.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS weak弱引用底层实现">
 <meta name="twitter:description" content="源码版本：objc4-779.1当然还是推荐使用这个来学习：可编译的源码 weak是一个所有权修饰符, 它提供弱引用的功能, 即弱引用者(weak 修饰的变量, 后统称为弱引用者)不能持有引用对象, 当引用对象被释放时, 此弱引用者被置为 nil.此文将探究弱引用在底层是如何实现 弱引用者如何注册到弱引用表首先我们研究弱引用者是如何注册到弱引用表中的调试代码如下(代码需要在开头提到的可编译版本里面">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建时间：2020-04-23 15:16:30 / 修改时间：15:30:47" itemprop="dateCreated datePublished" datetime="2020-04-23T15:16:30+08:00">2020-04-23</time>
+              <time title="创建时间：2020-04-23 15:16:30 / 修改时间：16:02:44" itemprop="dateCreated datePublished" datetime="2020-04-23T15:16:30+08:00">2020-04-23</time>
             
 
             
@@ -464,8 +464,7 @@
 <p>继续 step into, 跳转到<code>storeWeak()</code>函数里面</p>
 <p><img src="https://i.loli.net/2020/04/22/nRwmhYWQS7ovKVH.jpg" alt=""></p>
 <p>函数里面代码比较多, 为了方便, 我把它分成了几部分来说明</p>
-<!--FIXME:文章地址-->
-<p><code>SideTable</code>跟弱引用的实现息息相关, 在<a href="">这里</a>可以看到对这个类的详细说明.<br>这里我就简单的介绍一下, 它是存放引用计数表和弱引用表的结构. 它有三个成员变量:引用计数表, 弱引用表, 自旋锁. 在我们操作引用计数表或者弱引用表的时候自旋锁会加锁防止竞态条件的出现.</p>
+<p><code>SideTable</code>跟弱引用的实现息息相关, 在<a href="https://kikido.github.io/2020/04/23/%E6%8E%A2%E7%A9%B6runtime%E7%A2%B0%E5%88%B0%E7%9A%84%E7%B1%BB%E5%92%8C%E7%BB%93%E6%9E%84%E4%BD%93/" target="_blank" rel="noopener">这里</a>可以看到对这个类的详细说明.<br>这里我就简单的介绍一下, 它是存放引用计数表和弱引用表的结构. 它有三个成员变量:引用计数表, 弱引用表, 自旋锁. 在我们操作引用计数表或者弱引用表的时候自旋锁会加锁防止竞态条件的出现.</p>
 <p>代码块 1 的作用:</p>
 <ul>
 <li>加锁, 防止在修改哈希表时可能出现的竞态条件. 按锁地址(从低到高)顺序加锁, 防止可能出现的锁的排序问题. </li>
@@ -695,7 +694,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -874,7 +873,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共 68.2k 字</span>
+  <span class="post-count">博客全站共 74.6k 字</span>
 </div>
 
         
