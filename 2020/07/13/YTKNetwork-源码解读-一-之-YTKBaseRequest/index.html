@@ -107,29 +107,45 @@
 
 
 
-  <meta name="description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
-<meta name="keywords" content="工具">
+  <meta name="description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
+<meta name="keywords" content="YTKNetwork,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS如何配置Bugly符号表(2020年最新)">
-<meta property="og:url" content="http://yoursite.com/2020/04/20/iOS如何配置Bugly符号表-2020年有效/index.html">
+<meta property="og:title" content="YTKNetwork 源码解读 (一) 之 YTKBaseRequest">
+<meta property="og:url" content="http://yoursite.com/2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/index.html">
 <meta property="og:site_name" content="千行的博客">
-<meta property="og:description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
+<meta property="og:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538">
-<meta property="og:image" content="https://i.loli.net/2020/04/20/EmPNnc9RQUy8X7W.jpg">
-<meta property="og:image" content="https://i.loli.net/2020/04/20/h72tVKX4LQlcYHO.jpg">
-<meta property="og:updated_time" content="2020-04-20T03:07:25.785Z">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/ZlS7V3w91BXoH4a.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/YV2MJiOnbyE7HwX.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/zrmpbNKCdMojXua.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/ynW2spDa8TO9bAB.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/1DZGRTkV3QESAp7.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/exVL4ChWQlyKb26.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/VudFo4c9YDZPC8R.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/mgYVArZ1p5N6FsE.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/d2ovlJ4YtS7mQeF.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/njUJ93GyN6SertB.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/9jCsWPpr6qMcFoa.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/x5iXczjwIsrBVY4.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/HYdDZ5xE18bouSh.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/t4ia9CTdyofFMPn.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/D7bwGxekBOVtUNh.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/pJaWsQxdj1mATEh.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/z2X8Fqbu6fB5GIe.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/JTaGPn6tEl7fpVq.jpg">
+<meta property="og:updated_time" content="2020-07-13T03:12:00.226Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS如何配置Bugly符号表(2020年最新)">
-<meta name="twitter:description" content="本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点 符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.  Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.之前一直使用Xcode + sh方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方">
-<meta name="twitter:image" content="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538">
+<meta name="twitter:title" content="YTKNetwork 源码解读 (一) 之 YTKBaseRequest">
+<meta name="twitter:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/04/20/iOS如何配置Bugly符号表-2020年有效/">
+  <link rel="canonical" href="http://yoursite.com/2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/">
 
 
 
@@ -139,7 +155,7 @@
   };
 </script>
 
-  <title>iOS如何配置Bugly符号表(2020年最新) | 千行的博客</title>
+  <title>YTKNetwork 源码解读 (一) 之 YTKBaseRequest | 千行的博客</title>
   
 
 
@@ -339,7 +355,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/20/iOS如何配置Bugly符号表-2020年有效/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="杜倩杭">
@@ -356,7 +372,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOS如何配置Bugly符号表(2020年最新)
+          <h1 class="post-title" itemprop="name headline">YTKNetwork 源码解读 (一) 之 YTKBaseRequest
 
               
             
@@ -382,7 +398,7 @@
                 
               
 
-              <time title="创建时间：2020-04-20 11:02:49 / 修改时间：11:07:25" itemprop="dateCreated datePublished" datetime="2020-04-20T11:02:49+08:00">2020-04-20</time>
+              <time title="创建时间：2020-07-13 11:09:56 / 修改时间：11:12:00" itemprop="dateCreated datePublished" datetime="2020-07-13T11:09:56+08:00">2020-07-13</time>
             
 
             
@@ -438,78 +454,100 @@
       
 
       
-        <p>本文将粗略的讲解 Bugly 的集成过程, 其中配置符号表部分会说的仔细一点</p>
-<p>符号表就是内存地址与函数名, 文件名, 行号的映射表. 通过上传符号表, 我们能将 App 发生 Crash 的程序堆栈进行解析还原.</p>
-<p><img src="https://bugly.qq.com/docs/img/symbol-ios/4001.png?v=20200312155538" alt=""></p>
-<p>Bugly 是我在用的一个崩溃日志收集分析工具. 集成使用简单并且免费.<br>之前一直使用<code>Xcode + sh</code>方式自动配置符号表, 直到有一天看到 crash 堆栈没有被解析, 才知道这个方法已无法上传符号表. 上网找过一些解决方法, 大致就是找到符号表后延迟以后再上传, 但也没什么效果. 随后再上官网查看文档, 使用官方手动配置的方法, 成功的上传了符号表和解析堆栈.</p>
-<h3 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h3><p>上 <a href="https://bugly.qq.com/v2/workbench/myapp" target="_blank" rel="noopener">官网</a> 创建产品.<br>创建成功后获取应用的 App ID </p>
-<h3 id="集成"><a href="#集成" class="headerlink" title="集成"></a>集成</h3><p>使用<code>Cocoapods</code>集成<br><code>pod &#39;Bugly&#39;</code></p>
-<h3 id="初始化-SDK"><a href="#初始化-SDK" class="headerlink" title="初始化 SDK"></a>初始化 SDK</h3><p>在工程<code>AppDelegate.m</code>的<code>application:didFinishLaunchingWithOptions:</code>方法中初始化：</p>
-<figure class="highlight roboconf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</span><br><span class="line">    [<span class="attribute">Bugly startWithAppId</span>:@"此处替换为你的AppId"];</span><br><span class="line">    <span class="attribute">return YES;</span></span><br><span class="line"><span class="attribute">&#125;</span></span><br><span class="line"><span class="attribute">```	</span></span><br><span class="line"><span class="attribute"></span></span><br><span class="line"><span class="attribute">### 手动配置符号表</span></span><br><span class="line"><span class="attribute"></span></span><br><span class="line"><span class="attribute">下载 [最新版](https</span>://bugly<span class="variable">.qq</span><span class="variable">.com</span>/v2/sdk?id=15343657-638a-4569-a220-8689b090be65) 请点击我这个连接去下载, 这个是 3.0.0 版本的.</span><br><span class="line"></span><br><span class="line">包里面有几个文件:</span><br><span class="line"></span><br><span class="line">![](https://i<span class="variable">.loli</span><span class="variable">.net</span>/2020/04/20/a5KHeFYtcfXhvzi<span class="variable">.jpg</span>)</span><br><span class="line"></span><br><span class="line">- buglySymboliOS<span class="variable">.jar</span>: 符号表工具JAR包</span><br><span class="line">- buglySymboliOS<span class="variable">.bat</span>: Windows的脚本</span><br><span class="line">- buglySymboliOS<span class="variable">.sh</span>: Shell脚本</span><br><span class="line">- settings<span class="variable">.txt</span>: 默认符号表配置文件</span><br><span class="line">- 符号表工具iOS版-使用指南</span><br><span class="line"></span><br><span class="line">&gt;  运行需要`Java 运行环境` (JRE􏲀JDK􏰅􏱺􏱿􏰎&gt;=1.6)</span><br><span class="line">&gt;  使用脚本时, 请保证脚本和 jar 包在同个目录下!</span><br><span class="line"></span><br><span class="line">#### 获取 dSYM 文件</span><br><span class="line"> </span><br><span class="line"> iOS 平台中, 􏲜􏲝􏲐􏱓dSYM 文件是指具有调试信息的目标文件, 文件名通常为: dSYM􏰔􏰕􏰫􏰈􏰄􏰳􏲁􏲂􏲃􏲄􏰞􏲅􏲆􏰔􏰕􏱓􏰔􏰕􏲡􏰻􏳋􏱈􏱣xxx<span class="variable">.app</span><span class="variable">.dSYM</span></span><br><span class="line"> 我使用下面的方式来找到它:</span><br><span class="line"> </span><br><span class="line"> ![](https://i<span class="variable">.loli</span><span class="variable">.net</span>/2020/04/20/Zs9OQXEzhIMjCJ3<span class="variable">.jpg</span>)</span><br><span class="line"> ![](https://i<span class="variable">.loli</span><span class="variable">.net</span>/2020/04/20/Vh7fZrmd9ewpbnW<span class="variable">.jpg</span>)</span><br><span class="line"> ![](https://i<span class="variable">.loli</span><span class="variable">.net</span>/2020/04/20/kVNFOq6KchGES9A<span class="variable">.jpg</span>)</span><br><span class="line"> ![](https://i<span class="variable">.loli</span><span class="variable">.net</span>/2020/04/20/cPuXpiyDk3lAwZU<span class="variable">.jpg</span>)</span><br><span class="line"> </span><br><span class="line"> 将最后的 dSYM 文件拷贝出来一份集中备份</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">#### dSYM 的符号表生成和上传</span><br><span class="line"></span><br><span class="line">- 生成</span><br><span class="line"></span><br><span class="line">我使用下面的方式来生成和上传 dSYM 文件</span><br></pre></td></tr></table></figure>
-<p>cd /Users/dqh/Desktop/buglySymboliOS3.0.0<br>java -jar buglySymboliOS.jar -i /Users/AAAA_1.0.15.app.dSYM -u -id 123456 -key 123456-2608-4a57-8af8-ff9c4d481f3e -package com.kikido.youappname -version 1.3.5<br><code>`</code></p>
-<p>你需要更改以下选项信息:</p>
-<ul>
-<li>i /Users/AAAA_1.0.15.app.dSYM: 更改为 [i 自己 dSYM 文件存放的地址]</li>
-<li>id 123456: 更改为 [id 你自己在 Bugly 申请到的 apple id]</li>
-<li>key 123456-2608-4a57-8af8-ff9c4d481f3e: 更改为 [key 你自己在 Bugly 申请到的 apple key]</li>
-<li>package com.kikido.youappname: 更改为 [package 你自己 app 的 bundle id]</li>
-<li>version 1.3.5: 更改为 [version 你自己 app 的 version]</li>
-</ul>
-<p>工具选项说明如下</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-i</td>
-<td>指定文件路径, 可指定目录(必选)􏰈􏰭􏰔􏰕􏲯􏲰􏱓􏲇􏰈􏰭􏲅􏲒􏱪􏲟􏰡􏱫􏰈􏰭􏰔􏰕􏲯􏲰􏱓􏲇􏰈􏰭􏲅􏲒</td>
-</tr>
-<tr>
-<td>-o</td>
-<td>􏲱􏲲􏰞􏰀􏰁􏰂输出的符号表 zip 文件的路径, 必须是 zip 文件</td>
-</tr>
-<tr>
-<td>-d</td>
-<td>调试模式开关(默认关闭)</td>
-</tr>
-<tr>
-<td>-s</td>
-<td>指定配置文件(默认读取 JAR 目录下的 settings.text 文件)</td>
-</tr>
-<tr>
-<td>-u</td>
-<td>上传开关</td>
-</tr>
-<tr>
-<td>-id</td>
-<td>app id</td>
-</tr>
-<tr>
-<td>-key</td>
-<td>app key</td>
-</tr>
-<tr>
-<td>-package</td>
-<td>app 包名</td>
-</tr>
-<tr>
-<td>-version</td>
-<td>app 版本</td>
-</tr>
-<tr>
-<td>-symbol</td>
-<td>生成 symbol 文件</td>
-</tr>
-</tbody>
-</table>
-<p>更多信息请查看<code>符号表工具iOS版-使用指南.pdf</code></p>
-<p>使用上面的命令之后就会在本地生成符号表文件, 并上传到符号表.</p>
-<p><img src="https://i.loli.net/2020/04/20/EmPNnc9RQUy8X7W.jpg" alt="上传成功"></p>
-<p>下面是 crash 的堆栈解析, 完美<br><img src="https://i.loli.net/2020/04/20/h72tVKX4LQlcYHO.jpg" alt=""></p>
+        <pre><code>因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。
+
+![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)
+
+不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。
+`YTKRequestValidationErrorInvalidStatusCode` 值的是 `reponse.statusCode` 不在 200~299 这个区间内，跟 AFHTTPResponseSerializer 的 `acceptableStatusCodes` 的范围一致
+
+
+![](https://i.loli.net/2020/07/10/YIxNzSZ2gdTma4b.jpg)
+
+常见的请求方法
+
+![](https://i.loli.net/2020/07/10/fulaMKk6Eys97i2.jpg)
+</code></pre><p>请求的序列化样式，相对于 AFNetworking 少了 AFPropertyListRequestSerializer，可能是因为这种编码方式比较少见吧。</p>
+<p>相应的序列化样式，相对于 AFNetworking 少了 AFXMLDocumentResponseSerializer，AFPropertyListResponseSerializer，AFImageResponseSerializer，AFCompoundResponseSerializer 几个类型</p>
+<p><img src="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg" alt=""></p>
+<p>对应于 NSURLSessionTask 的 priority 属性，需要在 iOS8 以后的系统中使用，不过一般也不需要再兼容之前的系统了吧。。。</p>
+<p><img src="https://i.loli.net/2020/07/10/ZlS7V3w91BXoH4a.jpg" alt=""></p>
+<p>AFMultipartFormData 在 AFNetworking 用于 <code>Content-Type</code> 为 <code>application/form-data</code> 的请求，将数据添加到请求体中。一般用于 upload task 中。<br>在 AFConstructingBlock 类型的 block 中，你可以将数据添加数据添加到请求体中<br>在 AFURLSessionTaskProgressBlock 的 block 你可以追踪上传的进度</p>
+<p><img src="https://i.loli.net/2020/07/10/YV2MJiOnbyE7HwX.jpg" alt=""></p>
+<p>你可以实现这两个协议，以便在 request 的不同阶段进行相应的处理<br>需要注意的是这些方法的执行顺序不要搞错了</p>
+<p><img src="https://i.loli.net/2020/07/10/zrmpbNKCdMojXua.jpg" alt=""></p>
+<p>接下来介绍 <code>YTKBaseRequest</code> 这个类，它是一个抽象类，提供了构建 requeset 时的许多选项</p>
+<p><img src="https://i.loli.net/2020/07/10/ynW2spDa8TO9bAB.jpg" alt=""></p>
+<p>这里大部分的属性是映射 <code>NSHTTPURLResponse</code>， <code>NSURLRequest</code>，<code>NSURLSessionTask</code> 这几个类的属性的。</p>
+<p>需要注意的是 <code>responseObject</code>，如果 <code>resumableDownloadPath</code> 不为空并且 requestTask 是 DownloadTask 类型的，那么这个属性的值就一个文件路径(NSURL)，用来保存下载数据的</p>
+<p><img src="https://i.loli.net/2020/07/10/1DZGRTkV3QESAp7.jpg" alt=""></p>
+<p>tag 可以用来标记 YTKBaseRequest，默认值是 0<br>userInfo 可以用来添加额外信息</p>
+<p><img src="https://i.loli.net/2020/07/10/exVL4ChWQlyKb26.jpg" alt=""></p>
+<p>requestAccessories 是一个数组，可以用来保存<code>多个</code>实现了 <code>YTKRequestAccessory</code> 协议的对象<br>constructingBodyBlock 用来将数据添加到请求体中<br>resumableDownloadPath 是保存下载数据文件的路径，当下载请求失败时，部分的下载数据会自动保存到这个文件中，否则数据会保存到 responseData/responseString 中<br>resumableDownloadProgressBlock 可以用来追踪下载进度<br>uploadProgressBlock 可以用来追踪上传进度</p>
+<p><img src="https://i.loli.net/2020/07/10/VudFo4c9YDZPC8R.jpg" alt=""> </p>
+<p><code>-setCompletionBlockWithSuccess:failure:</code> 用来添加请求 成功/失败 的回调<br><code>-clearCompletionBlock:</code> 将请求 成功/失败 的回调 block 置为 nil，避免循环引用<br><code>-addAccessory:</code> 用来添加实现 YTKRequestAccessory 的对象</p>
+<p><img src="https://i.loli.net/2020/07/13/mgYVArZ1p5N6FsE.jpg" alt=""></p>
+<ol>
+<li>-start：开启任务。需要注意是为了让 task 在完成之前不被释放掉，会在这个 task 添加到单例 YTKNetworkAgent 的成员变量 <code>_requestsRecord</code>中</li>
+<li>-stop：取消任务。我感觉这个方法叫做 cancle 比较合适，我一开始看到 stop 还以为是 suspend 的意思</li>
+<li>-startWithCompletionBlockWithSuccess:failure:，设置请求 失败/成功 的回调，并开启任务</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/13/d2ovlJ4YtS7mQeF.jpg" alt=""></p>
+<p>这部分是你实现 YTKBaseRequest 子类时可以覆写的方法</p>
+<p>-requestCompletePreprocessor，-requestCompleteFilter，-requestFailedPreprocessor，-requestFailedFilter：这几个方法都是对请求 成功/失败 结果的处理，结合之前讲过 <code>YTKRequestDelegate</code>，<code>YTKRequestAccessory</code> 两个协议里面的方法，下面给出这些方法的执行顺序.</p>
+<p>请求成功后回调的执行顺序：</p>
+<ol>
+<li>requestCompletePreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestCompleteFilter</li>
+<li>requestFinished</li>
+<li>successCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<p>请求失败后回调的执行顺序</p>
+<ol>
+<li>requestFailedPreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestFailedFilter</li>
+<li>requestFailed</li>
+<li>failureCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<p>方法 <code>-cacheFileNameFilterForRequestArgument</code> 用来对请求参数 argument 进行过滤后返回一个新的参数，用在获取缓存文件名字上。</p>
+<p>方法 <code>-requestAuthorizationHeaderFieldArray</code>，用于身份验证，在这个方法中你需要返回一个容量为 2 的数组，第一个元素表示账号，第二个元素表示密码。<br>该认证方式使用用户的 账号/密码 作为凭证信息，进行 base64 编码添加到请求头 <code>Authorization</code> 中传输到服务器中</p>
+<p>方法 <code>buildCustomUrlRequest</code>，在这个方法里面你可以放回一个自定义的 request，而不是使用 AFNetworking 的 AFHTTPRequestSerializer 生成。<br>如果你返回了一个不为 nil 的对象，那么将忽略 <code>requestUrl</code>, <code>requestTimeoutInterval</code>,  <code>requestArgument</code>, <code>allowsCellularAccess</code>, <code>requestMethod</code> and <code>requestSerializerType</code></p>
+<p>方法 <code>jsonValidator</code>，在这个方法里面，你可以对 reponse 序列化后的 JSON 对象进行验证。<br>举个例子，我们要向网址 <a href="http://www.yuantiku.com/iphone/users" target="_blank" rel="noopener">http://www.yuantiku.com/iphone/users</a> 发送一个 GET 请求，请求参数是 userId 。我们想获得某一个用户的信息，包括他的昵称和等级，我们需要服务器必须返回昵称（字符串类型）和等级信息（数值类型），则可以覆盖 jsonValidator 方法，实现简单的验证。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)jsonValidator &#123;</span><br><span class="line">    <span class="keyword">return</span> @&#123;</span><br><span class="line">        <span class="string">@"nick"</span>: [<span class="built_in">NSString</span> <span class="keyword">class</span>],</span><br><span class="line">        <span class="string">@"level"</span>: [<span class="built_in">NSNumber</span> <span class="keyword">class</span>]</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法 <code>statusCodeValidator</code>，我觉得如果是验证状态码的话好得加个状态码的参数啊，不过无所谓啦，反正可以自己获取状态码然后再进行判断。该方法返回一个布尔值，如果返回的是 NO 的话将会报错。</p>
+<p>接下来讲 .m 文件</p>
+<p><img src="https://i.loli.net/2020/07/13/njUJ93GyN6SertB.jpg" alt=""></p>
+<p>在 .h 文件中这些属性都是只读的，在 .m 文件中改成可读写，防止外部修改这些属性的值。</p>
+<p><img src="https://i.loli.net/2020/07/13/9jCsWPpr6qMcFoa.jpg" alt=""></p>
+<p>将 <code>NSURLSessionTask</code>，<code>NSURLResponse</code> 的一些属性映射成自己的属性，便于使用</p>
+<p><img src="https://i.loli.net/2020/07/13/x5iXczjwIsrBVY4.jpg" alt=""></p>
+<p>设置请求 成功/失败 的回调<br>需要注意的是可以添加多个实现了 YTKRequestAccessory 协议的对象</p>
+<p><img src="https://i.loli.net/2020/07/13/HYdDZ5xE18bouSh.jpg" alt=""></p>
+<p>开启/关闭 请求的方法。<br>在 start 方法中：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 触发 YTKRequestAccessory 代理</span></span><br><span class="line"><span class="selector-tag">-</span> (void)<span class="selector-tag">toggleAccessoriesWillStartCallBack</span> &#123;</span><br><span class="line">    <span class="selector-tag">for</span> (id&lt;YTKRequestAccessory&gt; accessory in self.requestAccessories) &#123;</span><br><span class="line">        <span class="selector-tag">if</span> ([accessory <span class="attribute">respondsToSelector</span>:<span class="variable">@selector</span>(<span class="attribute">requestWillStart</span>:)]) &#123;</span><br><span class="line">            <span class="selector-attr">[accessory requestWillStart:self]</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2020/07/13/t4ia9CTdyofFMPn.jpg" alt="addRequest方法实现"></p>
+<p>在成功创建 task 后，task 将会被添加到 _requestsRecord 属性中避免被释放。随后调用 resume 开启任务<br>如果我们没有覆写方法 buildCustomUrlRequest 返回自定义的 request，系统会根据 YTKBaseRequest 创建 request。这部分在 <code>sessionTaskForRequest:error:</code> 中实现</p>
+<p><img src="https://i.loli.net/2020/07/13/D7bwGxekBOVtUNh.jpg" alt=""></p>
+<p>获取 YTKBaseRequest 实例上各种属性的值，例如方法类型，参数，然后在根据 method 的不同，使用不同的方法创建 task。<br>因为这部分内容都在 YTKNetworkAgent，这里就简单提下。在后面讲解 YTKNetworkAgent 部分的时候再仔细说</p>
+<p>在 <code>stop</code> 方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 执行代理</span></span><br><span class="line">[<span class="keyword">self</span> toggleAccessoriesWillStopCallBack];</span><br><span class="line"><span class="comment">// 将 delegate 置为 nil</span></span><br><span class="line"><span class="keyword">self</span>.delegate = <span class="literal">nil</span>;</span><br><span class="line"><span class="comment">// task cancle</span></span><br><span class="line">[[YTKNetworkAgent sharedAgent] cancelRequest:<span class="keyword">self</span>];</span><br><span class="line"><span class="comment">// 执行代理</span></span><br><span class="line">[<span class="keyword">self</span> toggleAccessoriesDidStopCallBack];</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2020/07/13/pJaWsQxdj1mATEh.jpg" alt=""></p>
+<p>如果你的请求是下载任务，并且你指定了一个缓存文件名，那么下载好的部分数据将会写入这个临时文件中，在下次恢复下载时使用。<br>当然如果要使用断点下载，还需要满足下面的几个条件：</p>
+<ol>
+<li>这个资源自你第一次请求后没有改变</li>
+<li>这个任务是一个 HTTP 或者 HTTP GET 请求</li>
+<li>服务器在 reponse header 提供了 ETag 或者 Last-Modified 字段</li>
+<li>服务器支持字节范围请求</li>
+<li>本地临时文件没有被删除</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/13/z2X8Fqbu6fB5GIe.jpg" alt=""></p>
+<p>由于 YTKBaseRequest 是一个基类，所以在这些需要子类覆写的方法里面内容不多</p>
+<p><img src="https://i.loli.net/2020/07/13/JTaGPn6tEl7fpVq.jpg" alt=""></p>
+<p>覆写了 -description 方法，方便打印信息</p>
 
       
     </div>
@@ -545,7 +583,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/工具/" rel="tag"># 工具</a>
+            <a href="/tags/YTKNetwork/" rel="tag"># YTKNetwork</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
           
         </div>
       
@@ -558,8 +598,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/16/深入了解-iOS-引用计数/" rel="next" title="深入了解 iOS 引用计数">
-                <i class="fa fa-chevron-left"></i> 深入了解 iOS 引用计数
+              <a href="/2020/05/24/从源码读懂-Runloop/" rel="next" title=" 从源码读懂 Runloop">
+                <i class="fa fa-chevron-left"></i>  从源码读懂 Runloop
               </a>
             
           </div>
@@ -567,10 +607,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/04/23/iOS-weak弱引用底层实现/" rel="prev" title="iOS weak弱引用底层实现">
-                iOS weak弱引用底层实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -620,17 +656,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -774,22 +801,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建应用"><span class="nav-text">创建应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成"><span class="nav-text">集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-SDK"><span class="nav-text">初始化 SDK</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
@@ -950,7 +961,7 @@
   
     <script>
       window.livereOptions = {
-        refer: '2020/04/20/iOS如何配置Bugly符号表-2020年有效/'
+        refer: '2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/'
       };
       (function(d, s) {
         var j, e = d.getElementsByTagName(s)[0];
