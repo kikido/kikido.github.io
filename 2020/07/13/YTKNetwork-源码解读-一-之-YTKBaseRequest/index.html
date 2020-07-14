@@ -107,14 +107,17 @@
 
 
 
-  <meta name="description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
+  <meta name="description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  不知道你有没有注意到 NS_ENUM 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。YTKRequestValidationErrorInvalidStatusCode 值的是 reponse.sta">
 <meta name="keywords" content="YTKNetwork,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="YTKNetwork 源码解读 (一) 之 YTKBaseRequest">
 <meta property="og:url" content="http://yoursite.com/2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/index.html">
 <meta property="og:site_name" content="千行的博客">
-<meta property="og:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
+<meta property="og:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  不知道你有没有注意到 NS_ENUM 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。YTKRequestValidationErrorInvalidStatusCode 值的是 reponse.sta">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/YIxNzSZ2gdTma4b.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/fulaMKk6Eys97i2.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/10/ZlS7V3w91BXoH4a.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/10/YV2MJiOnbyE7HwX.jpg">
@@ -134,11 +137,11 @@
 <meta property="og:image" content="https://i.loli.net/2020/07/13/pJaWsQxdj1mATEh.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/13/z2X8Fqbu6fB5GIe.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/13/JTaGPn6tEl7fpVq.jpg">
-<meta property="og:updated_time" content="2020-07-13T03:12:00.226Z">
+<meta property="og:updated_time" content="2020-07-13T05:42:48.601Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YTKNetwork 源码解读 (一) 之 YTKBaseRequest">
-<meta name="twitter:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  ![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)  不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。">
-<meta name="twitter:image" content="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg">
+<meta name="twitter:description" content="因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。  不知道你有没有注意到 NS_ENUM 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。YTKRequestValidationErrorInvalidStatusCode 值的是 reponse.sta">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg">
 
 
 
@@ -398,7 +401,7 @@
                 
               
 
-              <time title="创建时间：2020-07-13 11:09:56 / 修改时间：11:12:00" itemprop="dateCreated datePublished" datetime="2020-07-13T11:09:56+08:00">2020-07-13</time>
+              <time title="创建时间：2020-07-13 11:09:56 / 修改时间：13:42:48" itemprop="dateCreated datePublished" datetime="2020-07-13T11:09:56+08:00">2020-07-13</time>
             
 
             
@@ -454,20 +457,13 @@
       
 
       
-        <pre><code>因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。
-
-![](https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg)
-
-不知道你有没有注意到 `NS_ENUM` 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。
-`YTKRequestValidationErrorInvalidStatusCode` 值的是 `reponse.statusCode` 不在 200~299 这个区间内，跟 AFHTTPResponseSerializer 的 `acceptableStatusCodes` 的范围一致
-
-
-![](https://i.loli.net/2020/07/10/YIxNzSZ2gdTma4b.jpg)
-
-常见的请求方法
-
-![](https://i.loli.net/2020/07/10/fulaMKk6Eys97i2.jpg)
-</code></pre><p>请求的序列化样式，相对于 AFNetworking 少了 AFPropertyListRequestSerializer，可能是因为这种编码方式比较少见吧。</p>
+        <p>因为 YTKBaseRequest .h/.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。</p>
+<p><img src="https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg" alt=""></p>
+<p>不知道你有没有注意到 <code>NS_ENUM</code> 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。<br><code>YTKRequestValidationErrorInvalidStatusCode</code> 值的是 <code>reponse.statusCode</code> 不在 200~299 这个区间内，跟 AFHTTPResponseSerializer 的 <code>acceptableStatusCodes</code> 的范围一致</p>
+<p><img src="https://i.loli.net/2020/07/10/YIxNzSZ2gdTma4b.jpg" alt=""></p>
+<p>常见的请求方法</p>
+<p><img src="https://i.loli.net/2020/07/10/fulaMKk6Eys97i2.jpg" alt=""></p>
+<p>请求的序列化样式，相对于 AFNetworking 少了 AFPropertyListRequestSerializer，可能是因为这种编码方式比较少见吧。</p>
 <p>相应的序列化样式，相对于 AFNetworking 少了 AFXMLDocumentResponseSerializer，AFPropertyListResponseSerializer，AFImageResponseSerializer，AFCompoundResponseSerializer 几个类型</p>
 <p><img src="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg" alt=""></p>
 <p>对应于 NSURLSessionTask 的 priority 属性，需要在 iOS8 以后的系统中使用，不过一般也不需要再兼容之前的系统了吧。。。</p>
