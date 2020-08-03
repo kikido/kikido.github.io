@@ -107,31 +107,49 @@
 
 
 
-  <meta name="description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
+  <meta name="description" content="YTKCacheMetadata YTKCacheMetadata 表示缓存元数据，保存了跟缓存相关的一些信息，例如创建时间，创建时的版本号，app 版本号等。通过比较 YTKCacheMetadata，来判断本地缓存是否有效。如果无效的话则重新发起请求，有效的话则从本地缓存加载 reponse 数据 下面几种比较 YTKCacheMetadata 的情况会被认为本地无效：  version 不匹">
+<meta name="keywords" content="YTKNetwork,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何将自己的库上传到cocoapods">
-<meta property="og:url" content="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/index.html">
+<meta property="og:title" content="YTKNetwork 源码解读 (二) 之 YTKRequest">
+<meta property="og:url" content="http://yoursite.com/2020/08/03/YTKNetwork-源码解读-二-之-YTKRequest/index.html">
 <meta property="og:site_name" content="千行的博客">
-<meta property="og:description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
+<meta property="og:description" content="YTKCacheMetadata YTKCacheMetadata 表示缓存元数据，保存了跟缓存相关的一些信息，例如创建时间，创建时的版本号，app 版本号等。通过比较 YTKCacheMetadata，来判断本地缓存是否有效。如果无效的话则重新发起请求，有效的话则从本地缓存加载 reponse 数据 下面几种比较 YTKCacheMetadata 的情况会被认为本地无效：  version 不匹">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/14/5cda81206e65314279.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdb71183965554049.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc0291fcff15453.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc042bb60f27101.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc498e9b8687464.jpg">
-<meta property="og:updated_time" content="2019-06-12T08:55:32.000Z">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/vK2cFaYh54MoLsu.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/3AQOFr6ICM5uq9d.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/pLRehUOCPFoVxMJ.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/PQLzhDKWxZuTC5l.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/msUzTJGKSufay2p.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/2MIDkdoPpyFlJnH.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/59fMuWAXvbqT4oa.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/ynWUkDuqTzieHlO.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/FAirxDa6dfjCETv.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/vUlL8gpwIi4mkxa.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/15/R7Sh9anB2bvfKYw.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/NbsO7IQTnAqhlkp.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/NmwzDa2IUyQ18bT.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/Z7xt3jHokVRS5EU.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/oBP5jgH3f6T9zM1.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/uoIxqKkjCOiDvYE.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/6tmJugLQ8fscNPS.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/pR8CtblTKcOvwDi.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/sL6Q5M2E81Aw7uN.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/mAFkNIntxwS2CM1.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/4Q2YEgoDiGX8p93.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/8MXwRHIantJKGiT.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/03/knBlZpyvgf2wICu.jpg">
+<meta property="og:updated_time" content="2020-08-03T07:18:16.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何将自己的库上传到cocoapods">
-<meta name="twitter:description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
-<meta name="twitter:image" content="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg">
+<meta name="twitter:title" content="YTKNetwork 源码解读 (二) 之 YTKRequest">
+<meta name="twitter:description" content="YTKCacheMetadata YTKCacheMetadata 表示缓存元数据，保存了跟缓存相关的一些信息，例如创建时间，创建时的版本号，app 版本号等。通过比较 YTKCacheMetadata，来判断本地缓存是否有效。如果无效的话则重新发起请求，有效的话则从本地缓存加载 reponse 数据 下面几种比较 YTKCacheMetadata 的情况会被认为本地无效：  version 不匹">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/13/vK2cFaYh54MoLsu.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/">
+  <link rel="canonical" href="http://yoursite.com/2020/08/03/YTKNetwork-源码解读-二-之-YTKRequest/">
 
 
 
@@ -141,7 +159,7 @@
   };
 </script>
 
-  <title>如何将自己的库上传到cocoapods | 千行的博客</title>
+  <title>YTKNetwork 源码解读 (二) 之 YTKRequest | 千行的博客</title>
   
 
 
@@ -341,7 +359,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/03/YTKNetwork-源码解读-二-之-YTKRequest/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="杜倩杭">
@@ -358,7 +376,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何将自己的库上传到cocoapods
+          <h1 class="post-title" itemprop="name headline">YTKNetwork 源码解读 (二) 之 YTKRequest
 
               
             
@@ -384,24 +402,12 @@
                 
               
 
-              <time title="创建时间：2019-05-15 16:39:11" itemprop="dateCreated datePublished" datetime="2019-05-15T16:39:11+08:00">2019-05-15</time>
+              <time title="创建时间：2020-08-03 15:17:32 / 修改时间：15:18:16" itemprop="dateCreated datePublished" datetime="2020-08-03T15:17:32+08:00">2020-08-03</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-12 16:55:32" itemprop="dateModified" datetime="2019-06-12T16:55:32+08:00">2019-06-12</time>
               
             
           </span>
@@ -418,7 +424,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/cocoapods/" itemprop="url" rel="index"><span itemprop="name">cocoapods</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS杂/" itemprop="url" rel="index"><span itemprop="name">iOS杂</span></a></span>
 
                 
                 
@@ -452,40 +458,113 @@
       
 
       
-        <p>假设到这里你已经将你的代码上传了<code>github</code>上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程</p>
-<h3 id="生成及修改配置文件"><a href="#生成及修改配置文件" class="headerlink" title="生成及修改配置文件"></a>生成及修改配置文件</h3><p>在创建之前，你需要将你的代码提交到<code>github</code>上，并且为它生成一个相应版本号的tag</p>
-<h4 id="pod-trunk-register-EMAIL-USERNAME"><a href="#pod-trunk-register-EMAIL-USERNAME" class="headerlink" title="pod trunk register [EMAIL] [USERNAME]"></a>pod trunk register [EMAIL] [USERNAME]</h4><p><img src="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg" alt=""><br>当你运行<code>pod trunk me</code>后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是运行如下的命令<br><code>pod trunk register [EMAIL] [USERNAME]</code>，运行成功之后，你填的邮箱会收到一封邮件，点进去点击里面的链接就算是登录成功了。</p>
-<p><img src="https://i.loli.net/2019/05/14/5cda81206e65314279.jpg" alt="登录"></p>
-<h4 id="pod-spec-create-JTForm"><a href="#pod-spec-create-JTForm" class="headerlink" title="pod spec create JTForm"></a>pod spec create JTForm</h4><p>cd到项目中，在readme.md的位置使用<code>pod spec create JTForm</code>。这个命令会生成一个<code>JTForm.podspec</code>的文件。</p>
-<h4 id="编辑JTForm-podspec"><a href="#编辑JTForm-podspec" class="headerlink" title="编辑JTForm.podspec"></a>编辑JTForm.podspec</h4><p>你可以直接参考或者复制别的项目podspec文件里面的内容，仅需修改一些信息。你也可以看<a href="https://guides.cocoapods.org/syntax/podspec.html" target="_blank" rel="noopener">官方文档</a>自己编辑。</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line"></span><br><span class="line">  s.<span class="attr">name</span>          = <span class="string">"JTForm"</span></span><br><span class="line">  s.<span class="attr">version</span>       = <span class="string">"0.0.1"</span></span><br><span class="line">  s.<span class="attr">summary</span>       = <span class="string">"简单快速的创建复杂且流畅的表单，XLForm与Texture相结合"</span></span><br><span class="line">  s.<span class="attr">homepage</span>      = <span class="string">"https://github.com/kikido/JTForm"</span></span><br><span class="line">  s.<span class="attr">license</span>       = &#123; :<span class="attr">type</span> =&gt; <span class="string">"MIT"</span>,  &#125;</span><br><span class="line">  s.<span class="attr">author</span>             = &#123; <span class="string">"kikido"</span> =&gt; <span class="string">"kikido1992@gmail.com"</span> &#125;</span><br><span class="line">  s.<span class="attr">source</span>        = &#123; :<span class="attr">git</span> =&gt; <span class="string">"https://github.com/kikido/JTForm.git"</span>, :<span class="attr">tag</span> =&gt; s.version.to_s &#125;</span><br><span class="line">  s.<span class="attr">source_files</span>  = <span class="string">"JTForm"</span>, <span class="string">"JTForm/**/*.&#123;h,m&#125;"</span></span><br><span class="line">  s.<span class="attr">resource</span>      = 'JTForm/JTForm.bundle'</span><br><span class="line">  s.dependency <span class="string">"SDWebImage"</span>, <span class="string">"~&gt; 4.4.6"</span></span><br><span class="line">  s.dependency <span class="string">"Texture"</span>, '~&gt; <span class="number">2.8</span>'</span><br><span class="line">  s.<span class="attr">requires_arc</span> = <span class="literal">true</span></span><br><span class="line">  s.ios.<span class="attr">deployment_target</span> = '<span class="number">9.0</span>'</span><br><span class="line">  s.<span class="attr">xcconfig</span> = &#123; <span class="string">"HEADER_SEARCH_PATHS"</span> =&gt; <span class="string">"$(SRCROOT)/SDWebImage"</span> &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># s.public_header_files = "Classes/**/*.h"</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<h4 id="pod-spec-lint"><a href="#pod-spec-lint" class="headerlink" title="pod spec lint"></a>pod spec lint</h4><p>验证你编辑的podspec文件是否符合规范，如果出现error的话是不可以的，warning的话是可以的，可以使用命令<code>pod spec lint --allow-warnings</code>来忽略所有warnings。</p>
-<p>下面是我验证时出现的问题：</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb71183965554049.jpg" alt="验证出错"></p>
-<p>原因是因为podspec文件里面<code>s.ios.deployment_target = &#39;8.0&#39;</code>，而Texture仅支持iOS9.0以上的版本，所以我这里做了以下的修改：<code>s.ios.deployment_target = &#39;9.0&#39;</code>。</p>
-<p>重新验证，出现了以下错误：</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdbc0291fcff15453.jpg" alt="错误1"><br><img src="https://i.loli.net/2019/05/15/5cdbc042bb60f27101.jpg" alt="错误2"></p>
-<p>一开始我以为我的.h直接引用了第三方的文件导致，后来才发现是因为没有暴露SDWebImage的头文件。解决办法：在podspec文件修改配置<code>s.xcconfig = { &quot;HEADER_SEARCH_PATHS&quot; =&gt; &quot;$(SRCROOT)/SDWebImage&quot; }</code><br>答案来源：<a href="http://corotata.com/2017/04/06/2017-4-6-%E5%85%B3%E4%BA%8E%E7%BB%84%E4%BB%B6%E5%8C%96%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89Pods%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%B0%E5%BD%95/" target="_blank" rel="noopener">关于组件化使用私有Pods的一些记录</a></p>
-<p>重新编译，通过<br><a href="https://i.loli.net/2019/05/15/5cdbc1557b1d581509.jpg" target="_blank" rel="noopener"></a></p>
-<h4 id="pod-trunk-push-–allow-warnings"><a href="#pod-trunk-push-–allow-warnings" class="headerlink" title="pod trunk push –allow-warnings"></a>pod trunk push –allow-warnings</h4><p>使用<code>pod trunk push --allow-warnings</code>命令将自己的库发布到cocoapods上，大概8分钟左上</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdbc498e9b8687464.jpg" alt="上传成功"></p>
-<h4 id="pod-setup"><a href="#pod-setup" class="headerlink" title="pod setup"></a>pod setup</h4><p>上传成功之后，使用<code>pod search</code>无法搜到自己的库的话，你可以这样做：</p>
+        <h2 id="YTKCacheMetadata"><a href="#YTKCacheMetadata" class="headerlink" title="YTKCacheMetadata"></a>YTKCacheMetadata</h2><p><img src="https://i.loli.net/2020/07/13/vK2cFaYh54MoLsu.jpg" alt=""></p>
+<p>YTKCacheMetadata 表示缓存元数据，保存了跟缓存相关的一些信息，例如创建时间，创建时的版本号，app 版本号等。<br>通过比较 YTKCacheMetadata，来判断本地缓存是否有效。如果无效的话则重新发起请求，有效的话则从本地缓存加载 reponse 数据</p>
+<p>下面几种比较 YTKCacheMetadata 的情况会被认为本地无效：</p>
 <ol>
-<li>命令<code>rm ~/Library/Caches/CocoaPods/search_index.json</code></li>
+<li>version 不匹配</li>
+<li>sensitiveDataString 不匹配。不要被它的名字给误导了，其实它就相当于一个额外的一个标识符，自己可以设定，如果 sensitiveDataString 不相等说明不匹配</li>
+<li>creationDate 取创建日期到现在的时间戳，如果超过了设定的缓存有效时间说明缓存无效</li>
+<li>appVersionString 不匹配，app 版本号不匹配</li>
 </ol>
-<p>完成后重新使用<code>pod search</code>搜索</p>
-<h3 id="版本升级"><a href="#版本升级" class="headerlink" title="版本升级"></a>版本升级</h3><p>当你需要升级自己库版本的时候，你可以这样做：</p>
+<p>还有一个属性 <code>NSStringEncoding stringEncoding</code> 用于将本地数据转换成字符串时使用。</p>
+<p>另外 YTKCacheMetadata 还支持 NSSecureCoding 协议，协议里的方法就不讲了。</p>
+<p><img src="https://i.loli.net/2020/07/13/3AQOFr6ICM5uq9d.jpg" alt=""></p>
+<p>定义了一些跟缓存相关的一些状态码</p>
+<h2 id="YTKRequest"><a href="#YTKRequest" class="headerlink" title="YTKRequest"></a>YTKRequest</h2><!--FIXME：扩展的版本链接-->
+<p>YTKRequest 是 YTKBaseRequest 的子类，为 YTKBaseRequest 增加了缓存功能</p>
+<p><img src="https://i.loli.net/2020/07/13/pLRehUOCPFoVxMJ.jpg" alt=""></p>
+<p>response 数据是否保存到本地需要满足两个条件:</p>
 <ol>
-<li>修改podspec中<code>s.version</code>的版本号</li>
-<li>提交到git，并打上相应版本号的tag</li>
-<li>进入到podspec目录下，使用命令<code>pod trunk push --allow-warnings</code>更新库</li>
+<li>当前 response 不是来自于缓存，即 response 需要来自于 request</li>
+<li>缓存有效时间 cacheTimeInSeconds 需要大于 0</li>
 </ol>
-<h3 id="更换版本"><a href="#更换版本" class="headerlink" title="更换版本"></a>更换版本</h3><p>如果你对当前版本的库不满意，但是又不想升级版本号。你可以这样做：</p>
+<p><img src="https://i.loli.net/2020/07/13/PQLzhDKWxZuTC5l.jpg" alt=""></p>
+<p><code>-cacheVersion</code>，<code>-cacheSensitiveData</code> 这两个标识符都是自己设定的。<br>保存缓存时，也会将缓存元数据保存在本地，当需要加载缓存时，会先把缓存元数据取出来，比较 cacheVersion，cacheSensitiveData 这两个标识符跟当前的标识符是否相等，如果有不相等说明缓存无效</p>
+<p>接下来是 <code>YTKRequest.m</code> 部分</p>
+<p><img src="https://i.loli.net/2020/07/15/msUzTJGKSufay2p.jpg" alt=""></p>
+<p>两个宏 <code>NSFoundationVersionNumber_iOS_8_0</code> 和 <code>NSFoundationVersionNumber_With_QoS_Available</code> 用来处理系统在 iOS8 之前和之后两种情况，不过在 iOS11 之后，我们可以使用 <code>if (@available(iOS 10, macOS 10.12, watchOS 3, tvOS 10, *))</code> 这个关键字来处理系统版本不同的问题</p>
+<p>这里创建了一个串行队列，对于 iOS8 之后的系统，还指定了它的队列优先级为 <code>QOS_CLASS_BACKGROUND</code>。需要注意的是 <code>QOS_CLASS_BACKGROUND</code> 的优先级别是最低的，可能是因为不想占用太多系统资源吧。<br>这个队列用来将 response 保存到本地文件中</p>
+<p><img src="https://i.loli.net/2020/07/15/2MIDkdoPpyFlJnH.jpg" alt=""></p>
+<p>上面几种不同类型的缓存对应 YTKResponseSerializerType 的类型</p>
 <ol>
-<li>去掉git上相应版本号的tag</li>
-<li>git上传新的内容</li>
-<li>上传之后打上相应版本号的tag</li>
+<li>cacheData 和 cacheString 对应于 YTKResponseSerializerTypeHTTP</li>
+<li>cacheData 和 cacheJSON 对应于 YTKResponseSerializerTypeJSON</li>
+<li>cacheData 和 cacheXML 对应于 YTKResponseSerializerTypeXMLParser</li>
 </ol>
+<p><img src="https://i.loli.net/2020/07/15/59fMuWAXvbqT4oa.jpg" alt=""></p>
+<p>因为 YTKRequest 是 YTKBaseRequest 的子类，在这里覆写了它的 <code>start</code> 方法。</p>
+<p>有三种情况会导致不使用缓存数据：</p>
+<ol>
+<li>设置 YTKRequest 的属性 ignoreCache 为 YES，这样会忽略缓存直接进行请求</li>
+<li>如果当前任务是一个下载任务，此时不会对 response 结果进行缓存，自然也就不会有读取缓存这个过程</li>
+<li>加载缓存时出现了问题。例如缓存元数据验证时出现问题，或者是读取缓存文件时出现的问题</li>
+</ol>
+<p>如果加载缓存成功，会在主队列分发一个异步任务，用来执行请求完成后的一些方法，这些我们在讲 YTKBaseRequest 的时候提到过了<br>需要注意的是下面这行代码</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YTKRequest *strongSelf = self<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>这是为了防止执行异步任务的时候 self 突然被释放了。不过我的理解是，既然 GCD 已经强引用了 self，那么在 block 执行完毕之前，self 都是不会被释放掉的，所以这句代码貌似有点多余了</p>
+<p><img src="https://i.loli.net/2020/07/15/ynWUkDuqTzieHlO.jpg" alt=""></p>
+<p>使用 -loadCacheWithError 方法来加载本地缓存，分这么几步：</p>
+<ol>
+<li>判断是否设置了缓存有效时间，如果没有的话说明不使用缓存了，直接返回</li>
+<li>加载缓存元数据，如果元数据不存在，说明缓存也不存在</li>
+<li>验证缓存元数据，判断缓存是否有效</li>
+<li>加载本地缓存</li>
+</ol>
+<p>在这里，我们先讲一下第三步验证缓存元数据的方法，加载缓存元数据和加载缓存后面再讲</p>
+<p><img src="https://i.loli.net/2020/07/15/FAirxDa6dfjCETv.jpg" alt="validateCacheWithError"></p>
+<ol>
+<li>首先比较缓存的有效时间，因为缓存元数据中保存了缓存的创建日期，所以这里比较简单</li>
+<li>比较缓存版本号，因为是 long long 类型，所以直接比较就可以</li>
+<li>比较 sensitiveDataString 标识符，因为是字符串类型，所以需要使用 <code>isEqualToString</code> 方法比较。值得注意的是，对于符号 <code>||</code>，当前面那个条件满足之后就不会再去比较后面那个条件了，所以我们写代码的时候可以把比较简单的判断条件放在前面，同理还有 <code>&amp;&amp;</code></li>
+<li>比较 app 版本号。这里我觉得只需要使用 dispatch_once 进行一次比较就可以了。如果变 app 版本号变更了，则清除缓存，后面就不再需要比较; 如果版本号没有变更，后面也不需要比较了</li>
+</ol>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 忽略缓存，开启请求</span></span><br><span class="line">- (<span class="keyword">void</span>)startWithoutCache &#123;</span><br><span class="line">    <span class="comment">// 清空跟缓存相关的属性</span></span><br><span class="line">    [<span class="meta">self clearCacheVariables</span>];</span><br><span class="line">    [<span class="meta">super start</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果不使用缓存，则调用这个方法来开启任务。</p>
+<p><img src="https://i.loli.net/2020/07/15/vUlL8gpwIi4mkxa.jpg" alt=""></p>
+<p>清空跟缓存相关属性的值，需要注意的是，并不会清除本地的缓存文件(如果有)</p>
+<p><img src="https://i.loli.net/2020/07/15/R7Sh9anB2bvfKYw.jpg" alt=""></p>
+<p><code>requestCompletePreprocessor</code> 方法在得到请求结果后调用。由于 YTKRequest 覆写了父类 YTKBaseRequest 的 requestCompletePreprocessor 方法，所以首先需要调用父类的 requestCompletePreprocessor 方法。<br>如果 YTKRequest 的 <code>writeCacheAsynchronously</code> 属性值为 YES，则表示在执行请求回调的线程(一般为主线程)，将请求结果保存在本地文件中; 如果值是 NO，则在私有的串行队列 <code>ytkrequest_cache_writing_queue</code> 添加一个异步任务来处理</p>
+<p><img src="https://i.loli.net/2020/08/03/NbsO7IQTnAqhlkp.jpg" alt="saveResponseDataToCacheFile"></p>
+<p><code>saveResponseDataToCacheFile</code> 方法的作用是将数据保存到本地。</p>
+<ol>
+<li>检查数据是否是来自缓存，如果是的话则返回; 否则执行下一步</li>
+<li>将数据保存到本地，文件名字根据接口名字、参数、请求方式来生成</li>
+<li>生成一个 YTKCacheMetadata 实例，保存缓存元数据，然后使用归档的方式将其保存到本地中，其文件名字为 “缓存名字.metadata”</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/03/NmwzDa2IUyQ18bT.jpg" alt=""></p>
+<p>覆写这些方法，用来控制请求缓存的使用</p>
+<ul>
+<li>cacheTimeInSeconds：缓存使用时间</li>
+<li>cacheVersion：缓存版本，充当一个标记</li>
+<li>cacheSensitiveData：也是一个标记</li>
+<li>writeCacheAsynchronously：是否异步保存缓存</li>
+</ul>
+<p><img src="https://i.loli.net/2020/08/03/Z7xt3jHokVRS5EU.jpg" alt=""></p>
+<p>属性 _dataFromCache 用来标记此时的请求结果是否来自于缓存<br>根据请求格式 responseSerializerType 的不同，缓存将被转换成的对象也不相同，所以这里有很多成员变量 _cacheData/_cacheXML/_cacheJSON/_cacheString</p>
+<p><img src="https://i.loli.net/2020/08/03/oBP5jgH3f6T9zM1.jpg" alt="loadCacheMetadata"></p>
+<p>加载缓存元数据，使用归档加载，如果加载成功，则该方法返回 YES。<br>这里需要注意的是 YTKLog 这个宏</p>
+<p><img src="https://i.loli.net/2020/08/03/uoIxqKkjCOiDvYE.jpg" alt="YTKLog"></p>
+<p>展开来其实是一个 C 函数，参数是 format 和可变参数。<br>方法的实现被包含在了一个 #ifdef/#endif 里面，这样做的好处是在正式版本环境 RELEASE 时，不会再打印 log，减少系统开销</p>
+<p><img src="https://i.loli.net/2020/08/03/6tmJugLQ8fscNPS.jpg" alt="loadCacheData"></p>
+<p>这个方法的作用是加载本地缓存</p>
+<p>首先判断缓存文件是否存在，存在的话则读取数据 data，随后根据属性 responseSerializerType 的值将 data 转换成不同格式的对象</p>
+<p><img src="https://i.loli.net/2020/08/03/pR8CtblTKcOvwDi.jpg" alt="clearCacheVariables"></p>
+<p>清除跟缓存相关的几个属性，需要注意的是并没有主动的清除本地缓存</p>
+<p><img src="https://i.loli.net/2020/08/03/sL6Q5M2E81Aw7uN.jpg" alt="createBaseDirectoryAtPath"></p>
+<p>该方法用来创建文件夹，需要注意的是 createDirectoryAtPath:withIntermediateDirectories:attributes:error:，该方法可以用来创建中间目录。<br>例如我们创建一个名字为 app/doc/user/info 的文件夹，而当前只存在 app 这个文件夹的话，使用该方法会帮我们创建好 doc，user，info 这几个文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/mAFkNIntxwS2CM1.jpg" alt=""></p>
+<p>根据 path 来查找是否存在该文件夹，如果不存在的话则使用 createBaseDirectoryAtPath 来创建文件夹; 如果存在的话则判断是否是文件，如果是文件的话则移除该文件，然后使用 createBaseDirectoryAtPath 来创建文件夹</p>
+<p>可以看到 createBaseDirectoryAtPath，createBaseDirectoryAtPath 两个方法的使用是为了确保生成指定名字的文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/4Q2YEgoDiGX8p93.jpg" alt=""></p>
+<p>该方法用来创建缓存存放的文件目录</p>
+<p>默认的文件夹位置是 /Library/LazyRequestCache，但是我们可以使用 YTKNetworkConfig 的实例方法 <code>addCacheDirPathFilter</code> 来修改文件夹的名字<br>在确定好文件夹名字之后，使用 createDirectoryIfNeeded 创建该文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/8MXwRHIantJKGiT.jpg" alt=""></p>
+<p>该方法用来确定缓存文件的名字</p>
+<p>得到请求的 url， basicUrl，参数，然后拼接成一个字符串 requestInfo，随后使用 YTKNetworkUtils 的方法 md5StringFromString，从 requestInfo 中提取 md5，将其作为缓存文件的名字</p>
+<p><img src="https://i.loli.net/2020/08/03/knBlZpyvgf2wICu.jpg" alt=""></p>
+<p>得到了文件夹名字和文件名字，我们就可以将其拼接成缓存文件的路径啦</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>YTKRequest 作为 YTKBaseRequest 的子类，为其添加了缓存这个功能。在我们的使用中自定义的 request 子类也是需要直接继承与 YTKRequest 的</p>
 
       
     </div>
@@ -519,6 +598,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/YTKNetwork/" rel="tag"># YTKNetwork</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
 
       
       
@@ -528,8 +615,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/14/大牛博客/" rel="next" title="大牛博客">
-                <i class="fa fa-chevron-left"></i> 大牛博客
+              <a href="/2020/07/13/YTKNetwork-源码解读-一-之-YTKBaseRequest/" rel="next" title="YTKNetwork 源码解读 (一) 之 YTKBaseRequest">
+                <i class="fa fa-chevron-left"></i> YTKNetwork 源码解读 (一) 之 YTKBaseRequest
               </a>
             
           </div>
@@ -537,10 +624,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/16/如何使用JTForm/" rel="prev" title="如何使用JTForm">
-                如何使用JTForm <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -754,7 +837,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成及修改配置文件"><span class="nav-text">生成及修改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-trunk-register-EMAIL-USERNAME"><span class="nav-text">pod trunk register [EMAIL] [USERNAME]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-spec-create-JTForm"><span class="nav-text">pod spec create JTForm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑JTForm-podspec"><span class="nav-text">编辑JTForm.podspec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-spec-lint"><span class="nav-text">pod spec lint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-trunk-push-–allow-warnings"><span class="nav-text">pod trunk push –allow-warnings</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-setup"><span class="nav-text">pod setup</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本升级"><span class="nav-text">版本升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更换版本"><span class="nav-text">更换版本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#YTKCacheMetadata"><span class="nav-text">YTKCacheMetadata</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YTKRequest"><span class="nav-text">YTKRequest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -920,7 +1003,7 @@
   
     <script>
       window.livereOptions = {
-        refer: '2019/05/15/如何将自己的库上传到cocoapods/'
+        refer: '2020/08/03/YTKNetwork-源码解读-二-之-YTKRequest/'
       };
       (function(d, s) {
         var j, e = d.getElementsByTagName(s)[0];
