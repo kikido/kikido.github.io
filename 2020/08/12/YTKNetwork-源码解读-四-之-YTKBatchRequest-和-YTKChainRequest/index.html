@@ -107,31 +107,53 @@
 
 
 
-  <meta name="description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
+  <meta name="description" content="这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB">
+<meta name="keywords" content="YTKNetwork,源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何将自己的库上传到cocoapods">
-<meta property="og:url" content="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/index.html">
+<meta property="og:title" content="YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest">
+<meta property="og:url" content="http://yoursite.com/2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/index.html">
 <meta property="og:site_name" content="千行的博客">
-<meta property="og:description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
+<meta property="og:description" content="这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/14/5cda81206e65314279.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdb71183965554049.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc0291fcff15453.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc042bb60f27101.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/05/15/5cdbc498e9b8687464.jpg">
-<meta property="og:updated_time" content="2019-06-12T08:55:32.000Z">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg">
+<meta property="og:updated_time" content="2020-08-12T08:28:32.840Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何将自己的库上传到cocoapods">
-<meta name="twitter:description" content="假设到这里你已经将你的代码上传了github上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程 生成及修改配置文件在创建之前，你需要将你的代码提交到github上，并且为它生成一个相应版本号的tag pod trunk register [EMAIL] [USERNAME]当你运行pod trunk me后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是">
-<meta name="twitter:image" content="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg">
+<meta name="twitter:title" content="YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest">
+<meta name="twitter:description" content="这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/">
+  <link rel="canonical" href="http://yoursite.com/2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/">
 
 
 
@@ -141,7 +163,7 @@
   };
 </script>
 
-  <title>如何将自己的库上传到cocoapods | 千行的博客</title>
+  <title>YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest | 千行的博客</title>
   
 
 
@@ -341,7 +363,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/如何将自己的库上传到cocoapods/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="杜倩杭">
@@ -358,7 +380,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何将自己的库上传到cocoapods
+          <h1 class="post-title" itemprop="name headline">YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest
 
               
             
@@ -384,24 +406,12 @@
                 
               
 
-              <time title="创建时间：2019-05-15 16:39:11" itemprop="dateCreated datePublished" datetime="2019-05-15T16:39:11+08:00">2019-05-15</time>
+              <time title="创建时间：2020-08-12 16:27:27 / 修改时间：16:28:32" itemprop="dateCreated datePublished" datetime="2020-08-12T16:27:27+08:00">2020-08-12</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-12 16:55:32" itemprop="dateModified" datetime="2019-06-12T16:55:32+08:00">2019-06-12</time>
               
             
           </span>
@@ -418,7 +428,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/cocoapods/" itemprop="url" rel="index"><span itemprop="name">cocoapods</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS杂/" itemprop="url" rel="index"><span itemprop="name">iOS杂</span></a></span>
 
                 
                 
@@ -452,40 +462,82 @@
       
 
       
-        <p>假设到这里你已经将你的代码上传了<code>github</code>上，如果没有的话就先别看了。在这里我会用自己的项目JTForm来讲解一下整个过程</p>
-<h3 id="生成及修改配置文件"><a href="#生成及修改配置文件" class="headerlink" title="生成及修改配置文件"></a>生成及修改配置文件</h3><p>在创建之前，你需要将你的代码提交到<code>github</code>上，并且为它生成一个相应版本号的tag</p>
-<h4 id="pod-trunk-register-EMAIL-USERNAME"><a href="#pod-trunk-register-EMAIL-USERNAME" class="headerlink" title="pod trunk register [EMAIL] [USERNAME]"></a>pod trunk register [EMAIL] [USERNAME]</h4><p><img src="https://i.loli.net/2019/05/14/5cda80589c7a272716.jpg" alt=""><br>当你运行<code>pod trunk me</code>后，发现不是如上图的结果，那么你可能需要重新登陆或者注册，也就是运行如下的命令<br><code>pod trunk register [EMAIL] [USERNAME]</code>，运行成功之后，你填的邮箱会收到一封邮件，点进去点击里面的链接就算是登录成功了。</p>
-<p><img src="https://i.loli.net/2019/05/14/5cda81206e65314279.jpg" alt="登录"></p>
-<h4 id="pod-spec-create-JTForm"><a href="#pod-spec-create-JTForm" class="headerlink" title="pod spec create JTForm"></a>pod spec create JTForm</h4><p>cd到项目中，在readme.md的位置使用<code>pod spec create JTForm</code>。这个命令会生成一个<code>JTForm.podspec</code>的文件。</p>
-<h4 id="编辑JTForm-podspec"><a href="#编辑JTForm-podspec" class="headerlink" title="编辑JTForm.podspec"></a>编辑JTForm.podspec</h4><p>你可以直接参考或者复制别的项目podspec文件里面的内容，仅需修改一些信息。你也可以看<a href="https://guides.cocoapods.org/syntax/podspec.html" target="_blank" rel="noopener">官方文档</a>自己编辑。</p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Pod::Spec.new do |s|</span><br><span class="line"></span><br><span class="line">  s.<span class="attr">name</span>          = <span class="string">"JTForm"</span></span><br><span class="line">  s.<span class="attr">version</span>       = <span class="string">"0.0.1"</span></span><br><span class="line">  s.<span class="attr">summary</span>       = <span class="string">"简单快速的创建复杂且流畅的表单，XLForm与Texture相结合"</span></span><br><span class="line">  s.<span class="attr">homepage</span>      = <span class="string">"https://github.com/kikido/JTForm"</span></span><br><span class="line">  s.<span class="attr">license</span>       = &#123; :<span class="attr">type</span> =&gt; <span class="string">"MIT"</span>,  &#125;</span><br><span class="line">  s.<span class="attr">author</span>             = &#123; <span class="string">"kikido"</span> =&gt; <span class="string">"kikido1992@gmail.com"</span> &#125;</span><br><span class="line">  s.<span class="attr">source</span>        = &#123; :<span class="attr">git</span> =&gt; <span class="string">"https://github.com/kikido/JTForm.git"</span>, :<span class="attr">tag</span> =&gt; s.version.to_s &#125;</span><br><span class="line">  s.<span class="attr">source_files</span>  = <span class="string">"JTForm"</span>, <span class="string">"JTForm/**/*.&#123;h,m&#125;"</span></span><br><span class="line">  s.<span class="attr">resource</span>      = 'JTForm/JTForm.bundle'</span><br><span class="line">  s.dependency <span class="string">"SDWebImage"</span>, <span class="string">"~&gt; 4.4.6"</span></span><br><span class="line">  s.dependency <span class="string">"Texture"</span>, '~&gt; <span class="number">2.8</span>'</span><br><span class="line">  s.<span class="attr">requires_arc</span> = <span class="literal">true</span></span><br><span class="line">  s.ios.<span class="attr">deployment_target</span> = '<span class="number">9.0</span>'</span><br><span class="line">  s.<span class="attr">xcconfig</span> = &#123; <span class="string">"HEADER_SEARCH_PATHS"</span> =&gt; <span class="string">"$(SRCROOT)/SDWebImage"</span> &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># s.public_header_files = "Classes/**/*.h"</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<h4 id="pod-spec-lint"><a href="#pod-spec-lint" class="headerlink" title="pod spec lint"></a>pod spec lint</h4><p>验证你编辑的podspec文件是否符合规范，如果出现error的话是不可以的，warning的话是可以的，可以使用命令<code>pod spec lint --allow-warnings</code>来忽略所有warnings。</p>
-<p>下面是我验证时出现的问题：</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb71183965554049.jpg" alt="验证出错"></p>
-<p>原因是因为podspec文件里面<code>s.ios.deployment_target = &#39;8.0&#39;</code>，而Texture仅支持iOS9.0以上的版本，所以我这里做了以下的修改：<code>s.ios.deployment_target = &#39;9.0&#39;</code>。</p>
-<p>重新验证，出现了以下错误：</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdbc0291fcff15453.jpg" alt="错误1"><br><img src="https://i.loli.net/2019/05/15/5cdbc042bb60f27101.jpg" alt="错误2"></p>
-<p>一开始我以为我的.h直接引用了第三方的文件导致，后来才发现是因为没有暴露SDWebImage的头文件。解决办法：在podspec文件修改配置<code>s.xcconfig = { &quot;HEADER_SEARCH_PATHS&quot; =&gt; &quot;$(SRCROOT)/SDWebImage&quot; }</code><br>答案来源：<a href="http://corotata.com/2017/04/06/2017-4-6-%E5%85%B3%E4%BA%8E%E7%BB%84%E4%BB%B6%E5%8C%96%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89Pods%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%B0%E5%BD%95/" target="_blank" rel="noopener">关于组件化使用私有Pods的一些记录</a></p>
-<p>重新编译，通过<br><a href="https://i.loli.net/2019/05/15/5cdbc1557b1d581509.jpg" target="_blank" rel="noopener"></a></p>
-<h4 id="pod-trunk-push-–allow-warnings"><a href="#pod-trunk-push-–allow-warnings" class="headerlink" title="pod trunk push –allow-warnings"></a>pod trunk push –allow-warnings</h4><p>使用<code>pod trunk push --allow-warnings</code>命令将自己的库发布到cocoapods上，大概8分钟左上</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdbc498e9b8687464.jpg" alt="上传成功"></p>
-<h4 id="pod-setup"><a href="#pod-setup" class="headerlink" title="pod setup"></a>pod setup</h4><p>上传成功之后，使用<code>pod search</code>无法搜到自己的库的话，你可以这样做：</p>
+        <p>这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。</p>
+<h2 id="YTKBatchRequest"><a href="#YTKBatchRequest" class="headerlink" title="YTKBatchRequest"></a>YTKBatchRequest</h2><p>YTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKBatchRequest 请求失败，同时 cancel 其它正在执行的请求</p>
+<p><img src="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg" alt=""></p>
+<p>协议，用于 YTKBatchRequest 请求失败或者成功的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg" alt=""></p>
+<p>这些是 YTKBatchRequest 的属性，大部分看注释就能理解了。</p>
+<p>需要注意的是：</p>
 <ol>
-<li>命令<code>rm ~/Library/Caches/CocoaPods/search_index.json</code></li>
+<li>代理的执行顺序在 block 之前</li>
+<li>tag 需要自己手动赋值来区分 YTKBatchRequest，默认值都是 0</li>
 </ol>
-<p>完成后重新使用<code>pod search</code>搜索</p>
-<h3 id="版本升级"><a href="#版本升级" class="headerlink" title="版本升级"></a>版本升级</h3><p>当你需要升级自己库版本的时候，你可以这样做：</p>
+<p><img src="https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg" alt=""></p>
+<p>初始化方法，在这里你需要指定 YTKRequest 数组。<br>个人觉得最好将其它默认的初始化方法给禁用掉</p>
+<p><img src="https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg" alt=""></p>
+<p>设置 YTKBatchRequest 请求成功和失败的回调，当请求结束后，会调用 <code>-clearCompletionBlock</code> 将 block 置为 nil</p>
+<p><img src="https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg" alt=""></p>
+<p>YTKRequestAccessory 协议用于执行请求不同阶段的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg" alt=""></p>
+<p>请求的开启和取消</p>
+<p><img src="https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg" alt=""></p>
+<p>请求的数据是否来自于缓存。所有请求中，如果有一个请求的数据来自于缓存，那么这个方法就会返回 YES</p>
+<p><img src="https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg" alt=""></p>
+<p>初始化方法，将参数 requestArray 赋值给属性 _requestArray，并且会判断里面的元素是否是 YTKRequest 实例，如果不是的话会返回。<br>初始化内部属性 finishedCount，该属性表示已完成请求的数目</p>
+<p><img src="https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg" alt=""></p>
+<p>方法开头会判断属性 finishedCount 的值是否大于 0，如果 0 的话则返回。这说明当 YTKBatchRequest 实例创建只能调用 <code>start</code> 方法一次，再次调用的话可能会出现重复开启任务的问题，这里个人还是觉得要进行下判断比较好。<br>将 YTKRequest 的 delegate 设置为自己，同时清空 YTKRequest 的 block 回调，以确保只有 YTKBatchRequest 处理请求完成后的回调，最后开启请求</p>
+<p><img src="https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg" alt="stop"></p>
+<p>触发即将停止回调 toggleAccessoriesWillStopCallBack，并调用 clearRequest 方法循环将 YTKRequest 进行停止操作，随后将自己从 YTKBatchRequestAgent 中移除。</p>
+<p><img src="https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg" alt="clearRequest"></p>
+<p>循环调用 YTKRequest 的 stop 方法</p>
+<p><img src="https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg" alt=""></p>
+<p>设置 YTKBatchRequest 的完成回调，当所有请求都成功调用或者其中一个失败时使用</p>
+<p><img src="https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg" alt="isDataFromCache"></p>
+<p>可以看到，只要一个请求的数据来自于缓存，那么方法的返回结果就是 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg" alt=""></p>
+<p>当请求成功后，YTKBatchRequest 在这个方法里面处理数据。</p>
 <ol>
-<li>修改podspec中<code>s.version</code>的版本号</li>
-<li>提交到git，并打上相应版本号的tag</li>
-<li>进入到podspec目录下，使用命令<code>pod trunk push --allow-warnings</code>更新库</li>
+<li>_finishedCount 的值 +1</li>
+<li>如果 _finishedCount 的值等于请求的个数，说明所有的请求都已请求成功，这种情况表示 YTKBatchRequest 请求成功，执行相应的回调</li>
 </ol>
-<h3 id="更换版本"><a href="#更换版本" class="headerlink" title="更换版本"></a>更换版本</h3><p>如果你对当前版本的库不满意，但是又不想升级版本号。你可以这样做：</p>
+<p><img src="https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg" alt=""></p>
+<p>YTKBatchRequest 在这个方法里面处理请求失败的情况。<br>一个请求失败意味着 YTKBatchRequest 的失败，所以也不用接着处理那些完成的请求。在这里会循环取消 YTKRequest 请求<br>接着执行失败回调，并将自己从 YTKBatchRequestAgent 移除。</p>
+<p>YTKBatchRequestAgent 是一个单例，作用是强引用 YTKBatchRequest，避免被销毁。当任务执行完毕后，将 YTKBatchRequest 移除</p>
+<h3 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h3><p>YTKBatchRequest 是一个批量执行请求的类，能够批量执行 YTKRequest 类型的请求。<br>请求的开启顺序按照任务的添加顺序执行，单个 YTKRequest 完成后，不会执行 YTKRequest 自己的回调 block，代理等回调方法。<br>当所有请求成功后，执行 YTKBatchRequest 的代理回调，回调 block; 否则执行 YTKBatchRequest 的失败回调</p>
+<h2 id="YTKChainRequest"><a href="#YTKChainRequest" class="headerlink" title="YTKChainRequest"></a>YTKChainRequest</h2><p>YTKChainRequest 也是批量处理请求的类，只不过是当前面的请求完成后再执行下一个请求。</p>
+<p><img src="https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg" alt=""></p>
+<p>YTKChainRequest 完成的回调。可以看到在失败回调中多了一个参数 failedBaseRequest</p>
+<p><img src="https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg" alt=""></p>
+<p>比较简单，看注释就好了。<br><code>id&lt;YTKRequestAccessory&gt;</code> 是实现了协议 YTKRequestAccessory 的实例，这个协议里面有请求各种状态的方法，例如将要发起请求，将要结束请求</p>
+<p><img src="https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg" alt=""></p>
+<p>通过该方法向 YTKChainRequest 里面添加请求，同时设定该请求的完成回调。<br>我们知道 YTKBaseRequest 可以通过设定属性来设置完成回调，但这里为什么还需要这个方法来设定呢？通过属性设定的回调是否会触发呢？这些在后面会讲到的</p>
+<p><img src="https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg" alt=""></p>
+<p>一些内部用到的属性</p>
 <ol>
-<li>去掉git上相应版本号的tag</li>
-<li>git上传新的内容</li>
-<li>上传之后打上相应版本号的tag</li>
+<li>requestArray：请求数组</li>
+<li>requestCallbackArray：请求完成回调数组，有的请求没有设定回调，那么会往数组里面添加一个什么都不做的空回调</li>
+<li>nextRequestIndex：下一个执行的请求的序号</li>
+<li>emptyCallback：空回调</li>
 </ol>
+<p><img src="https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg" alt=""></p>
+<p>初始化实例，可以看到 _emptyCallback 其实是一个不执行任何操作的 block</p>
+<p><img src="https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg" alt=""></p>
+<p>开启任务后，通过 startNextRequest 方法开启第一个请求，并将 YTKChainRequest 添加到单例 YTKChainRequestAgent 中，防止被销毁</p>
+<p><img src="https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg" alt="startNextRequest"></p>
+<p>该方法用来开启下一个未执行的请求。<br>_nextRequestIndex 表示该请求在数组中的位置，如果超出了数组范围则返回。<br>通过 _nextRequestIndex 得到该请求，随后将 delegate 设置为自己，并清除其完成回调，随后开启请求，返回 YES; 否则返回 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg" alt="stop"></p>
+<p>取消 YTKChainRequest，并将 YTKChainRequest 从单例 YTKChainRequestAgent 中移除。<br>通过调用 clearRequest 方法取消当前的请求</p>
+<p><img src="https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg" alt="clearRequest"></p>
+<p>获取到当前的 YTKBaseRequest，由于 _nextRequestIndex 表示下一个未执行的请求位置，所以这里要 -1。<br>清空 _requestArray 和 _requestCallbackArray 这两个数组</p>
+<p><img src="https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg" alt=""></p>
+<p>添加请求及其完成回调。<br>在 startNextRequest 方法中，我们知道，开启单个任务 YTKBaseRequest 之前，会将 YTKBaseRequest 的 delegate 设置为自己，并清除其回调 block。<br>所以，这里我们需要通过 _requestCallbackArray 这种方式来额外添加回调<br>需要注意的是该回调仅在请求成功时被调用</p>
+<p><img src="https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg" alt="requestFinished"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求成功后调用。<br>从 _requestCallbackArray 数组中获取该请求的完成回调。当所有的请求都获取成功后，执行 YTKChainRequestAgent 的完成回调</p>
+<p><img src="https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg" alt="requestFailed"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求失败后调用。需要注意的是，当单个 YTKBaseRequest 请求失败，判断 YTKChainRequestAgent 请求失败，执行其完成回调<br>如果你想执行 YTKBaseRequest 的失败回调，你可以在代理方法 <code>chainRequestFailed:failedBaseRequest:</code> 中，通过 YTKBaseRequest 得到响应数据，随后执行后续操作</p>
+<h3 id="小总结-1"><a href="#小总结-1" class="headerlink" title="小总结"></a>小总结</h3><p>YTKChainRequest 是一个批量同步执行请求的类，能够批量执行 YTKBaseRequest 类型的请求。<br>你可以自定义 YTKChainRequest 的实例方法添加 YTKBaseRequest 和 成功回调。</p>
+<p>不同于 YTKBatchRequest，YTKChainRequest 中可添加的 request 类型是 YTKBaseRequest 而不是 YTKRequest</p>
 
       
     </div>
@@ -519,6 +571,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/YTKNetwork/" rel="tag"># YTKNetwork</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
 
       
       
@@ -528,8 +588,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/14/大牛博客/" rel="next" title="大牛博客">
-                <i class="fa fa-chevron-left"></i> 大牛博客
+              <a href="/2020/08/06/YTKNetwork-源码解读-三-之-YTKNetworkAgent/" rel="next" title="YTKNetwork 源码解读 (三) 之 YTKNetworkAgent">
+                <i class="fa fa-chevron-left"></i> YTKNetwork 源码解读 (三) 之 YTKNetworkAgent
               </a>
             
           </div>
@@ -537,10 +597,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/16/如何使用JTForm/" rel="prev" title="如何使用JTForm">
-                如何使用JTForm <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -754,7 +810,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成及修改配置文件"><span class="nav-text">生成及修改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-trunk-register-EMAIL-USERNAME"><span class="nav-text">pod trunk register [EMAIL] [USERNAME]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-spec-create-JTForm"><span class="nav-text">pod spec create JTForm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑JTForm-podspec"><span class="nav-text">编辑JTForm.podspec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-spec-lint"><span class="nav-text">pod spec lint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-trunk-push-–allow-warnings"><span class="nav-text">pod trunk push –allow-warnings</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pod-setup"><span class="nav-text">pod setup</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本升级"><span class="nav-text">版本升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更换版本"><span class="nav-text">更换版本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#YTKBatchRequest"><span class="nav-text">YTKBatchRequest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小总结"><span class="nav-text">小总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YTKChainRequest"><span class="nav-text">YTKChainRequest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小总结-1"><span class="nav-text">小总结</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -920,7 +976,7 @@
   
     <script>
       window.livereOptions = {
-        refer: '2019/05/15/如何将自己的库上传到cocoapods/'
+        refer: '2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/'
       };
       (function(d, s) {
         var j, e = d.getElementsByTagName(s)[0];
