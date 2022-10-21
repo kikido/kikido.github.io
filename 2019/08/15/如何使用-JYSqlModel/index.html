@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>如何使用 JYSqlModel - 千行的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="千行的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="千行的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="JYSqlModel是一个高效的 model、sqlite数据的转换工具。在 JYSqlModel，每一条数据库的数据都会被当做一个 model，所以当你对 model 执行相应的增删改查操作时，即对数据库进行着增删改查操作，这意味着你不再需要记得什么字段，什么约束，甚至可以不再使用 sql 语句来操作数据库！JYSqlModel 依赖于库FMDB，使用前请保证你的项目中有这个库。JYSqlMod"><meta property="og:type" content="blog"><meta property="og:title" content="如何使用 JYSqlModel"><meta property="og:url" content="http://example.com/2019/08/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-JYSqlModel/"><meta property="og:site_name" content="千行的博客"><meta property="og:description" content="JYSqlModel是一个高效的 model、sqlite数据的转换工具。在 JYSqlModel，每一条数据库的数据都会被当做一个 model，所以当你对 model 执行相应的增删改查操作时，即对数据库进行着增删改查操作，这意味着你不再需要记得什么字段，什么约束，甚至可以不再使用 sql 语句来操作数据库！JYSqlModel 依赖于库FMDB，使用前请保证你的项目中有这个库。JYSqlMod"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:published_time" content="2019-08-15T03:07:00.000Z"><meta property="article:modified_time" content="2022-10-21T02:13:53.000Z"><meta property="article:author" content="千行"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2019/08/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-JYSqlModel/"},"headline":"如何使用 JYSqlModel","image":["http://example.com/img/og_image.png"],"datePublished":"2019-08-15T03:07:00.000Z","dateModified":"2022-10-21T02:13:53.000Z","author":{"@type":"Person","name":"千行"},"publisher":{"@type":"Organization","name":"千行的博客","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":"JYSqlModel是一个高效的 model、sqlite数据的转换工具。在 JYSqlModel，每一条数据库的数据都会被当做一个 model，所以当你对 model 执行相应的增删改查操作时，即对数据库进行着增删改查操作，这意味着你不再需要记得什么字段，什么约束，甚至可以不再使用 sql 语句来操作数据库！JYSqlModel 依赖于库FMDB，使用前请保证你的项目中有这个库。JYSqlMod"}</script><link rel="canonical" href="http://example.com/2019/08/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-JYSqlModel/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-0VD5EHM46E" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-0VD5EHM46E');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-15T03:07:00.000Z" title="8/15/2019, 11:07:00 AM">2019-08-15</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">14 分钟读完 (大约2109个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">如何使用 JYSqlModel</h1><div class="content"><p><a target="_blank" rel="noopener" href="https://github.com/kikido/JYSqlModel">JYSqlModel</a>是一个高效的 model、sqlite数据的转换工具。在 JYSqlModel，每一条数据库的数据都会被当做一个 model，所以当你对 model 执行相应的增删改查操作时，即对数据库进行着增删改查操作，这意味着你不再需要记得什么字段，什么约束，甚至可以不再使用 sql 语句来操作数据库！<br>JYSqlModel 依赖于库<a target="_blank" rel="noopener" href="https://github.com/ccgus/fmdb">FMDB</a>，使用前请保证你的项目中有这个库。<br>JYSqlModel 的思路来源来自于<a target="_blank" rel="noopener" href="https://github.com/ibireme/YYModel">YYModel</a></p>
+<p>使用前请将<code>JYSqlModel</code>和<code>JYClassInfo</code>的 .h 和 .m 文件，放到工程中。</p>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><p>在 JYSqlModel 中，一个 model 对应于一个表。首先，你需要给这个表确定好一个名字，所以你必须在 model 内重载 JYSqlModel 的类方法<code>+ (nonnull NSString *)tbName;</code>。注意这个名字不能重复重复。<br>系统会在启动的时候，会根据 model 结构创建相应的表。表中字段(column)与 model 属性是一一对应的，在默认情况下，字段名字即是属性名字，当然你也可以使用协议中的方法自定义字段名，这个后面会详细讲。字段的类型会根据属性的类型分成不同的类型，目前只支持下表中的几种类型：</p>
+<table>
+<thead>
+<tr>
+<th>字段类型</th>
+<th>描述</th>
+<th>对应属性类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>integer</td>
+<td>整型数</td>
+<td>c的整型，NSNumber</td>
+</tr>
+<tr>
+<td>real</td>
+<td>浮点数</td>
+<td>c的浮点型，NSDecimalNumber</td>
+</tr>
+<tr>
+<td>text</td>
+<td>文本</td>
+<td>NSString，NSMutableString，NSURL</td>
+</tr>
+<tr>
+<td>blob</td>
+<td>二进制数据</td>
+<td>NSData，NSMutableData</td>
+</tr>
+<tr>
+<td>date</td>
+<td>日期</td>
+<td>NSDate</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>布尔值</td>
+<td>c的bool</td>
+</tr>
+<tr>
+<td>unknow</td>
+<td>除上面所以，会报错</td>
+<td>除上面所有</td>
+</tr>
+</tbody></table>
+<p>如果你的类型不是上面支持的几种类型之一，那么就会被归为 unkonw 类型，随即就会报错。这样做的原因一方面是因为自己的知识不够丰富，不知道怎么处理其它的类型，另一方面避免复杂类型引起不可预料的错误。在后期的话可能还会支持 NSArray 等容器类型。</p>
+<p>下面是一个简单的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@interface Student : JYSqlModel</span><br><span class="line">@property (nonatomic, copy) NSString *name;</span><br><span class="line">@property (nonatomic, copy) NSString *school;</span><br><span class="line">@property (nonatomic, assign) NSInteger age;</span><br><span class="line">@property (nonatomic, assign) CGFloat height;</span><br><span class="line">@property (nonatomic, strong) NSDate *birthDay;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Student</span><br><span class="line">+ (NSString *)tbName</span><br><span class="line">&#123;</span><br><span class="line">    return @&quot;sudent&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>下面是创建相应表的 sql：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table if not exists sudent (school text ,age integer ,birthDay date ,name text ,height real)</span><br></pre></td></tr></table></figure>
+
+<p>是不是很简单，你只需要新建一个<code>JYSqlModel</code>的子类，并给它指定一个表名，就能自动的创建一个表。</p>
+<h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><p>JYSqlModel 提供了以下几种方法来帮助你将 model 写入数据库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">+ (BOOL)addModel:(nonnull __kindof JYSqlMode *)model;</span><br><span class="line">// 2</span><br><span class="line">+ (BOOL)addModels:(nonnull NSArray&lt;__kindof JYSqlMode *&gt; *)models;</span><br><span class="line">// 3</span><br><span class="line">- (BOOL)addToSql;</span><br></pre></td></tr></table></figure>
+
+<p>方法1和方法2类似，都是使用类方法来添加 model 到数据库中。需要注意的是，model 的类需要跟类一致，否则会添加失败。<br>方法3是实例方法。添加成功会返回 YES，否则返回 NO</p>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><p>JYSqlModel 提供了以下几种方法来帮助你将 model 从数据库中删除：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">+ (BOOL)deleteModelBySql:(nonnull NSString *)sql;</span><br><span class="line">// 2</span><br><span class="line">+ (BOOL)deleteModelByPrimaryKey:(NSString *)primaryKey value:(NSInteger)value;</span><br><span class="line">// 3</span><br><span class="line">+ - (BOOL)deleteFromSql;</span><br></pre></td></tr></table></figure>
+
+<p>方法1的话需要你自己写删除 sql，适用于删除语句比较简单或者批量删除的时候。你可以在子类中，根据这个方法封装一个更简单的方法。举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@interface Student : JYSqlMode    </span><br><span class="line">+ (BOOL)deleteModeByPKValue:(NSInteger)value;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation JYPerson</span><br><span class="line"> + (BOOL)deleteModeByPKValue:(NSInteger)value &#123;</span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;delete from tbName where pk = %zd&quot;, value];</span><br><span class="line">    [JYSonModel deleteModelBySql:sql];</span><br><span class="line"> &#125;</span><br><span class="line"> @end</span><br></pre></td></tr></table></figure>
+<p>现在你只需要一个pk值就能删除数据库记录了。当然你也可以封装一个实例方法，这样连参数都不需要了。</p>
+<p>方法2需要你指定一个主键名字以及主键值来删除相应记录。类似于方法1，你也可以根据该方法封装一个更简便的方法！</p>
+<p>方法3不需要你提供什么参数，使用起来更简单，但是如果对应表中没有主键，该删除方法就会失败，因为无法定位到具体到某一条记录。</p>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>JYSqlModel 提供了以下几种方法来帮助你更新数据库中的记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">+ (BOOL)updateModelBySql:(NSString *)sql;</span><br><span class="line">// 2</span><br><span class="line">+ (BOOL)updateModel:(nonnull __kindof JYSqlMode *)model primaryKey:(NSString *)primaryKey value:(NSInteger)value;</span><br></pre></td></tr></table></figure>
+
+<p>方法1的话需要你自己提供更新 sql，适用于更新字段比较少或者批量更新的时候。</p>
+<p>方法2需要你提供一个主键来确定是哪条记录，以便更新相应数据。该方法将更新除主键和autoincrement以外所有的字段，适用于更新字段比较多的情况。</p>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>JYSqlModel 提供了以下几种方法来帮助你查找数据库中的记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">+ (nullable NSArray&lt;__kindof JYSqlMode *&gt; *)findModelsBySql:(nonnull NSString *)sql;</span><br><span class="line">// 2</span><br><span class="line">+ (nullable NSArray&lt;__kindof JYSqlMode *&gt; *)findAllModels;</span><br></pre></td></tr></table></figure>
+
+<p>方法1需要你自己提供查找 sql，返回结果将以 model 数组返回。</p>
+<p>方法2将会查找出表中所有的记录，以 model 数组的形式返回。</p>
+<h3 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h3><p>在项目更新中，如果我们需要增加、删除 model 中的某些属性，或者改变属性的类型要怎么办呢？<br>很简单，你只需要对 model 进行修改，在项目运行时，JYSqlMode 会检测新 model 的结构以及旧表的结构，来判断是否需要进行数据迁移。<br>所谓的<code>数据迁移</code>也就是，将旧表重命名，根据新 model 的结构新建一个表，然后将旧表的数据迁移到新的表中。如此操作之后，新表的结构与新 model 的结构就一一对应了，保证了你在执行增删改查操作时不会出错。</p>
+<p>当然，也有一些情况下，可能你做了修改也不会触发数据迁移。例如，如果仅仅是改变了字段的约束条件，那么是不会触发数据迁移的。解决办法最后面会给出。</p>
+<h3 id="JYSqlMode"><a href="#JYSqlMode" class="headerlink" title="JYSqlMode"></a>JYSqlMode</h3><p>下面是协议<code>JYSqlMode</code>的可选方法，帮助你执行一些自定义操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 1</span><br><span class="line">+ (nullable NSDictionary&lt;NSString *, id&gt; *)jyCustomPropertyMapper;</span><br><span class="line">// 2</span><br><span class="line">+ (nullable NSDictionary&lt;NSString *, NSDictionary *&gt; *)jyCustomPropertyConstraint;</span><br></pre></td></tr></table></figure>
+
+
+<p>方法1帮助你实现自定义 属性 -&gt; 表字段名 的映射。举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface Student : JYSqlMode &lt;JYSqlMode&gt;</span><br><span class="line">@property NSString *name;</span><br><span class="line">@property NSString *title;</span><br><span class="line">@property NSInteger age;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">implementation Student</span><br><span class="line">+ (nullable NSDictionary&lt;NSString *, id&gt; *)jyCustomPropertyMapper &#123;</span><br><span class="line">return @&#123;</span><br><span class="line">	      @&quot;name&quot;   : @&quot;fName&quot;,</span><br><span class="line">	      @&quot;title&quot;  : @&quot;ftitle&quot;,</span><br><span class="line">	      @&quot;age&quot;    : @&quot;fage&quot;</span><br><span class="line">	     &#125;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>在相应的表中，fName 将会对应属性 name，ftitle 将会对应属性 title，fage 将会对应属性 age</p>
+<p>方法2帮助你实现自定义字段的约束条件。目前仅支持以下几种约束类型：</p>
+<ul>
+<li>JYColumnConstraintKeyNotNull -&gt; not null</li>
+<li>JYColumnConstraintKeyDefault -&gt; default</li>
+<li>JYColumnConstraintKeyDefaultValue -&gt; 默认值，需要与 JYColumnConstraintKeyDefault 配套使用</li>
+<li>JYColumnConstraintKeyUnique -&gt; unique</li>
+<li>JYColumnConstraintKeyPrimaryKey -&gt; primary key</li>
+<li>JYColumnConstraintKeyAutoIncrement -&gt; autoincrement</li>
+</ul>
+<p>需要注意的是，JYColumnConstraintKeyDefault 需要配合 JYColumnConstraintKeyDefaultValue 使用，设置一个默认值。<br>举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@interface Student : JYSqlModel &lt;JYSqlModel&gt;</span><br><span class="line">@property (nonatomic, assign) NSInteger fid;</span><br><span class="line">@property (nonatomic, copy) NSString *name;</span><br><span class="line">@property (nonatomic, copy) NSString *school;</span><br><span class="line">@property (nonatomic, assign) CGFloat height;</span><br><span class="line">@property (nonatomic, strong) NSDate *birthDay;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Student</span><br><span class="line">+ (nullable NSDictionary&lt;NSString *, NSDictionary *&gt; *)jyCustomPropertyConstraint;</span><br><span class="line">&#123;</span><br><span class="line">    return @&#123;</span><br><span class="line">             @&quot;fid&quot; : @&#123;</span><br><span class="line">                     JYColumnConstraintKeyPrimaryKey : @YES,</span><br><span class="line">                     JYColumnConstraintKeyUnique : @YES</span><br><span class="line">                     JYColumnConstraintKeyAutoIncrement : @YES</span><br><span class="line">                     &#125;,</span><br><span class="line">             @&quot;school&quot; : @&#123;</span><br><span class="line">                     JYColumnConstraintKeyDefault : @YES,</span><br><span class="line">                     JYColumnConstraintKeyDefaultValue : @&quot;背背山小学&quot;</span><br><span class="line">                     &#125;</span><br><span class="line">             &#125;;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>这样子，你就定义了一个<code>primary key unique autoincrement</code>的主键 fid，以及一个<code>default &#39;背背山小学&#39;</code>的字段 school。</p>
+<h3 id="note"><a href="#note" class="headerlink" title="@note"></a>@note</h3><p>限于个人水平，JYSqlModel 肯定会在一些的问题。也许你会奇怪明明按说明操作了，但没有出现想要的结构。下面我将总结一下使用时需要注意的地方：</p>
+<ol>
+<li>已存在一个旧表，若只是修改了相应字段的约束条件，这些约束条件是不会立刻生效的。一个解决办法是预留一个字段，当你需要更新表结构的时候修改这个预留字段的名字</li>
+<li>已存在一个旧表，如果你为它设置了一个主键，抱歉设置会失败。解决方法参考第1条</li>
+<li>NSNumber类型的属性会存储到 integer 类型的字段中，如果想保存成浮点数的话，请将属性类型改为 NSDecimalNumber 或者直接使用 C 的浮点类型 float, double等</li>
+<li>如果你在运行时动态的为 model 新增了属性，抱歉，表结构也不会更新</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>如何使用 JYSqlModel</p><p><a href="http://example.com/2019/08/15/如何使用-JYSqlModel/">http://example.com/2019/08/15/如何使用-JYSqlModel/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>千行</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2019-08-15</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-10-21</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/08/23/iOS%E7%9A%84%E9%94%81%E4%BB%A5%E5%8F%8AGCD%E7%9B%B8%E5%85%B3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">iOS的锁以及GCD相关</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/07/30/YYModel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"><span class="level-item">YYModel实现原理</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://example.com/2019/08/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-JYSqlModel/';
+            this.page.identifier = '2019/08/15/如何使用-JYSqlModel/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'qianxingdeblog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="千行"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">千行</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州, 浙江</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">33</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">21</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/bug/"><span class="level-start"><span class="level-item">bug</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/cocoapods/"><span class="level-start"><span class="level-item">cocoapods</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/iOS%E6%9D%82/"><span class="level-start"><span class="level-item">iOS杂</span></span><span class="level-end"><span class="level-item tag">28</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%90%AD%E5%BB%BA/"><span class="level-start"><span class="level-item">搭建</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/EventKit/"><span class="tag">EventKit</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GCD/"><span class="tag">GCD</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NSError/"><span class="tag">NSError</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Runloop/"><span class="tag">Runloop</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tagged-Pointer/"><span class="tag">Tagged Pointer</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YTKNetwork/"><span class="tag">YTKNetwork</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YYModel/"><span class="tag">YYModel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/block/"><span class="tag">block</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dyld/"><span class="tag">dyld</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/mach-o/"><span class="tag">mach-o</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/runtime/"><span class="tag">runtime</span><span class="tag">12</span></a></div><div class="control"><a class="tags has-addons" href="/tags/weak/"><span class="tag">weak</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/"><span class="tag">关联对象</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83/"><span class="tag">内存分布</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><span class="tag">多线程</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%AE%A1%E6%A0%B8/"><span class="tag">审核</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%B7%A5%E5%85%B7/"><span class="tag">工具</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/"><span class="tag">引用计数</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%9D%82/"><span class="tag">杂</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/"><span class="tag">源码</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E9%94%81/"><span class="tag">锁</span><span class="tag">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a><p class="is-size-7"><span>&copy; 2022 千行</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

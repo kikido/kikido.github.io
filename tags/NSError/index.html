@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="robots" content="noindex"><meta><title>标签: NSError - 千行的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="千行的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="千行的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="千行的博客"><meta property="og:url" content="http://example.com/"><meta property="og:site_name" content="千行的博客"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:author" content="千行"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com"},"headline":"千行的博客","image":["http://example.com/img/og_image.png"],"author":{"@type":"Person","name":"千行"},"publisher":{"@type":"Organization","name":"千行的博客","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":""}</script><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-0VD5EHM46E" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-0VD5EHM46E');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/tags">标签</a></li><li class="is-active"><a href="#" aria-current="page">NSError</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-03-13T02:46:13.000Z" title="3/13/2019, 10:46:13 AM">2019-03-13</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">7 分钟读完 (大约1074个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/03/13/NSError%E4%BA%86%E8%A7%A3%E4%B8%80%E5%93%88/">NSError了解一哈</a></h1><div class="content"><p> 说来惭愧，工作以来一直没有好好了解<code>NSError</code>这个类。这次的话因为一些需求，准备系统的学习一下子，下面就是我大致的总结。</p>
+<h3 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h3><p>OC中通常使用<code>NSError</code>对象来发出错误信号，提供错误类型以及任何潜在原因的额外信息。</p>
+<p><code>Foundation</code>和其它<code>Cocoa</code>框架产生的错误通常归属于<code>NSCocoaErrorDomain</code>错误域。<code>NSCocoaErrorDomain</code>中的错误状态码都是在<code>Foundation</code>定义好的常量。</p>
+<p>在子类中，可以通过覆写<code>localizedDescription</code>方法来提供更好的本地错误描述。</p>
+<p><code>NSError</code>是<code>CFError</code>的无缝转换对象。</p>
+<p>每个<code>NSError</code>对象主要提供三部分的信息：</p>
+<ul>
+<li>code 状态码</li>
+<li>domain 对应的特定错误域</li>
+<li>userInfo 额外的信息</li>
+</ul>
+<h3 id="code和domain"><a href="#code和domain" class="headerlink" title="code和domain"></a>code和domain</h3><p><code>code</code>状态码表示问题的本质，这些状态码都在一个特定的错误域中，以防重叠和混淆。</p>
+<p>例如在<code>NSCocoaErrorDomain</code>中，<code>NSFileManager</code>访问一个不存在的文件产生的错误代码是4。而在<code>NSPOSIXErrorDomain</code>中，4代表<code>中断函数</code>错误。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g0u9ptklmyj30l90cidg2.jpg" alt="系统错误域"></p>
+<h3 id="userInfo及一些属性"><a href="#userInfo及一些属性" class="headerlink" title="userInfo及一些属性"></a>userInfo及一些属性</h3><p>作为<code>Cocoa</code>的惯例，<code>userInfo</code>是一个可以包含任意键值对的字典，无论是为了继承或降低耦合的目的, 它都不适合拿来填满各种杂七杂八的属性。在<code>NSError</code>这个例子中，有一些特定的键值对应着只读属性。一下是标准<code>NSError</code>的<code>userInfo</code>的键列表</p>
+<ul>
+<li>NSLocalizedDescriptionKey</li>
+<li>NSLocalizedFailureReasonErrorKey</li>
+<li>NSLocalizedRecoverySuggestionErrorKey</li>
+<li>NSLocalizedRecoveryOptionsErrorKey</li>
+<li>NSFilePathErrorKey</li>
+<li>NSStringEncodingErrorKey</li>
+<li>NSUnderlyingErrorKey</li>
+<li>NSRecoveryAttempterErrorKey</li>
+<li>NSHelpAnchorErrorKey</li>
+</ul>
+<blockquote>
+<p>下面是常见的几个键：</p>
+</blockquote>
+<h4 id="localizedDescription"><a href="#localizedDescription" class="headerlink" title="localizedDescription"></a>localizedDescription</h4><blockquote>
+<p>NSLocalizedDescriptionKey的对应值，即userInfo[NSLocalizedDescriptionKey]，下同<br>一段本地化的错误描述。错误的主要可呈现信息。例如<code>NSFileReadNoPermissionError</code>：”文件XX无法打开，因为你并没有查看它的权限”。理想状况下，这个信息会指出失败的原因以及失败原因。这个值来自于<code>NSLocalizedDescriptionKey</code>或者是<code>NSLocalizedFailureErrorKey + NSLocalizedFailureReasonErrorKey</code>或者是<code>NSLocalizedFailureErrorKey</code>。构建描述信息的步骤如下：</p>
+</blockquote>
+<ul>
+<li>在<code>userInfo</code>中查找<code>NSLocalizedDescriptionKey</code>，如果存在则使用</li>
+<li>在<code>userInfo</code>中查找<code>NSLocalizedFailureErrorKey</code>，如果存在，则使用，与<code>NSLocalizedFailureReasonErrorKey</code>的值组合使用(如果存在)</li>
+<li>在<code>userInfoValueProvider</code>中查找<code>NSLocalizedDescriptionKey</code>，如果存在则使用</li>
+<li>在<code>userInfoValueProvider</code>中查找<code>NSLocalizedFailureErrorKey</code>，如果存在则使用，与<code>NSLocalizedFailureReasonErrorKey</code>的值组合使用(如果存在)</li>
+<li>在<code>userInfo</code>或者<code>userInfoValueProvider</code>查找<code>NSLocalizedFailureErrorKey</code>，如果存在则使用</li>
+</ul>
+<blockquote>
+<p>上文中提到的<code>userInfoValueProvider</code>我也不知道是什么东西，我猜测可能是NSError的类方法<code>+ (id  _Nullable (^)(NSError * _Nonnull, NSErrorUserInfoKey _Nonnull))userInfoValueProviderForDomain:(NSErrorDomain)errorDomain; </code>中的返回值</p>
+</blockquote>
+<h4 id="localizedRecoverySuggestion"><a href="#localizedRecoverySuggestion" class="headerlink" title="localizedRecoverySuggestion"></a>localizedRecoverySuggestion</h4><blockquote>
+<p>NSLocalizedRecoverySuggestionErrorKey的对应值，即userInfo[NSLocalizedRecoverySuggestionErrorKey]，一段该错误的恢复建议，适合在<code>alert</code>中显示为辅助消息。</p>
+</blockquote>
+<h4 id="localizedFailureReason"><a href="#localizedFailureReason" class="headerlink" title="localizedFailureReason"></a>localizedFailureReason</h4><blockquote>
+<p>localizedFailureReason的对应值，即userInfo[localizedFailureReason]，一段本地化的错误解释</p>
+</blockquote>
+<h3 id="如何使用调用系统API时返回的NSError"><a href="#如何使用调用系统API时返回的NSError" class="headerlink" title="如何使用调用系统API时返回的NSError"></a>如何使用调用系统API时返回的NSError</h3><p>了解过上面的知识之后，那我们要怎样更好的使用系统返回给我们的<code>NSError</code>呢，下面是我自己使用的方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (void)showErrorDetail:(NSError *)error viewController:(UIViewController *)viewController</span><br><span class="line">&#123;</span><br><span class="line">    if (![viewController isKindOfClass:[UIViewController class]]) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    if (![error isKindOfClass:[NSError class]] || !error) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:error.localizedDescription message:error.localizedRecoverySuggestion preferredStyle:UIAlertControllerStyleAlert];</span><br><span class="line">    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@&quot;确定&quot;, nil) style:UIAlertActionStyleDefault handler:nil]];</span><br><span class="line">    [viewController presentViewController:alertController animated:YES completion:nil];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何创建一个NSError"><a href="#如何创建一个NSError" class="headerlink" title="如何创建一个NSError"></a>如何创建一个NSError</h3><p>作为开发者，我们需要怎么样使用<code>NSError</code>，才能更好的传递错误信息呢？首先，我们可以按<code>Foundation</code>库中很多类那个样子，在一个自定义方法中定义<code>NSError **</code>类型的形参。然后，我们也可以定义属于自己的错误域、错误代码常量和userInfo中的Key。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 自定义Domain</span><br><span class="line">NSString *const JYCustomErrorDomain = @&quot;JYCustomErrorDomain&quot;;</span><br><span class="line">// 自定义key</span><br><span class="line">NSString *const JYValidationStatusErrorKey = @&quot;JYValidationStatusErrorKey&quot;;</span><br><span class="line">// 自定义错误码</span><br><span class="line">typedef NS_ENUM(NSInteger, JYCustomErrorCode)</span><br><span class="line">&#123;</span><br><span class="line">    JYCustomErrorCodeGen = -999,</span><br><span class="line">    JYCustomErrorCodeRequired = -1000</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用userInfo字典来创建一个NSError"><a href="#使用userInfo字典来创建一个NSError" class="headerlink" title="使用userInfo字典来创建一个NSError"></a>使用userInfo字典来创建一个NSError</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSDictionary *userInfo = @&#123;</span><br><span class="line">  NSLocalizedDescriptionKey: NSLocalizedString(@&quot;Operation was unsuccessful.&quot;, nil),</span><br><span class="line">  NSLocalizedFailureReasonErrorKey: NSLocalizedString(@&quot;The operation timed out.&quot;, nil),</span><br><span class="line">  NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@&quot;Have you tried turning it off and on again?&quot;, nil)</span><br><span class="line">                          &#125;;</span><br><span class="line">NSError *error = [NSError errorWithDomain:JYCustomErrorDomain</span><br><span class="line">                                     code:JYCustomErrorCodeGen</span><br><span class="line">                                 userInfo:userInfo];</span><br></pre></td></tr></table></figure>
+
+<p>将错误信息包装在<code>NSError</code>对象中，很容易在不同对象或者上下文中进行传递。</p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>参考来源：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://nshipster.cn/nserror/">NSError</a></li>
+<li>苹果文档</li>
+</ul>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="千行"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">千行</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州, 浙江</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">33</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">21</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/bug/"><span class="level-start"><span class="level-item">bug</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/cocoapods/"><span class="level-start"><span class="level-item">cocoapods</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/iOS%E6%9D%82/"><span class="level-start"><span class="level-item">iOS杂</span></span><span class="level-end"><span class="level-item tag">28</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%90%AD%E5%BB%BA/"><span class="level-start"><span class="level-item">搭建</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/EventKit/"><span class="tag">EventKit</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GCD/"><span class="tag">GCD</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NSError/"><span class="tag">NSError</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Runloop/"><span class="tag">Runloop</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tagged-Pointer/"><span class="tag">Tagged Pointer</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YTKNetwork/"><span class="tag">YTKNetwork</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YYModel/"><span class="tag">YYModel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/block/"><span class="tag">block</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dyld/"><span class="tag">dyld</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/mach-o/"><span class="tag">mach-o</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/runtime/"><span class="tag">runtime</span><span class="tag">12</span></a></div><div class="control"><a class="tags has-addons" href="/tags/weak/"><span class="tag">weak</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/"><span class="tag">关联对象</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83/"><span class="tag">内存分布</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><span class="tag">多线程</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%AE%A1%E6%A0%B8/"><span class="tag">审核</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%B7%A5%E5%85%B7/"><span class="tag">工具</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/"><span class="tag">引用计数</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%9D%82/"><span class="tag">杂</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/"><span class="tag">源码</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E9%94%81/"><span class="tag">锁</span><span class="tag">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a><p class="is-size-7"><span>&copy; 2022 千行</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest - 千行的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="千行的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="千行的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB"><meta property="og:type" content="blog"><meta property="og:title" content="YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest"><meta property="og:url" content="http://example.com/2020/08/12/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E5%9B%9B-%E4%B9%8B-YTKBatchRequest-%E5%92%8C-YTKChainRequest/"><meta property="og:site_name" content="千行的博客"><meta property="og:description" content="这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg"><meta property="og:image" content="https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg"><meta property="article:published_time" content="2020-08-12T08:27:27.000Z"><meta property="article:modified_time" content="2022-10-21T02:13:53.000Z"><meta property="article:author" content="千行"><meta property="article:tag" content="YTKNetwork"><meta property="article:tag" content="源码"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2020/08/12/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E5%9B%9B-%E4%B9%8B-YTKBatchRequest-%E5%92%8C-YTKChainRequest/"},"headline":"YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest","image":["https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg","https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg","https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg","https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg","https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg","https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg","https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg","https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg","https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg","https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg","https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg","https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg","https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg","https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg","https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg","https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg","https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg","https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg","https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg","https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg","https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg","https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg","https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg","https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg","https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg","https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg","https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg"],"datePublished":"2020-08-12T08:27:27.000Z","dateModified":"2022-10-21T02:13:53.000Z","author":{"@type":"Person","name":"千行"},"publisher":{"@type":"Organization","name":"千行的博客","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":"这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。 YTKBatchRequestYTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKB"}</script><link rel="canonical" href="http://example.com/2020/08/12/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E5%9B%9B-%E4%B9%8B-YTKBatchRequest-%E5%92%8C-YTKChainRequest/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-0VD5EHM46E" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-0VD5EHM46E');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-12T08:27:27.000Z" title="8/12/2020, 4:27:27 PM">2020-08-12</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">13 分钟读完 (大约1946个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest</h1><div class="content"><p>这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。</p>
+<h2 id="YTKBatchRequest"><a href="#YTKBatchRequest" class="headerlink" title="YTKBatchRequest"></a>YTKBatchRequest</h2><p>YTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKBatchRequest 请求失败，同时 cancel 其它正在执行的请求</p>
+<p><img src="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg"></p>
+<p>协议，用于 YTKBatchRequest 请求失败或者成功的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg"></p>
+<p>这些是 YTKBatchRequest 的属性，大部分看注释就能理解了。</p>
+<p>需要注意的是：</p>
+<ol>
+<li>代理的执行顺序在 block 之前</li>
+<li>tag 需要自己手动赋值来区分 YTKBatchRequest，默认值都是 0</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg"></p>
+<p>初始化方法，在这里你需要指定 YTKRequest 数组。<br>个人觉得最好将其它默认的初始化方法给禁用掉</p>
+<p><img src="https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg"></p>
+<p>设置 YTKBatchRequest 请求成功和失败的回调，当请求结束后，会调用 <code>-clearCompletionBlock</code> 将 block 置为 nil</p>
+<p><img src="https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg"></p>
+<p>YTKRequestAccessory 协议用于执行请求不同阶段的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg"></p>
+<p>请求的开启和取消</p>
+<p><img src="https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg"></p>
+<p>请求的数据是否来自于缓存。所有请求中，如果有一个请求的数据来自于缓存，那么这个方法就会返回 YES</p>
+<p><img src="https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg"></p>
+<p>初始化方法，将参数 requestArray 赋值给属性 _requestArray，并且会判断里面的元素是否是 YTKRequest 实例，如果不是的话会返回。<br>初始化内部属性 finishedCount，该属性表示已完成请求的数目</p>
+<p><img src="https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg"></p>
+<p>方法开头会判断属性 finishedCount 的值是否大于 0，如果 0 的话则返回。这说明当 YTKBatchRequest 实例创建只能调用 <code>start</code> 方法一次，再次调用的话可能会出现重复开启任务的问题，这里个人还是觉得要进行下判断比较好。<br>将 YTKRequest 的 delegate 设置为自己，同时清空 YTKRequest 的 block 回调，以确保只有 YTKBatchRequest 处理请求完成后的回调，最后开启请求</p>
+<p><img src="https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg" alt="stop"></p>
+<p>触发即将停止回调 toggleAccessoriesWillStopCallBack，并调用 clearRequest 方法循环将 YTKRequest 进行停止操作，随后将自己从 YTKBatchRequestAgent 中移除。</p>
+<p><img src="https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg" alt="clearRequest"></p>
+<p>循环调用 YTKRequest 的 stop 方法</p>
+<p><img src="https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg"></p>
+<p>设置 YTKBatchRequest 的完成回调，当所有请求都成功调用或者其中一个失败时使用</p>
+<p><img src="https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg" alt="isDataFromCache"></p>
+<p>可以看到，只要一个请求的数据来自于缓存，那么方法的返回结果就是 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg"></p>
+<p>当请求成功后，YTKBatchRequest 在这个方法里面处理数据。</p>
+<ol>
+<li>_finishedCount 的值 +1</li>
+<li>如果 _finishedCount 的值等于请求的个数，说明所有的请求都已请求成功，这种情况表示 YTKBatchRequest 请求成功，执行相应的回调</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg"></p>
+<p>YTKBatchRequest 在这个方法里面处理请求失败的情况。<br>一个请求失败意味着 YTKBatchRequest 的失败，所以也不用接着处理那些完成的请求。在这里会循环取消 YTKRequest 请求<br>接着执行失败回调，并将自己从 YTKBatchRequestAgent 移除。</p>
+<p>YTKBatchRequestAgent 是一个单例，作用是强引用 YTKBatchRequest，避免被销毁。当任务执行完毕后，将 YTKBatchRequest 移除</p>
+<h3 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h3><p>YTKBatchRequest 是一个批量执行请求的类，能够批量执行 YTKRequest 类型的请求。<br>请求的开启顺序按照任务的添加顺序执行，单个 YTKRequest 完成后，不会执行 YTKRequest 自己的回调 block，代理等回调方法。<br>当所有请求成功后，执行 YTKBatchRequest 的代理回调，回调 block; 否则执行 YTKBatchRequest 的失败回调</p>
+<h2 id="YTKChainRequest"><a href="#YTKChainRequest" class="headerlink" title="YTKChainRequest"></a>YTKChainRequest</h2><p>YTKChainRequest 也是批量处理请求的类，只不过是当前面的请求完成后再执行下一个请求。</p>
+<p><img src="https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg"></p>
+<p>YTKChainRequest 完成的回调。可以看到在失败回调中多了一个参数 failedBaseRequest</p>
+<p><img src="https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg"></p>
+<p>比较简单，看注释就好了。<br><code>id&lt;YTKRequestAccessory&gt;</code> 是实现了协议 YTKRequestAccessory 的实例，这个协议里面有请求各种状态的方法，例如将要发起请求，将要结束请求</p>
+<p><img src="https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg"></p>
+<p>通过该方法向 YTKChainRequest 里面添加请求，同时设定该请求的完成回调。<br>我们知道 YTKBaseRequest 可以通过设定属性来设置完成回调，但这里为什么还需要这个方法来设定呢？通过属性设定的回调是否会触发呢？这些在后面会讲到的</p>
+<p><img src="https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg"></p>
+<p>一些内部用到的属性</p>
+<ol>
+<li>requestArray：请求数组</li>
+<li>requestCallbackArray：请求完成回调数组，有的请求没有设定回调，那么会往数组里面添加一个什么都不做的空回调</li>
+<li>nextRequestIndex：下一个执行的请求的序号</li>
+<li>emptyCallback：空回调</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg"></p>
+<p>初始化实例，可以看到 _emptyCallback 其实是一个不执行任何操作的 block</p>
+<p><img src="https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg"></p>
+<p>开启任务后，通过 startNextRequest 方法开启第一个请求，并将 YTKChainRequest 添加到单例 YTKChainRequestAgent 中，防止被销毁</p>
+<p><img src="https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg" alt="startNextRequest"></p>
+<p>该方法用来开启下一个未执行的请求。<br>_nextRequestIndex 表示该请求在数组中的位置，如果超出了数组范围则返回。<br>通过 _nextRequestIndex 得到该请求，随后将 delegate 设置为自己，并清除其完成回调，随后开启请求，返回 YES; 否则返回 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg" alt="stop"></p>
+<p>取消 YTKChainRequest，并将 YTKChainRequest 从单例 YTKChainRequestAgent 中移除。<br>通过调用 clearRequest 方法取消当前的请求</p>
+<p><img src="https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg" alt="clearRequest"></p>
+<p>获取到当前的 YTKBaseRequest，由于 _nextRequestIndex 表示下一个未执行的请求位置，所以这里要 -1。<br>清空 _requestArray 和 _requestCallbackArray 这两个数组</p>
+<p><img src="https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg"></p>
+<p>添加请求及其完成回调。<br>在 startNextRequest 方法中，我们知道，开启单个任务 YTKBaseRequest 之前，会将 YTKBaseRequest 的 delegate 设置为自己，并清除其回调 block。<br>所以，这里我们需要通过 _requestCallbackArray 这种方式来额外添加回调<br>需要注意的是该回调仅在请求成功时被调用</p>
+<p><img src="https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg" alt="requestFinished"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求成功后调用。<br>从 _requestCallbackArray 数组中获取该请求的完成回调。当所有的请求都获取成功后，执行 YTKChainRequestAgent 的完成回调</p>
+<p><img src="https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg" alt="requestFailed"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求失败后调用。需要注意的是，当单个 YTKBaseRequest 请求失败，判断 YTKChainRequestAgent 请求失败，执行其完成回调<br>如果你想执行 YTKBaseRequest 的失败回调，你可以在代理方法 <code>chainRequestFailed:failedBaseRequest:</code> 中，通过 YTKBaseRequest 得到响应数据，随后执行后续操作</p>
+<h3 id="小总结-1"><a href="#小总结-1" class="headerlink" title="小总结"></a>小总结</h3><p>YTKChainRequest 是一个批量同步执行请求的类，能够批量执行 YTKBaseRequest 类型的请求。<br>你可以自定义 YTKChainRequest 的实例方法添加 YTKBaseRequest 和 成功回调。</p>
+<p>不同于 YTKBatchRequest，YTKChainRequest 中可添加的 request 类型是 YTKBaseRequest 而不是 YTKRequest</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest</p><p><a href="http://example.com/2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/">http://example.com/2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>千行</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-08-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-10-21</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/YTKNetwork/">YTKNetwork</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%BA%90%E7%A0%81/">源码</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/08/06/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E4%B8%89-%E4%B9%8B-YTKNetworkAgent/"><span class="level-item">YTKNetwork 源码解读 (三) 之 YTKNetworkAgent</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://example.com/2020/08/12/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E5%9B%9B-%E4%B9%8B-YTKBatchRequest-%E5%92%8C-YTKChainRequest/';
+            this.page.identifier = '2020/08/12/YTKNetwork-源码解读-四-之-YTKBatchRequest-和-YTKChainRequest/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'qianxingdeblog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="千行"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">千行</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州, 浙江</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">33</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">21</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/bug/"><span class="level-start"><span class="level-item">bug</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/cocoapods/"><span class="level-start"><span class="level-item">cocoapods</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/iOS%E6%9D%82/"><span class="level-start"><span class="level-item">iOS杂</span></span><span class="level-end"><span class="level-item tag">28</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%90%AD%E5%BB%BA/"><span class="level-start"><span class="level-item">搭建</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/EventKit/"><span class="tag">EventKit</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GCD/"><span class="tag">GCD</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NSError/"><span class="tag">NSError</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Runloop/"><span class="tag">Runloop</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tagged-Pointer/"><span class="tag">Tagged Pointer</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YTKNetwork/"><span class="tag">YTKNetwork</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YYModel/"><span class="tag">YYModel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/block/"><span class="tag">block</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dyld/"><span class="tag">dyld</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/mach-o/"><span class="tag">mach-o</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/runtime/"><span class="tag">runtime</span><span class="tag">12</span></a></div><div class="control"><a class="tags has-addons" href="/tags/weak/"><span class="tag">weak</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/"><span class="tag">关联对象</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83/"><span class="tag">内存分布</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><span class="tag">多线程</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%AE%A1%E6%A0%B8/"><span class="tag">审核</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%B7%A5%E5%85%B7/"><span class="tag">工具</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/"><span class="tag">引用计数</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%9D%82/"><span class="tag">杂</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/"><span class="tag">源码</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E9%94%81/"><span class="tag">锁</span><span class="tag">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a><p class="is-size-7"><span>&copy; 2022 千行</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

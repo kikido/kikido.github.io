@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="robots" content="noindex"><meta><title>标签: 源码 - 千行的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="千行的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="千行的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="千行的博客"><meta property="og:url" content="http://example.com/"><meta property="og:site_name" content="千行的博客"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:author" content="千行"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com"},"headline":"千行的博客","image":["http://example.com/img/og_image.png"],"author":{"@type":"Person","name":"千行"},"publisher":{"@type":"Organization","name":"千行的博客","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":""}</script><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-0VD5EHM46E" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-0VD5EHM46E');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/tags">标签</a></li><li class="is-active"><a href="#" aria-current="page">源码</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-12T08:27:27.000Z" title="8/12/2020, 4:27:27 PM">2020-08-12</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">13 分钟读完 (大约1946个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/08/12/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E5%9B%9B-%E4%B9%8B-YTKBatchRequest-%E5%92%8C-YTKChainRequest/">YTKNetwork 源码解读 (四) 之 YTKBatchRequest 和 YTKChainRequest</a></h1><div class="content"><p>这篇是 YTKNetwork 源码阅读的最后一篇，主要讲解的是 YTKBaseRequest(批量请求)，YTKChainRequest(链式请求) 两个部分。</p>
+<h2 id="YTKBatchRequest"><a href="#YTKBatchRequest" class="headerlink" title="YTKBatchRequest"></a>YTKBatchRequest</h2><p>YTKBatchRequest 用于完成批量请求的任务。当初始化时，需要指定 YTKBatchRequest 的数目，后续无法再添加新的请求。随后按添加顺序依次发起请求，当其中的一个请求失败时判定为 YTKBatchRequest 请求失败，同时 cancel 其它正在执行的请求</p>
+<p><img src="https://i.loli.net/2020/08/06/wgAGbD3QvtMhk1V.jpg"></p>
+<p>协议，用于 YTKBatchRequest 请求失败或者成功的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/hgMZA6yiQRF8OjW.jpg"></p>
+<p>这些是 YTKBatchRequest 的属性，大部分看注释就能理解了。</p>
+<p>需要注意的是：</p>
+<ol>
+<li>代理的执行顺序在 block 之前</li>
+<li>tag 需要自己手动赋值来区分 YTKBatchRequest，默认值都是 0</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/06/hbnC92FYwM5rJXT.jpg"></p>
+<p>初始化方法，在这里你需要指定 YTKRequest 数组。<br>个人觉得最好将其它默认的初始化方法给禁用掉</p>
+<p><img src="https://i.loli.net/2020/08/06/Frtwa1VXfBgARd5.jpg"></p>
+<p>设置 YTKBatchRequest 请求成功和失败的回调，当请求结束后，会调用 <code>-clearCompletionBlock</code> 将 block 置为 nil</p>
+<p><img src="https://i.loli.net/2020/08/06/9dHeIuiD7Jh6nKB.jpg"></p>
+<p>YTKRequestAccessory 协议用于执行请求不同阶段的回调</p>
+<p><img src="https://i.loli.net/2020/08/06/rnkEDsPpLVCRxSa.jpg"></p>
+<p>请求的开启和取消</p>
+<p><img src="https://i.loli.net/2020/08/06/PAzdSfveubah4MD.jpg"></p>
+<p>请求的数据是否来自于缓存。所有请求中，如果有一个请求的数据来自于缓存，那么这个方法就会返回 YES</p>
+<p><img src="https://i.loli.net/2020/08/10/MWZotGTC9cyVxs8.jpg"></p>
+<p>初始化方法，将参数 requestArray 赋值给属性 _requestArray，并且会判断里面的元素是否是 YTKRequest 实例，如果不是的话会返回。<br>初始化内部属性 finishedCount，该属性表示已完成请求的数目</p>
+<p><img src="https://i.loli.net/2020/08/10/p8XUGsxKnqodMHi.jpg"></p>
+<p>方法开头会判断属性 finishedCount 的值是否大于 0，如果 0 的话则返回。这说明当 YTKBatchRequest 实例创建只能调用 <code>start</code> 方法一次，再次调用的话可能会出现重复开启任务的问题，这里个人还是觉得要进行下判断比较好。<br>将 YTKRequest 的 delegate 设置为自己，同时清空 YTKRequest 的 block 回调，以确保只有 YTKBatchRequest 处理请求完成后的回调，最后开启请求</p>
+<p><img src="https://i.loli.net/2020/08/10/EaCdM8eAnmGcgoP.jpg" alt="stop"></p>
+<p>触发即将停止回调 toggleAccessoriesWillStopCallBack，并调用 clearRequest 方法循环将 YTKRequest 进行停止操作，随后将自己从 YTKBatchRequestAgent 中移除。</p>
+<p><img src="https://i.loli.net/2020/08/10/x8hr17BTw4CHyaz.jpg" alt="clearRequest"></p>
+<p>循环调用 YTKRequest 的 stop 方法</p>
+<p><img src="https://i.loli.net/2020/08/10/EtTJoiqeZpGaRBA.jpg"></p>
+<p>设置 YTKBatchRequest 的完成回调，当所有请求都成功调用或者其中一个失败时使用</p>
+<p><img src="https://i.loli.net/2020/08/10/pnYCvZ9LAtrzm8R.jpg" alt="isDataFromCache"></p>
+<p>可以看到，只要一个请求的数据来自于缓存，那么方法的返回结果就是 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/BwSh5TM6FRxCyGE.jpg"></p>
+<p>当请求成功后，YTKBatchRequest 在这个方法里面处理数据。</p>
+<ol>
+<li>_finishedCount 的值 +1</li>
+<li>如果 _finishedCount 的值等于请求的个数，说明所有的请求都已请求成功，这种情况表示 YTKBatchRequest 请求成功，执行相应的回调</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/10/krLgfPAah8bwUZ6.jpg"></p>
+<p>YTKBatchRequest 在这个方法里面处理请求失败的情况。<br>一个请求失败意味着 YTKBatchRequest 的失败，所以也不用接着处理那些完成的请求。在这里会循环取消 YTKRequest 请求<br>接着执行失败回调，并将自己从 YTKBatchRequestAgent 移除。</p>
+<p>YTKBatchRequestAgent 是一个单例，作用是强引用 YTKBatchRequest，避免被销毁。当任务执行完毕后，将 YTKBatchRequest 移除</p>
+<h3 id="小总结"><a href="#小总结" class="headerlink" title="小总结"></a>小总结</h3><p>YTKBatchRequest 是一个批量执行请求的类，能够批量执行 YTKRequest 类型的请求。<br>请求的开启顺序按照任务的添加顺序执行，单个 YTKRequest 完成后，不会执行 YTKRequest 自己的回调 block，代理等回调方法。<br>当所有请求成功后，执行 YTKBatchRequest 的代理回调，回调 block; 否则执行 YTKBatchRequest 的失败回调</p>
+<h2 id="YTKChainRequest"><a href="#YTKChainRequest" class="headerlink" title="YTKChainRequest"></a>YTKChainRequest</h2><p>YTKChainRequest 也是批量处理请求的类，只不过是当前面的请求完成后再执行下一个请求。</p>
+<p><img src="https://i.loli.net/2020/08/10/tyxu5r2jRzsBlWN.jpg"></p>
+<p>YTKChainRequest 完成的回调。可以看到在失败回调中多了一个参数 failedBaseRequest</p>
+<p><img src="https://i.loli.net/2020/08/10/gcXN2dnmY38oeEQ.jpg"></p>
+<p>比较简单，看注释就好了。<br><code>id&lt;YTKRequestAccessory&gt;</code> 是实现了协议 YTKRequestAccessory 的实例，这个协议里面有请求各种状态的方法，例如将要发起请求，将要结束请求</p>
+<p><img src="https://i.loli.net/2020/08/10/OlkmZNL6vgs1dVb.jpg"></p>
+<p>通过该方法向 YTKChainRequest 里面添加请求，同时设定该请求的完成回调。<br>我们知道 YTKBaseRequest 可以通过设定属性来设置完成回调，但这里为什么还需要这个方法来设定呢？通过属性设定的回调是否会触发呢？这些在后面会讲到的</p>
+<p><img src="https://i.loli.net/2020/08/10/jPd6qNIc1yioT8C.jpg"></p>
+<p>一些内部用到的属性</p>
+<ol>
+<li>requestArray：请求数组</li>
+<li>requestCallbackArray：请求完成回调数组，有的请求没有设定回调，那么会往数组里面添加一个什么都不做的空回调</li>
+<li>nextRequestIndex：下一个执行的请求的序号</li>
+<li>emptyCallback：空回调</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/10/bBq7KgyMYjSEkcV.jpg"></p>
+<p>初始化实例，可以看到 _emptyCallback 其实是一个不执行任何操作的 block</p>
+<p><img src="https://i.loli.net/2020/08/10/8buHYgPl34VcACO.jpg"></p>
+<p>开启任务后，通过 startNextRequest 方法开启第一个请求，并将 YTKChainRequest 添加到单例 YTKChainRequestAgent 中，防止被销毁</p>
+<p><img src="https://i.loli.net/2020/08/10/aTvqonJywNXlQYd.jpg" alt="startNextRequest"></p>
+<p>该方法用来开启下一个未执行的请求。<br>_nextRequestIndex 表示该请求在数组中的位置，如果超出了数组范围则返回。<br>通过 _nextRequestIndex 得到该请求，随后将 delegate 设置为自己，并清除其完成回调，随后开启请求，返回 YES; 否则返回 NO</p>
+<p><img src="https://i.loli.net/2020/08/10/SJz6RqeaDiowu7F.jpg" alt="stop"></p>
+<p>取消 YTKChainRequest，并将 YTKChainRequest 从单例 YTKChainRequestAgent 中移除。<br>通过调用 clearRequest 方法取消当前的请求</p>
+<p><img src="https://i.loli.net/2020/08/10/YUa8JQXwyvkVClD.jpg" alt="clearRequest"></p>
+<p>获取到当前的 YTKBaseRequest，由于 _nextRequestIndex 表示下一个未执行的请求位置，所以这里要 -1。<br>清空 _requestArray 和 _requestCallbackArray 这两个数组</p>
+<p><img src="https://i.loli.net/2020/08/10/MEnRFSX5bNODYJy.jpg"></p>
+<p>添加请求及其完成回调。<br>在 startNextRequest 方法中，我们知道，开启单个任务 YTKBaseRequest 之前，会将 YTKBaseRequest 的 delegate 设置为自己，并清除其回调 block。<br>所以，这里我们需要通过 _requestCallbackArray 这种方式来额外添加回调<br>需要注意的是该回调仅在请求成功时被调用</p>
+<p><img src="https://i.loli.net/2020/08/10/CLAJBh9KMlGyPza.jpg" alt="requestFinished"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求成功后调用。<br>从 _requestCallbackArray 数组中获取该请求的完成回调。当所有的请求都获取成功后，执行 YTKChainRequestAgent 的完成回调</p>
+<p><img src="https://i.loli.net/2020/08/10/34OZmbANdI7LM1f.jpg" alt="requestFailed"></p>
+<p>这里是 YTKBaseRequest 的代理方法，当请求失败后调用。需要注意的是，当单个 YTKBaseRequest 请求失败，判断 YTKChainRequestAgent 请求失败，执行其完成回调<br>如果你想执行 YTKBaseRequest 的失败回调，你可以在代理方法 <code>chainRequestFailed:failedBaseRequest:</code> 中，通过 YTKBaseRequest 得到响应数据，随后执行后续操作</p>
+<h3 id="小总结-1"><a href="#小总结-1" class="headerlink" title="小总结"></a>小总结</h3><p>YTKChainRequest 是一个批量同步执行请求的类，能够批量执行 YTKBaseRequest 类型的请求。<br>你可以自定义 YTKChainRequest 的实例方法添加 YTKBaseRequest 和 成功回调。</p>
+<p>不同于 YTKBatchRequest，YTKChainRequest 中可添加的 request 类型是 YTKBaseRequest 而不是 YTKRequest</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-06T05:58:33.000Z" title="8/6/2020, 1:58:33 PM">2020-08-06</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">22 分钟读完 (大约3329个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/08/06/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E4%B8%89-%E4%B9%8B-YTKNetworkAgent/">YTKNetwork 源码解读 (三) 之 YTKNetworkAgent</a></h1><div class="content"><p>这一篇主要用来介绍 <code>YTKNetworkAgent</code> 这个类。当我们生成一个 <code>YTKBaseRequest</code> 实例，使用 <code>-start</code> 方法来发起请求，底层其实是使用 YTKNetworkAgent 来帮助序列化请求 request，以及请求结果 reponse 的序列化和回调。</p>
+<h2 id="YTKNetworkConfig"><a href="#YTKNetworkConfig" class="headerlink" title="YTKNetworkConfig"></a>YTKNetworkConfig</h2><p><img src="https://i.loli.net/2020/08/05/kIElVBOoyNjMRLZ.jpg"></p>
+<p>定义了一个叫做 AFURLSessionTaskDidFinishCollectingMetricsBlock 的 block 类型，看过 AF 源码的同学应该知道在 AFURLSessionManager.m 文件中同样定义了这个名字的 block，在同一个文件中 typedef 重复定义貌似不会报错。</p>
+<p>NSURLSessionTaskMetrics 是 session 任务指标的封装，每个实例均包含下面几个属性：</p>
+<ul>
+<li>taskInterval：表示任务从创建到完成花费的总时间，任务的创建时间是任务被实例化时的时间；任务完成时间是任务的内部状态将要变为完成的时间</li>
+<li>redirectCount：表示被重定向的次数</li>
+<li>transactionMetrics：包含了任务执行过程中每个请求&#x2F;响应事务中收集的指标，指标是 NSURLSessionTaskTransactionMetrics 类型</li>
+</ul>
+<p>这个 block 用于 <code>NSURLSessionTaskDelegate</code> 协议的回调方法 <code>URLSession:task:didFinishCollectingMetrics:</code>，简单的，你可以在这个方法中统计网络流量</p>
+<p><img src="https://i.loli.net/2020/08/05/Gf5ljV3ghY8XDQs.jpg" alt="YTKUrlFilterProtocol"></p>
+<p>YTKUrlFilterProtocol 协议里面只有一个方法 <code>- (NSString *)filterUrl:(NSString *)originUrl withRequest:(YTKBaseRequest *)request</code>，该方法在方法 <code>-buildRequestUrl</code> 中被调用，用来加工 <code>requestUrl</code> 返回的字符串 Url。<br>YTKNetworkConfig 可以添加多个实现 YTKUrlFilterProtocol 协议的实例</p>
+<p><img src="https://i.loli.net/2020/08/05/R6DfoBIKjP4tsmJ.jpg" alt="YTKCacheDirPathFilterProtocol"></p>
+<p>YTKCacheDirPathFilterProtocol 协议里面只有一个方法 <code>- (NSString *)filterCacheDirPath:(NSString *)originPath withRequest:(YTKBaseRequest *)request</code>，用来加工缓存的默认目录 &#x2F;Library&#x2F;LazyRequestCache，YTKNetworkConfig 可以添加多个实现了 YTKCacheDirPathFilterProtocol 的实例</p>
+<p><img src="https://i.loli.net/2020/08/05/oirZj9kn2SECWpy.jpg"></p>
+<p>NS_UNAVAILABLE 这个宏的作用是你无法使用这个宏修饰的方法，也就是你只能只用 <code>+sharedConfig</code> 方法来生成实例，也就是单例</p>
+<p><img src="https://i.loli.net/2020/08/05/bkA8PXwm1JrlILH.jpg"></p>
+<ul>
+<li>baseUrl: 域名，类似 <code>http://www.yuantiku.com</code>，默认值为 nil</li>
+<li>cdnUrl：cdn url，默认值是 nil</li>
+<li>urlFilters：只读，你可以使用实例方法 <code>-addUrlFilter：</code> 来添加实现了 YTKUrlFilterProtocol 协议的实例，该协议在上面已经提到过了</li>
+<li>cacheDirPathFilters：只读，你可以使用实例方法 <code>-addCacheDirPathFilter：</code> 来添加实现了 YTKCacheDirPathFilterProtocol 协议的实例，该协议在上面已经提到过了</li>
+<li>securityPolicy：安全策略，与证书相关</li>
+<li>debugLogEnabled：是否开启 debug 模式，开启后可打印 log</li>
+<li>sessionConfiguration：session config</li>
+<li>collectingMetricsBlock：收集指标后的回调</li>
+</ul>
+<p><img src="https://i.loli.net/2020/08/05/pMJYnzurIUE7oXA.jpg"></p>
+<p>这些就不讲了</p>
+<p><img src="https://i.loli.net/2020/08/05/GuTjnysMcBHQXbk.jpg"></p>
+<p>对应于 .h 文件中的 urlFilters, cacheDirPathFilters 属性，只是一个为只读，而上面的是成员变量可以直接使用<br><img src="https://i.loli.net/2020/08/05/dDCjnZPbhe16rEJ.jpg"></p>
+<p>单例的写法，并在 init 进行初始化。<br>需要注意的是安全策略 securityPolicy 为默认策略，也就是无条件信任服务器的证书</p>
+<p><img src="https://i.loli.net/2020/08/05/SnFb17CqAzaUYeJ.jpg"></p>
+<p>比较简单就不说了</p>
+<hr>
+<p>YTKNetworkConfig 是一个单例，你可以用它来：</p>
+<ol>
+<li>设定域名 baseUrl</li>
+<li>设定 cdn Url</li>
+<li>设定安全策略</li>
+<li>开启 log</li>
+<li>对接口 url 进行修改</li>
+<li>对缓存路径进行修改</li>
+</ol>
+<h2 id="YTKNetworkAgent"><a href="#YTKNetworkAgent" class="headerlink" title="YTKNetworkAgent"></a>YTKNetworkAgent</h2><p><img src="https://i.loli.net/2020/08/05/JhQS63NGAkVrzP5.jpg"></p>
+<p>跟上面一样</p>
+<p><img src="https://i.loli.net/2020/08/05/B5q3aymfGF2ihlp.jpg"></p>
+<ul>
+<li>addRequest：生成 NSURLSessionDataTask，并开启任务; 通过此方法会添加到一个字典集合中</li>
+<li>cancelRequest：取消任务，并从集合中移除</li>
+<li>cancelAllRequests：取消所有的任务，并从集合中移除</li>
+</ul>
+<p><img src="https://i.loli.net/2020/08/05/GN9aRKLEI5AyQFe.jpg" alt="buildRequestUrl"></p>
+<p>构建请求的 url 字符串</p>
+<p><img src="https://i.loli.net/2020/08/05/418R5InecrWNQz9.jpg"></p>
+<p>互斥锁，用来保持线程安全。这里使用宏来简化锁的使用<br>使用方式为：</p>
+<ol>
+<li>初始化锁：pthread_mutex_init(&amp;_lock, NULL)</li>
+<li>上锁：pthread_mutex_lock(&amp;_lock)</li>
+<li>解锁：pthread_mutex_unlock(&amp;_lock)</li>
+<li>销毁锁，虽然在文件中并没有这步操作：pthread_mutex_destroy(&amp;_lock)</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/05/j6l94oPuNxYVBHr.jpg"></p>
+<p>这里是一些 YTKNetworkAgent 的私有成员变量</p>
+<ol>
+<li>_manager：序列化参数，上传的附件，响应结果并发起请求</li>
+<li>_config：网络配置，上一节已经讲过了</li>
+<li>_jsonResponseSerializer：将响应结果序列化成 json </li>
+<li>_xmlParserResponseSerialzier：将响应结果序列化成 xml</li>
+<li>_requestsRecord：task 集合，强引用 task，使其在请求过程中不会被释放 </li>
+<li>_processingQueue：并行队列，用来分配请求成功时的回调</li>
+<li>_lock：互斥锁</li>
+<li>_allStatusCodes：状态码集合，用来验证响应结果</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/05/FlIMDLvcJHKBmZ7.jpg"></p>
+<p>生成 YTKNetworkAgent 实例并初始化，值得注意的是这里的状态码集合范围是 (100， 500)，不同于 AFN 的 (200， 300)</p>
+<p><img src="https://i.loli.net/2020/08/05/C8UnNLEmPjzQKIV.jpg"></p>
+<p>懒加载 _jsonResponseSerializer、_xmlParserResponseSerialzier 这两个序列化器，它们只有当 responseSerializerType 为 YTKResponseSerializerTypeJSON、YTKResponseSerializerTypeXMLParser 才会被使用</p>
+<p><img src="https://i.loli.net/2020/08/05/waucstXMhQOegdS.jpg" alt="buildRequestUrl"></p>
+<p>这个方法的作用是构建 request 的 url</p>
+<p>先让我们了解一下 URL 的组成，这里举一个例子：<a target="_blank" rel="noopener" href="http://www.example.com/path/to/myfile.html?key1=value1&amp;key2=value2#SomewhereInTheDocument">http://www.example.com:80/path/to/myfile.html?key1=value1&amp;key2=value2#SomewhereInTheDocument</a></p>
+<p>其中：</p>
+<ul>
+<li>scheme：因特网服务类型，这里是 http</li>
+<li>domain：因特网域名，在这里是 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a></li>
+<li>port：主机上的端口号，默认端口号是 80</li>
+<li>path：服务器上的资源路径，在这里是 &#x2F;path&#x2F;to&#x2F;myfile.html</li>
+<li>parameter：提供给服务器的额外参数，在这里是 ?key1&#x3D;value1&amp;key2&#x3D;value2</li>
+</ul>
+<p>在这个方法中，如果一个 url 存在 host 跟 scheme，那么就会把它当做一个完整的 url，不需要拼接直接返回</p>
+<p><img src="https://i.loli.net/2020/08/05/GE1FoKsCgbv7Aqa.jpg"></p>
+<p>这个方法的作用是创建一个请求序列化器</p>
+<p>① 前面部分是根据 requestSerializerType 类型创建不同的 requestSerializer<br>红色框里面的内容是服务器如果需要 账号&#x2F;密码 验证时，使用 <code>setAuthorizationHeaderFieldWithUsername：password：</code>将这些信息添加到请求头中<br>① 后面部分的内容是设置你自定义的请求头信息</p>
+<p><img src="https://i.loli.net/2020/08/05/CVyF3piMaPmfD4L.jpg"></p>
+<p>这个方法的作用是创建 NSURLSessionTask task</p>
+<ol>
+<li>根据参数 YTKBaseRequest 获取到请求 method，url，参数，要上传的文件信息，进度 block以及请求序列化器</li>
+<li>获取到上面的信息后，根据 method 选择不同的构建方法创建 NSURLSessionTask</li>
+</ol>
+<p>当 method 是 GET 时，有两种情况，一种是下载任务，一种是数据任务</p>
+<p><img src="https://i.loli.net/2020/08/05/23lydGtx7EuBgOT.jpg" alt="构建下载任务"></p>
+<p>这个方法用来构建下载任务。<br>下载任务有断点下载的作用，所以在这里我们需要判断之前是否下载了部分数据，如果是的话则继续下载，否则的话则重头开始下载。</p>
+<ol>
+<li>首先我们需要构建 request，这部分由 AFN 的请求序列器 requestSerializer 完成，简单点讲就是设置请求头，设置请求体(将参数编码)，创建 NSMutableURLRequest</li>
+<li>代码块 1 的作用是确保下载路径是一个文件路径，而不是文件夹路径。下载任务完成后，AFN 使用方法 <code>moveItemAtURL:toURL:error:</code> 将文件移动到指定路径，如果此时该路径下已经有一个文件存在，就会失败，所以 YTK 这里在下载前就先判断是否文件，如果存在的话则移除这个文件</li>
+<li>代码块 2 的作用是恢复断点下载<ul>
+<li>首先获取到之前下载好的数据，这些数据会被保存在 &#x2F;tmp&#x2F;Incomplete 文件夹下面 </li>
+<li>获取这些数据，并进行验证。断点数据被保存时会被当做一个 plist 文件，包含了许多的 key 来记录下载信息，所以 YTK 使用 <code>validateResumeData</code> 方法来对这些数据进行验证</li>
+<li>当断点数据存在并且有效时，使用 AFHTTPSessionManager 的实例方法 <code>downloadTaskWithResumeData:progress:destination:completionHandler</code> 方法来创建一个下载任务</li>
+<li>到这里如果没有断点下载，则使用 AFHTTPSessionManager 的实例方法 <code>downloadTaskWithRequest:progress:destination:completionHandler</code> 方法重新创建一个下载任务</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/05/voG8OhsDYqFUQPI.jpg"></p>
+<p>这个方法的作用是创建数据任务，流程大概就是：</p>
+<ol>
+<li>requestSerializer 生成 NSMutableURLRequest，需要注意的是如果有文件上传的话需要用另一个方法来初始化 request</li>
+<li>使用 AFHTTPSessionManager 生成 NSURLSessionDataTask，具体实现还是自己翻 AFN 的代码吧</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/05/N7gyvmaUR6VXStZ.jpg"></p>
+<p>这个方法的作用是生成任务 task，添加到字典集合中强引用避免被销毁，开启任务</p>
+<ol>
+<li>代码块 1 的作用是初始化 NSURLSessionTask 实例<ul>
+<li>如果我们使用了 <code>-buildCustomUrlRequest</code> 自定义了 NSURLRequest，那么将使用 AFHTTPSessionManager 的方法 <code>dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler</code> 来创建 NSURLSessionTask，你对 YTKBaseRequest 一些属性的设置都将失效</li>
+<li>如果没有自定义 NSURLRequest，那么将使用 <code>sessionTaskForRequest:error:</code> 来创建 NSURLSessionTask，这个方法我们在上面已经讲过了</li>
+</ul>
+</li>
+<li>代码块 2 的作用是在创建 NSURLSessionTask 的过程中失败了，则直接执行失败回调</li>
+<li>代码块 3 的作用是为 NSURLSessionTask 设置优先级，因为这个属性是 iOS8 之后才有的，所以先用 <code>respondsToSelector:</code> 方法判断了下</li>
+<li>当 NSURLSessionTask 创建成功后，使用 <code>-addRequestToRecord:</code> 添加到字典集合 _requestsRecord， key&#x2F;value 对应于 task.taskIdentifier&#x2F;request</li>
+<li>由于刚创建的 NSURLSessionTask 处于 suspend 暂停状态，所以需要使用 resume 方法来开启</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/05/K8AmFsxLf1whYbR.jpg" alt="cancelRequest"></p>
+<p>该方法用来取消 request。</p>
+<p>当 task 是下载任务时，且 YTKBaseRequest 的 resumableDownloadPath 属性不为 nil，取消任务会将已经下载好的数据保存在本地文件中，以便于下次下载时不重复下载。需要注意时，这些数据不只是你要下载的文件数据，而是一个 plist 文件，里面有许多键值对，例如 NSURLSessionDownloadURL，NSURLSessionResumeBytesReceived，NSURLSessionResumeCurrentRequest<br>数据保存的文件路径是 <code>/tmp/Incomplete/resumableDownloadPath</code>，其中 resumableDownloadPath 部分是你自己设定的值</p>
+<p>取消任务 task 之后，会将 task 从集合 _requestsRecord 中移除</p>
+<p><img src="https://i.loli.net/2020/08/06/osnFDKfHPtA8XIO.jpg" alt="cancelAllRequests"></p>
+<p>该方法用来取消所有添加到集合中的任务，值得注意的是锁的使用，这里将锁作用在数据的添加和读取上</p>
+<p><img src="https://i.loli.net/2020/08/06/BcWmje7frXJAxod.jpg"></p>
+<p>该方法用来验证 request 的响应结果，此时请求已经完成，且响应数据已经被序列化赋值给了 YTKBaseRequest 实例。</p>
+<ol>
+<li>首先验证状态码，有效的状态码范围是 (200，299)，在这个范围内说明请求被服务器接收并处理。如果无效则返回</li>
+<li>如果 YTKBaseRequest 的 responseJSONObject 属性和方法 -jsonValidator 返回值不为 nil，则需要验证 JSON，如果 JSON 中相应字段的值不为 nil，则验证成功; 如果失败则返回</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/06/D2X4imyep7MP5Kc.jpg"></p>
+<p>代码块 1：<br>当我们取消 task 后，底层的 AFN 会立刻调用失败回调，进而调用这个方法。为了防止这种情况，我们在这里做了一个判断，如果 request 为 nil 的时候立即返回</p>
+<p>代码块 2：<br>序列化响应结果，根据 responseSerializerType 属性的不同，将数据序列化成不同类型，比如 JSON Object，NSXMLParser。具体实现过程由 AFN 的响应序列化器实现</p>
+<ol>
+<li>到这一步如果都没有出现 error，则调用方法 <code>-validateResult:error:</code> 验证响应结果，这个方法我们在上面已经讲过</li>
+<li>如果验证成功，则调用 <code>-requestDidSucceedWithRequest：</code> 方法处理; 否则，调用 <code>-requestDidFailWithRequest：error:</code> 处理，这两个方法我们随后会讲到</li>
+<li>无论验证成功还是失败，最后都要将 request 从集合 _requestsRecord 中移除，并清空自己的 successCompletionBlock、failureCompletionBlock、uploadProgressBlock</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/06/2yuE35P7LSMlvNZ.jpg"></p>
+<p>请求成功后的处理方法，会依次调用下面几个方法</p>
+<ol>
+<li>requestCompletePreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestCompleteFilter</li>
+<li>requestFinished</li>
+<li>successCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/06/Iz4GmoRQcn6xdKZ.jpg"></p>
+<p>请求失败的处理方法</p>
+<p>代码块 1：<br>如果此时有断点数据且 resumableDownloadPath 属性不为 nil，则将其保存在本地，用于下载任务</p>
+<p>代码块 2：<br>对于断点下载的任务，后面恢复下载的任务开启时，responseObject 的值会被赋予断点数据的文件路径。<br>如果下载任务请求失败了，那么将把断点数据读取出来，然后把文件删除，不是很明白为什么把数据读取出来</p>
+<p>代码块 3：<br>执行一些失败的回调，执行顺序如下：</p>
+<ol>
+<li>requestFailedPreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestFailedFilter</li>
+<li>requestFailed</li>
+<li>failureCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>YTKNetworkAgent 是 YTK 实现请求的类，它序列化了请求以及响应数据，并且实现了断点下载的功能。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-03T07:17:32.000Z" title="8/3/2020, 3:17:32 PM">2020-08-03</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">17 分钟读完 (大约2535个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/08/03/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E4%BA%8C-%E4%B9%8B-YTKRequest/">YTKNetwork 源码解读 (二) 之 YTKRequest</a></h1><div class="content"><h2 id="YTKCacheMetadata"><a href="#YTKCacheMetadata" class="headerlink" title="YTKCacheMetadata"></a>YTKCacheMetadata</h2><p><img src="https://i.loli.net/2020/07/13/vK2cFaYh54MoLsu.jpg"></p>
+<p>YTKCacheMetadata 表示缓存元数据，保存了跟缓存相关的一些信息，例如创建时间，创建时的版本号，app 版本号等。<br>通过比较 YTKCacheMetadata，来判断本地缓存是否有效。如果无效的话则重新发起请求，有效的话则从本地缓存加载 reponse 数据</p>
+<p>下面几种比较 YTKCacheMetadata 的情况会被认为本地无效：</p>
+<ol>
+<li>version 不匹配</li>
+<li>sensitiveDataString 不匹配。不要被它的名字给误导了，其实它就相当于一个额外的一个标识符，自己可以设定，如果 sensitiveDataString 不相等说明不匹配</li>
+<li>creationDate 取创建日期到现在的时间戳，如果超过了设定的缓存有效时间说明缓存无效</li>
+<li>appVersionString 不匹配，app 版本号不匹配</li>
+</ol>
+<p>还有一个属性 <code>NSStringEncoding stringEncoding</code> 用于将本地数据转换成字符串时使用。</p>
+<p>另外 YTKCacheMetadata 还支持 NSSecureCoding 协议，协议里的方法就不讲了。</p>
+<p><img src="https://i.loli.net/2020/07/13/3AQOFr6ICM5uq9d.jpg"></p>
+<p>定义了一些跟缓存相关的一些状态码</p>
+<h2 id="YTKRequest"><a href="#YTKRequest" class="headerlink" title="YTKRequest"></a>YTKRequest</h2><!--FIXME：扩展的版本链接-->
+<p>YTKRequest 是 YTKBaseRequest 的子类，为 YTKBaseRequest 增加了缓存功能</p>
+<p><img src="https://i.loli.net/2020/07/13/pLRehUOCPFoVxMJ.jpg"></p>
+<p>response 数据是否保存到本地需要满足两个条件:</p>
+<ol>
+<li>当前 response 不是来自于缓存，即 response 需要来自于 request</li>
+<li>缓存有效时间 cacheTimeInSeconds 需要大于 0</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/13/PQLzhDKWxZuTC5l.jpg"></p>
+<p><code>-cacheVersion</code>，<code>-cacheSensitiveData</code> 这两个标识符都是自己设定的。<br>保存缓存时，也会将缓存元数据保存在本地，当需要加载缓存时，会先把缓存元数据取出来，比较 cacheVersion，cacheSensitiveData 这两个标识符跟当前的标识符是否相等，如果有不相等说明缓存无效</p>
+<p>接下来是 <code>YTKRequest.m</code> 部分</p>
+<p><img src="https://i.loli.net/2020/07/15/msUzTJGKSufay2p.jpg"></p>
+<p>两个宏 <code>NSFoundationVersionNumber_iOS_8_0</code> 和 <code>NSFoundationVersionNumber_With_QoS_Available</code> 用来处理系统在 iOS8 之前和之后两种情况，不过在 iOS11 之后，我们可以使用 <code>if (@available(iOS 10, macOS 10.12, watchOS 3, tvOS 10, *))</code> 这个关键字来处理系统版本不同的问题</p>
+<p>这里创建了一个串行队列，对于 iOS8 之后的系统，还指定了它的队列优先级为 <code>QOS_CLASS_BACKGROUND</code>。需要注意的是 <code>QOS_CLASS_BACKGROUND</code> 的优先级别是最低的，可能是因为不想占用太多系统资源吧。<br>这个队列用来将 response 保存到本地文件中</p>
+<p><img src="https://i.loli.net/2020/07/15/2MIDkdoPpyFlJnH.jpg"></p>
+<p>上面几种不同类型的缓存对应 YTKResponseSerializerType 的类型</p>
+<ol>
+<li>cacheData 和 cacheString 对应于 YTKResponseSerializerTypeHTTP</li>
+<li>cacheData 和 cacheJSON 对应于 YTKResponseSerializerTypeJSON</li>
+<li>cacheData 和 cacheXML 对应于 YTKResponseSerializerTypeXMLParser</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/15/59fMuWAXvbqT4oa.jpg"></p>
+<p>因为 YTKRequest 是 YTKBaseRequest 的子类，在这里覆写了它的 <code>start</code> 方法。</p>
+<p>有三种情况会导致不使用缓存数据：</p>
+<ol>
+<li>设置 YTKRequest 的属性 ignoreCache 为 YES，这样会忽略缓存直接进行请求</li>
+<li>如果当前任务是一个下载任务，此时不会对 response 结果进行缓存，自然也就不会有读取缓存这个过程</li>
+<li>加载缓存时出现了问题。例如缓存元数据验证时出现问题，或者是读取缓存文件时出现的问题</li>
+</ol>
+<p>如果加载缓存成功，会在主队列分发一个异步任务，用来执行请求完成后的一些方法，这些我们在讲 YTKBaseRequest 的时候提到过了<br>需要注意的是下面这行代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YTKRequest *strongSelf = self;</span><br></pre></td></tr></table></figure>
+
+<p>这是为了防止执行异步任务的时候 self 突然被释放了。不过我的理解是，既然 GCD 已经强引用了 self，那么在 block 执行完毕之前，self 都是不会被释放掉的，所以这句代码貌似有点多余了</p>
+<p><img src="https://i.loli.net/2020/07/15/ynWUkDuqTzieHlO.jpg"></p>
+<p>使用 -loadCacheWithError 方法来加载本地缓存，分这么几步：</p>
+<ol>
+<li>判断是否设置了缓存有效时间，如果没有的话说明不使用缓存了，直接返回</li>
+<li>加载缓存元数据，如果元数据不存在，说明缓存也不存在</li>
+<li>验证缓存元数据，判断缓存是否有效</li>
+<li>加载本地缓存</li>
+</ol>
+<p>在这里，我们先讲一下第三步验证缓存元数据的方法，加载缓存元数据和加载缓存后面再讲</p>
+<p><img src="https://i.loli.net/2020/07/15/FAirxDa6dfjCETv.jpg" alt="validateCacheWithError"></p>
+<ol>
+<li>首先比较缓存的有效时间，因为缓存元数据中保存了缓存的创建日期，所以这里比较简单</li>
+<li>比较缓存版本号，因为是 long long 类型，所以直接比较就可以</li>
+<li>比较 sensitiveDataString 标识符，因为是字符串类型，所以需要使用 <code>isEqualToString</code> 方法比较。值得注意的是，对于符号 <code>||</code>，当前面那个条件满足之后就不会再去比较后面那个条件了，所以我们写代码的时候可以把比较简单的判断条件放在前面，同理还有 <code>&amp;&amp;</code></li>
+<li>比较 app 版本号。这里我觉得只需要使用 dispatch_once 进行一次比较就可以了。如果变 app 版本号变更了，则清除缓存，后面就不再需要比较; 如果版本号没有变更，后面也不需要比较了</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 忽略缓存，开启请求</span><br><span class="line">- (void)startWithoutCache &#123;</span><br><span class="line">    // 清空跟缓存相关的属性</span><br><span class="line">    [self clearCacheVariables];</span><br><span class="line">    [super start];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果不使用缓存，则调用这个方法来开启任务。</p>
+<p><img src="https://i.loli.net/2020/07/15/vUlL8gpwIi4mkxa.jpg"></p>
+<p>清空跟缓存相关属性的值，需要注意的是，并不会清除本地的缓存文件(如果有)</p>
+<p><img src="https://i.loli.net/2020/07/15/R7Sh9anB2bvfKYw.jpg"></p>
+<p><code>requestCompletePreprocessor</code> 方法在得到请求结果后调用。由于 YTKRequest 覆写了父类 YTKBaseRequest 的 requestCompletePreprocessor 方法，所以首先需要调用父类的 requestCompletePreprocessor 方法。<br>如果 YTKRequest 的 <code>writeCacheAsynchronously</code> 属性值为 YES，则表示在执行请求回调的线程(一般为主线程)，将请求结果保存在本地文件中; 如果值是 NO，则在私有的串行队列 <code>ytkrequest_cache_writing_queue</code> 添加一个异步任务来处理</p>
+<p><img src="https://i.loli.net/2020/08/03/NbsO7IQTnAqhlkp.jpg" alt="saveResponseDataToCacheFile"></p>
+<p><code>saveResponseDataToCacheFile</code> 方法的作用是将数据保存到本地。</p>
+<ol>
+<li>检查数据是否是来自缓存，如果是的话则返回; 否则执行下一步</li>
+<li>将数据保存到本地，文件名字根据接口名字、参数、请求方式来生成</li>
+<li>生成一个 YTKCacheMetadata 实例，保存缓存元数据，然后使用归档的方式将其保存到本地中，其文件名字为 “缓存名字.metadata”</li>
+</ol>
+<p><img src="https://i.loli.net/2020/08/03/NmwzDa2IUyQ18bT.jpg"></p>
+<p>覆写这些方法，用来控制请求缓存的使用</p>
+<ul>
+<li>cacheTimeInSeconds：缓存使用时间</li>
+<li>cacheVersion：缓存版本，充当一个标记</li>
+<li>cacheSensitiveData：也是一个标记</li>
+<li>writeCacheAsynchronously：是否异步保存缓存</li>
+</ul>
+<p><img src="https://i.loli.net/2020/08/03/Z7xt3jHokVRS5EU.jpg"></p>
+<p>属性 _dataFromCache 用来标记此时的请求结果是否来自于缓存<br>根据请求格式 responseSerializerType 的不同，缓存将被转换成的对象也不相同，所以这里有很多成员变量 _cacheData&#x2F;_cacheXML&#x2F;_cacheJSON&#x2F;_cacheString</p>
+<p><img src="https://i.loli.net/2020/08/03/oBP5jgH3f6T9zM1.jpg" alt="loadCacheMetadata"></p>
+<p>加载缓存元数据，使用归档加载，如果加载成功，则该方法返回 YES。<br>这里需要注意的是 YTKLog 这个宏</p>
+<p><img src="https://i.loli.net/2020/08/03/uoIxqKkjCOiDvYE.jpg" alt="YTKLog"></p>
+<p>展开来其实是一个 C 函数，参数是 format 和可变参数。<br>方法的实现被包含在了一个 #ifdef&#x2F;#endif 里面，这样做的好处是在正式版本环境 RELEASE 时，不会再打印 log，减少系统开销</p>
+<p><img src="https://i.loli.net/2020/08/03/6tmJugLQ8fscNPS.jpg" alt="loadCacheData"></p>
+<p>这个方法的作用是加载本地缓存</p>
+<p>首先判断缓存文件是否存在，存在的话则读取数据 data，随后根据属性 responseSerializerType 的值将 data 转换成不同格式的对象</p>
+<p><img src="https://i.loli.net/2020/08/03/pR8CtblTKcOvwDi.jpg" alt="clearCacheVariables"></p>
+<p>清除跟缓存相关的几个属性，需要注意的是并没有主动的清除本地缓存</p>
+<p><img src="https://i.loli.net/2020/08/03/sL6Q5M2E81Aw7uN.jpg" alt="createBaseDirectoryAtPath"></p>
+<p>该方法用来创建文件夹，需要注意的是 createDirectoryAtPath:withIntermediateDirectories:attributes:error:，该方法可以用来创建中间目录。<br>例如我们创建一个名字为 app&#x2F;doc&#x2F;user&#x2F;info 的文件夹，而当前只存在 app 这个文件夹的话，使用该方法会帮我们创建好 doc，user，info 这几个文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/mAFkNIntxwS2CM1.jpg"></p>
+<p>根据 path 来查找是否存在该文件夹，如果不存在的话则使用 createBaseDirectoryAtPath 来创建文件夹; 如果存在的话则判断是否是文件，如果是文件的话则移除该文件，然后使用 createBaseDirectoryAtPath 来创建文件夹</p>
+<p>可以看到 createBaseDirectoryAtPath，createBaseDirectoryAtPath 两个方法的使用是为了确保生成指定名字的文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/4Q2YEgoDiGX8p93.jpg"></p>
+<p>该方法用来创建缓存存放的文件目录</p>
+<p>默认的文件夹位置是 &#x2F;Library&#x2F;LazyRequestCache，但是我们可以使用 YTKNetworkConfig 的实例方法 <code>addCacheDirPathFilter</code> 来修改文件夹的名字<br>在确定好文件夹名字之后，使用 createDirectoryIfNeeded 创建该文件夹</p>
+<p><img src="https://i.loli.net/2020/08/03/8MXwRHIantJKGiT.jpg"></p>
+<p>该方法用来确定缓存文件的名字</p>
+<p>得到请求的 url， basicUrl，参数，然后拼接成一个字符串 requestInfo，随后使用 YTKNetworkUtils 的方法 md5StringFromString，从 requestInfo 中提取 md5，将其作为缓存文件的名字</p>
+<p><img src="https://i.loli.net/2020/08/03/knBlZpyvgf2wICu.jpg"></p>
+<p>得到了文件夹名字和文件名字，我们就可以将其拼接成缓存文件的路径啦</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>YTKRequest 作为 YTKBaseRequest 的子类，为其添加了缓存这个功能。在我们的使用中自定义的 request 子类也是需要直接继承与 YTKRequest 的</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-07-13T03:09:56.000Z" title="7/13/2020, 11:09:56 AM">2020-07-13</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">14 分钟读完 (大约2056个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/07/13/YTKNetwork-%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB-%E4%B8%80-%E4%B9%8B-YTKBaseRequest/">YTKNetwork 源码解读 (一) 之 YTKBaseRequest</a></h1><div class="content"><p>因为 YTKBaseRequest .h&#x2F;.m 里代码数目不多，所以这里将从头开始逐行介绍，有一些直接就写在注释里了，有一些需要注意的地方会特别摘出来讲解的。</p>
+<p><img src="https://i.loli.net/2020/07/10/W3mhf6ugSBzDq9I.jpg"></p>
+<p>不知道你有没有注意到 <code>NS_ENUM</code> 后面没有跟着指定一个名字，是的，如果你不需要指定一个类型名字的话，可以直接这样子写。<br><code>YTKRequestValidationErrorInvalidStatusCode</code> 值的是 <code>reponse.statusCode</code> 不在 200~299 这个区间内，跟 AFHTTPResponseSerializer 的 <code>acceptableStatusCodes</code> 的范围一致</p>
+<p><img src="https://i.loli.net/2020/07/10/YIxNzSZ2gdTma4b.jpg"></p>
+<p>常见的请求方法</p>
+<p><img src="https://i.loli.net/2020/07/10/fulaMKk6Eys97i2.jpg"></p>
+<p>请求的序列化样式，相对于 AFNetworking 少了 AFPropertyListRequestSerializer，可能是因为这种编码方式比较少见吧。</p>
+<p>相应的序列化样式，相对于 AFNetworking 少了 AFXMLDocumentResponseSerializer，AFPropertyListResponseSerializer，AFImageResponseSerializer，AFCompoundResponseSerializer 几个类型</p>
+<p><img src="https://i.loli.net/2020/07/10/bSkVAmef7QgCLh1.jpg"></p>
+<p>对应于 NSURLSessionTask 的 priority 属性，需要在 iOS8 以后的系统中使用，不过一般也不需要再兼容之前的系统了吧。。。</p>
+<p><img src="https://i.loli.net/2020/07/10/ZlS7V3w91BXoH4a.jpg"></p>
+<p>AFMultipartFormData 在 AFNetworking 用于 <code>Content-Type </code> 为 <code>application/form-data</code> 的请求，将数据添加到请求体中。一般用于 upload task 中。<br>在 AFConstructingBlock 类型的 block 中，你可以将数据添加数据添加到请求体中<br>在 AFURLSessionTaskProgressBlock 的 block 你可以追踪上传的进度</p>
+<p><img src="https://i.loli.net/2020/07/10/YV2MJiOnbyE7HwX.jpg"></p>
+<p>你可以实现这两个协议，以便在 request 的不同阶段进行相应的处理<br>需要注意的是这些方法的执行顺序不要搞错了</p>
+<p><img src="https://i.loli.net/2020/07/10/zrmpbNKCdMojXua.jpg"></p>
+<p>接下来介绍 <code>YTKBaseRequest</code> 这个类，它是一个抽象类，提供了构建 requeset 时的许多选项</p>
+<p><img src="https://i.loli.net/2020/07/10/ynW2spDa8TO9bAB.jpg"></p>
+<p>这里大部分的属性是映射 <code>NSHTTPURLResponse</code>， <code>NSURLRequest</code>，<code>NSURLSessionTask</code> 这几个类的属性的。</p>
+<p>需要注意的是 <code>responseObject</code>，如果 <code>resumableDownloadPath</code> 不为空并且 requestTask 是 DownloadTask 类型的，那么这个属性的值就一个文件路径(NSURL)，用来保存下载数据的</p>
+<p><img src="https://i.loli.net/2020/07/10/1DZGRTkV3QESAp7.jpg"></p>
+<p>tag 可以用来标记 YTKBaseRequest，默认值是 0<br>userInfo 可以用来添加额外信息</p>
+<p><img src="https://i.loli.net/2020/07/10/exVL4ChWQlyKb26.jpg"></p>
+<p>requestAccessories 是一个数组，可以用来保存<code>多个</code>实现了 <code>YTKRequestAccessory</code> 协议的对象<br>constructingBodyBlock 用来将数据添加到请求体中<br>resumableDownloadPath 是保存下载数据文件的路径，当下载请求失败时，部分的下载数据会自动保存到这个文件中，否则数据会保存到 responseData&#x2F;responseString 中<br>resumableDownloadProgressBlock 可以用来追踪下载进度<br>uploadProgressBlock 可以用来追踪上传进度</p>
+<p><img src="https://i.loli.net/2020/07/10/VudFo4c9YDZPC8R.jpg"> </p>
+<p><code>-setCompletionBlockWithSuccess:failure:</code> 用来添加请求 成功&#x2F;失败 的回调<br><code>-clearCompletionBlock:</code> 将请求 成功&#x2F;失败 的回调 block 置为 nil，避免循环引用<br><code>-addAccessory:</code> 用来添加实现 YTKRequestAccessory 的对象</p>
+<p><img src="https://i.loli.net/2020/07/13/mgYVArZ1p5N6FsE.jpg"></p>
+<ol>
+<li>-start：开启任务。需要注意是为了让 task 在完成之前不被释放掉，会在这个 task 添加到单例 YTKNetworkAgent 的成员变量 <code>_requestsRecord</code>中</li>
+<li>-stop：取消任务。我感觉这个方法叫做 cancle 比较合适，我一开始看到 stop 还以为是 suspend 的意思</li>
+<li>-startWithCompletionBlockWithSuccess:failure:，设置请求 失败&#x2F;成功 的回调，并开启任务</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/13/d2ovlJ4YtS7mQeF.jpg"></p>
+<p>这部分是你实现 YTKBaseRequest 子类时可以覆写的方法</p>
+<p>-requestCompletePreprocessor，-requestCompleteFilter，-requestFailedPreprocessor，-requestFailedFilter：这几个方法都是对请求 成功&#x2F;失败 结果的处理，结合之前讲过 <code>YTKRequestDelegate</code>，<code>YTKRequestAccessory</code> 两个协议里面的方法，下面给出这些方法的执行顺序.</p>
+<p>请求成功后回调的执行顺序：</p>
+<ol>
+<li>requestCompletePreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestCompleteFilter</li>
+<li>requestFinished</li>
+<li>successCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<p>请求失败后回调的执行顺序</p>
+<ol>
+<li>requestFailedPreprocessor：如果使用 cache 的话是在主线程，否则的话在其它线程执行。下面的方法均在主线程执行</li>
+<li>requestWillStop</li>
+<li>requestFailedFilter</li>
+<li>requestFailed</li>
+<li>failureCompletionBlock</li>
+<li>requestDidStop</li>
+</ol>
+<p>方法 <code>-cacheFileNameFilterForRequestArgument</code> 用来对请求参数 argument 进行过滤后返回一个新的参数，用在获取缓存文件名字上。</p>
+<p>方法 <code>-requestAuthorizationHeaderFieldArray</code>，用于身份验证，在这个方法中你需要返回一个容量为 2 的数组，第一个元素表示账号，第二个元素表示密码。<br>该认证方式使用用户的 账号&#x2F;密码 作为凭证信息，进行 base64 编码添加到请求头 <code>Authorization</code> 中传输到服务器中</p>
+<p>方法 <code>buildCustomUrlRequest</code>，在这个方法里面你可以放回一个自定义的 request，而不是使用 AFNetworking 的 AFHTTPRequestSerializer 生成。<br>如果你返回了一个不为 nil 的对象，那么将忽略 <code>requestUrl</code>, <code>requestTimeoutInterval</code>,  <code>requestArgument</code>, <code>allowsCellularAccess</code>, <code>requestMethod</code> and <code>requestSerializerType</code></p>
+<p>方法 <code>jsonValidator</code>，在这个方法里面，你可以对 reponse 序列化后的 JSON 对象进行验证。<br>举个例子，我们要向网址 <a target="_blank" rel="noopener" href="http://www.yuantiku.com/iphone/users">http://www.yuantiku.com/iphone/users</a> 发送一个 GET 请求，请求参数是 userId 。我们想获得某一个用户的信息，包括他的昵称和等级，我们需要服务器必须返回昵称（字符串类型）和等级信息（数值类型），则可以覆盖 jsonValidator 方法，实现简单的验证。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (id)jsonValidator &#123;</span><br><span class="line">    return @&#123;</span><br><span class="line">        @&quot;nick&quot;: [NSString class],</span><br><span class="line">        @&quot;level&quot;: [NSNumber class]</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法 <code>statusCodeValidator</code>，我觉得如果是验证状态码的话好得加个状态码的参数啊，不过无所谓啦，反正可以自己获取状态码然后再进行判断。该方法返回一个布尔值，如果返回的是 NO 的话将会报错。</p>
+<p>接下来讲 .m 文件</p>
+<p><img src="https://i.loli.net/2020/07/13/njUJ93GyN6SertB.jpg"></p>
+<p>在 .h 文件中这些属性都是只读的，在 .m 文件中改成可读写，防止外部修改这些属性的值。</p>
+<p><img src="https://i.loli.net/2020/07/13/9jCsWPpr6qMcFoa.jpg"></p>
+<p>将 <code>NSURLSessionTask</code>，<code>NSURLResponse</code> 的一些属性映射成自己的属性，便于使用</p>
+<p><img src="https://i.loli.net/2020/07/13/x5iXczjwIsrBVY4.jpg"></p>
+<p>设置请求 成功&#x2F;失败 的回调<br>需要注意的是可以添加多个实现了 YTKRequestAccessory 协议的对象</p>
+<p><img src="https://i.loli.net/2020/07/13/HYdDZ5xE18bouSh.jpg"></p>
+<p>开启&#x2F;关闭 请求的方法。<br>在 start 方法中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 触发 YTKRequestAccessory 代理</span><br><span class="line">- (void)toggleAccessoriesWillStartCallBack &#123;</span><br><span class="line">    for (id&lt;YTKRequestAccessory&gt; accessory in self.requestAccessories) &#123;</span><br><span class="line">        if ([accessory respondsToSelector:@selector(requestWillStart:)]) &#123;</span><br><span class="line">            [accessory requestWillStart:self];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2020/07/13/t4ia9CTdyofFMPn.jpg" alt="addRequest方法实现"></p>
+<p>在成功创建 task 后，task 将会被添加到 _requestsRecord 属性中避免被释放。随后调用 resume 开启任务<br>如果我们没有覆写方法 buildCustomUrlRequest 返回自定义的 request，系统会根据 YTKBaseRequest 创建 request。这部分在 <code>sessionTaskForRequest:error:</code> 中实现</p>
+<p><img src="https://i.loli.net/2020/07/13/D7bwGxekBOVtUNh.jpg"></p>
+<p>获取 YTKBaseRequest 实例上各种属性的值，例如方法类型，参数，然后在根据 method 的不同，使用不同的方法创建 task。<br>因为这部分内容都在 YTKNetworkAgent，这里就简单提下。在后面讲解 YTKNetworkAgent 部分的时候再仔细说</p>
+<p>在 <code>stop</code> 方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 执行代理</span><br><span class="line">[self toggleAccessoriesWillStopCallBack];</span><br><span class="line">// 将 delegate 置为 nil</span><br><span class="line">self.delegate = nil;</span><br><span class="line">// task cancle</span><br><span class="line">[[YTKNetworkAgent sharedAgent] cancelRequest:self];</span><br><span class="line">// 执行代理</span><br><span class="line">[self toggleAccessoriesDidStopCallBack];</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2020/07/13/pJaWsQxdj1mATEh.jpg"></p>
+<p>如果你的请求是下载任务，并且你指定了一个缓存文件名，那么下载好的部分数据将会写入这个临时文件中，在下次恢复下载时使用。<br>当然如果要使用断点下载，还需要满足下面的几个条件：</p>
+<ol>
+<li>这个资源自你第一次请求后没有改变</li>
+<li>这个任务是一个 HTTP 或者 HTTP GET 请求</li>
+<li>服务器在 reponse header 提供了 ETag 或者 Last-Modified 字段</li>
+<li>服务器支持字节范围请求</li>
+<li>本地临时文件没有被删除</li>
+</ol>
+<p><img src="https://i.loli.net/2020/07/13/z2X8Fqbu6fB5GIe.jpg"></p>
+<p>由于 YTKBaseRequest 是一个基类，所以在这些需要子类覆写的方法里面内容不多</p>
+<p><img src="https://i.loli.net/2020/07/13/JTaGPn6tEl7fpVq.jpg"></p>
+<p>覆写了 -description 方法，方便打印信息</p>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="千行"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">千行</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州, 浙江</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">33</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">21</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/bug/"><span class="level-start"><span class="level-item">bug</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/cocoapods/"><span class="level-start"><span class="level-item">cocoapods</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/iOS%E6%9D%82/"><span class="level-start"><span class="level-item">iOS杂</span></span><span class="level-end"><span class="level-item tag">28</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%90%AD%E5%BB%BA/"><span class="level-start"><span class="level-item">搭建</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/EventKit/"><span class="tag">EventKit</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GCD/"><span class="tag">GCD</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NSError/"><span class="tag">NSError</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Runloop/"><span class="tag">Runloop</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tagged-Pointer/"><span class="tag">Tagged Pointer</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YTKNetwork/"><span class="tag">YTKNetwork</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YYModel/"><span class="tag">YYModel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/block/"><span class="tag">block</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dyld/"><span class="tag">dyld</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/mach-o/"><span class="tag">mach-o</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/runtime/"><span class="tag">runtime</span><span class="tag">12</span></a></div><div class="control"><a class="tags has-addons" href="/tags/weak/"><span class="tag">weak</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/"><span class="tag">关联对象</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83/"><span class="tag">内存分布</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><span class="tag">多线程</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%AE%A1%E6%A0%B8/"><span class="tag">审核</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%B7%A5%E5%85%B7/"><span class="tag">工具</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/"><span class="tag">引用计数</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%9D%82/"><span class="tag">杂</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/"><span class="tag">源码</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E9%94%81/"><span class="tag">锁</span><span class="tag">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a><p class="is-size-7"><span>&copy; 2022 千行</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

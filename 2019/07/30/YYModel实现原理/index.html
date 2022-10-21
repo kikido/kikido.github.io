@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>YYModel实现原理 - 千行的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="千行的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="千行的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="其实很早开始就想写这个了，因为自己一直在用这个库，而且它的代码量也比较少，另外作者ibireme写的代码质量很高。为了提高自己，拜读大神写的库是一个很好的方式。本文将从头开始分析代码，所以文字可能会比较多。 YYClassMethodInfo这个类保存了 Method 的信息(其实后面好像也没怎么用到。。。)。 该类的属性及描述如下：    属性名字 描述    Method method 对应的"><meta property="og:type" content="blog"><meta property="og:title" content="YYModel实现原理"><meta property="og:url" content="http://example.com/2019/07/30/YYModel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"><meta property="og:site_name" content="千行的博客"><meta property="og:description" content="其实很早开始就想写这个了，因为自己一直在用这个库，而且它的代码量也比较少，另外作者ibireme写的代码质量很高。为了提高自己，拜读大神写的库是一个很好的方式。本文将从头开始分析代码，所以文字可能会比较多。 YYClassMethodInfo这个类保存了 Method 的信息(其实后面好像也没怎么用到。。。)。 该类的属性及描述如下：    属性名字 描述    Method method 对应的"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:published_time" content="2019-07-30T07:57:13.000Z"><meta property="article:modified_time" content="2022-10-21T02:13:53.000Z"><meta property="article:author" content="千行"><meta property="article:tag" content="YYModel"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2019/07/30/YYModel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"},"headline":"YYModel实现原理","image":["http://example.com/img/og_image.png"],"datePublished":"2019-07-30T07:57:13.000Z","dateModified":"2022-10-21T02:13:53.000Z","author":{"@type":"Person","name":"千行"},"publisher":{"@type":"Organization","name":"千行的博客","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":"其实很早开始就想写这个了，因为自己一直在用这个库，而且它的代码量也比较少，另外作者ibireme写的代码质量很高。为了提高自己，拜读大神写的库是一个很好的方式。本文将从头开始分析代码，所以文字可能会比较多。 YYClassMethodInfo这个类保存了 Method 的信息(其实后面好像也没怎么用到。。。)。 该类的属性及描述如下：    属性名字 描述    Method method 对应的"}</script><link rel="canonical" href="http://example.com/2019/07/30/YYModel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-0VD5EHM46E" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-0VD5EHM46E');</script><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-07-30T07:57:13.000Z" title="7/30/2019, 3:57:13 PM">2019-07-30</time>发表</span><span class="level-item"><time dateTime="2022-10-21T02:13:53.000Z" title="10/21/2022, 10:13:53 AM">2022-10-21</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/iOS%E6%9D%82/">iOS杂</a></span><span class="level-item">32 分钟读完 (大约4794个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">YYModel实现原理</h1><div class="content"><p>其实很早开始就想写这个了，因为自己一直在用这个库，而且它的代码量也比较少，另外作者<a target="_blank" rel="noopener" href="https://github.com/ibireme">ibireme</a>写的代码质量很高。为了提高自己，拜读大神写的库是一个很好的方式。<br>本文将从头开始分析代码，所以文字可能会比较多。</p>
+<h3 id="YYClassMethodInfo"><a href="#YYClassMethodInfo" class="headerlink" title="YYClassMethodInfo"></a>YYClassMethodInfo</h3><p>这个类保存了 Method 的信息(其实后面好像也没怎么用到。。。)。 该类的属性及描述如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性名字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Method method</td>
+<td>对应的Method</td>
+</tr>
+<tr>
+<td>NSString *name</td>
+<td>方法的名字</td>
+</tr>
+<tr>
+<td>SEL sel</td>
+<td>方法选择器</td>
+</tr>
+<tr>
+<td>IMP imp</td>
+<td>方法实现</td>
+</tr>
+<tr>
+<td>NSString *typeEncoding</td>
+<td>参数及返回值类型的编码</td>
+</tr>
+<tr>
+<td>NSString *returnTypeEncoding</td>
+<td>返回值类型的编码</td>
+</tr>
+<tr>
+<td>NSArray&lt;NSString *&gt; *argumentTypeEncodings</td>
+<td>参数类型的编码</td>
+</tr>
+</tbody></table>
+<p>想更多的了解类型编码可以去看<a target="_blank" rel="noopener" href="https://nshipster.cn/type-encodings/">Type Encodings</a>这篇博客，主要是runtime加快消息的分发<br>你可以使用<code>@encode</code>将相应类型转换成内部表示的字符串，当然也有一大部分内部使用的类型编码无法用<code>@encode()</code>返回。</p>
+<h3 id="YYClassPropertyInfo"><a href="#YYClassPropertyInfo" class="headerlink" title="YYClassPropertyInfo"></a>YYClassPropertyInfo</h3><p>这个类保存了 Property 信息，主要用到等有<code>setter</code>和<code>getter</code>方法，成员变量名称，编码方式(很重要，根据这个来确定属性类型以及其它修饰符)。该类的属性及描述如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性名字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>objc_property_t property</td>
+<td>对应的Property</td>
+</tr>
+<tr>
+<td>NSString *name</td>
+<td>名字</td>
+</tr>
+<tr>
+<td>YYEncodingType type</td>
+<td>类型编码的类型</td>
+</tr>
+<tr>
+<td>NSString *typeEncoding</td>
+<td>类型编码</td>
+</tr>
+<tr>
+<td>NSString *ivarName</td>
+<td>成员变量名称，加了个_前缀</td>
+</tr>
+<tr>
+<td>Class cls</td>
+<td>属性类型</td>
+</tr>
+<tr>
+<td>NSArray&lt;NSString *&gt; *protocols</td>
+<td>被包含着的协议，可能为空</td>
+</tr>
+<tr>
+<td>SEL getter</td>
+<td>getter方法，不能为空</td>
+</tr>
+<tr>
+<td>SEL setter</td>
+<td>setter方法，不能为空</td>
+</tr>
+</tbody></table>
+<p>属性转换成<code>YYClassPropertyInfo</code>的过程比较麻烦，比较复杂的地方在于需要通过解析属性的类型编码，来确定 YYClassPropertyInfo 的<code>YYEncodingType type</code>属性。</p>
+<p>YYEncodingType 主要包含了以下几方面的信息：</p>
+<ul>
+<li>YYEncodingTypeMask： 属性值的类型，例如c的基本数据类型，结构体，id类型，class类型</li>
+<li>YYEncodingTypeQualifierMask：不知道怎么形容这个，在<a target="_blank" rel="noopener" href="https://nshipster.cn/type-encodings/">Type Encodings</a>这篇博客里面说是内部使用的类型编码。例如：const，in，out</li>
+<li>YYEncodingTypePropertyMask：属性关键词，例如：strong， weak， readonly</li>
+</ul>
+<h3 id="YYClassIvarInfo"><a href="#YYClassIvarInfo" class="headerlink" title="YYClassIvarInfo"></a>YYClassIvarInfo</h3><p>这个类保存了 Ivar 的信息。貌似不会用到，这里就不展开讲了。</p>
+<h3 id="YYClassInfo"><a href="#YYClassInfo" class="headerlink" title="YYClassInfo"></a>YYClassInfo</h3><p>每一个类(包括元类)都有一个对应的 YYClassInfo 实例。非元类对应的实例创建之后会被保存在一个静态字典缓存 classCache 中，元类对应的实例保存在另一个静态字典缓存 metaCache 中，以<code>Class -&gt; YYClassInfo</code>的映射关系保存在缓存中。如果缓存中没有，则重新创建一个。<br>创建时，首先会通过 runtime 的方法得到父类，是否是元类，元类，名字等基本信息，然后按顺序分别将它所有的的 Method，Property，Ivar 生成对应的 YYClassMethodInfo，YYClassPropertyInfo，YYClassIvarInfo实例，添加到 YYClassInfo 中。创建完成之后开始创建父类的 YYClassInfo 实例，一直到根类。</p>
+<p>YYClassInfo 保存了 Class 的绝大部分信息，但是 objc 是一门动态的语言，可以在运行时添加方法，属性等信息，这也意味着 YYClassInfo 里面保存的信息可能不是最新的。所以当你对 Class 做了一些修改之后，你需要先获得该 Class 对应的 YYClassInfo实例，然后手动调用<code>- (void)setNeedUpdate;</code>来刷新保存在缓存中的 info 信息。</p>
+<table>
+<thead>
+<tr>
+<th>属性名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Class cls</td>
+<td>对应类</td>
+</tr>
+<tr>
+<td>Class superCls</td>
+<td>对应类的父类</td>
+</tr>
+<tr>
+<td>Class metaCls</td>
+<td>对应类的元类</td>
+</tr>
+<tr>
+<td>BOOL isMeta</td>
+<td>对应类是否是元类</td>
+</tr>
+<tr>
+<td>NSString *name</td>
+<td>类名</td>
+</tr>
+<tr>
+<td>YYClassInfo *superClassInfo</td>
+<td>父类对应的 YYClassInfo 实例</td>
+</tr>
+<tr>
+<td>NSDictionary&lt;NSString *, YYClassIvarInfo *&gt; *ivarInfos</td>
+<td>所有成员变量信息</td>
+</tr>
+<tr>
+<td>NSDictionary&lt;NSString *, YYClassMethodInfo *&gt; *methodInfos</td>
+<td>所有方法信息</td>
+</tr>
+<tr>
+<td>NSDictionary&lt;NSString *, YYClassPropertyInfo *&gt; *propertyInfos</td>
+<td>所有属性信息</td>
+</tr>
+</tbody></table>
+<h3 id="YYModel协议"><a href="#YYModel协议" class="headerlink" title="YYModel协议"></a>YYModel协议</h3><p>如果默认的模型转换不能满足你的需求，那么你可以通过实现 YYModel 协议中的方法达到自定义键值转化的过程。下面，简单介绍一下它的几个方法：</p>
+<ul>
+<li>+ (nullable NSDictionary&lt;NSString *, id&gt; *)modelCustomPropertyMapper;</li>
+</ul>
+<p>实现这个方法，你可以自定义<code>mode property -&gt; json key</code>之间的映射关系，你可以定义一个属性映射多个 key。举个注释中的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">json: </span><br><span class="line">    &#123;</span><br><span class="line">        &quot;n&quot;:&quot;Harry Pottery&quot;,</span><br><span class="line">        &quot;p&quot;: 256,</span><br><span class="line">        &quot;ext&quot; : &#123;</span><br><span class="line">            &quot;desc&quot; : &quot;A book written by J.K.Rowling.&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;ID&quot; : 100010</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">model:</span><br><span class="line">    @interface YYBook : NSObject &lt;YYModel&gt;</span><br><span class="line">    @property NSString *name;</span><br><span class="line">    @property NSInteger page;</span><br><span class="line">    @property NSString *desc;</span><br><span class="line">    @property NSString *bookID;</span><br><span class="line">    @end</span><br><span class="line">    </span><br><span class="line">    @implementation YYBook</span><br><span class="line">    + (NSDictionary *)modelCustomPropertyMapper &#123;</span><br><span class="line">        return @&#123;@&quot;name&quot;  : @&quot;n&quot;,</span><br><span class="line">                 @&quot;page&quot;  : @&quot;p&quot;,</span><br><span class="line">                 @&quot;desc&quot;  : @&quot;ext.desc&quot;,</span><br><span class="line">                 @&quot;bookID&quot;: @[@&quot;id&quot;, @&quot;ID&quot;, @&quot;book_id&quot;]&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    @end</span><br></pre></td></tr></table></figure>
+
+<p>在上面的那个例子中，实现该方法后，字典中 n 对应于属性 name，p 对应于属性 page。。。</p>
+<hr>
+<ul>
+<li>+ (nullable NSDictionary&lt;NSString *, id&gt; *)modelContainerPropertyGenericClass;</li>
+</ul>
+<p>实现该方法，你可以自定义容器类属性的泛型。例如 NSArray 和 NSDictionary 类的属性，你可以通过该方法你定义它们的元素(数组) value(字典)的类型</p>
+<hr>
+<ul>
+<li>+ (nullable Class)modelCustomClassForDictionary:(NSDictionary *)dictionary;</li>
+</ul>
+<p>通过该方法，你可以自定义 json&#x2F;字典 在不同的情况转化成不同 Class 的实例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@class YYCircle, YYRectangle, YYLine;</span><br><span class="line"> </span><br><span class="line">@implementation YYShape</span><br><span class="line"></span><br><span class="line">+ (Class)modelCustomClassForDictionary:(NSDictionary*)dictionary &#123;</span><br><span class="line">    if (dictionary[@&quot;radius&quot;] != nil) &#123;</span><br><span class="line">        return [YYCircle class];</span><br><span class="line">    &#125; else if (dictionary[@&quot;width&quot;] != nil) &#123;</span><br><span class="line">        return [YYRectangle class];</span><br><span class="line">    &#125; else if (dictionary[@&quot;y2&quot;] != nil) &#123;</span><br><span class="line">        return [YYLine class];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return [self class];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<hr>
+<ul>
+<li>+ (nullable NSArray&lt;NSString *&gt; *)modelPropertyBlacklist;</li>
+</ul>
+<p>黑名单，数组中的元素代表的是属性的名字。如果这个方法实现了，那么数组中的属性则不会被赋值。</p>
+<hr>
+<ul>
+<li>+ (nullable NSArray&lt;NSString *&gt; *)modelPropertyWhitelist;</li>
+</ul>
+<p>白名单，数组的元素代表的是属性的名字。如果这个方法实现，那么不在这个数组中的属性不会被赋值</p>
+<hr>
+<ul>
+<li>- (NSDictionary *)modelCustomWillTransformFromDictionary:(NSDictionary *)dic;</li>
+</ul>
+<p>在数据模型转换之前，对json字典进行修改。如果实现了这个方法，那么将使用修改后的字典进行mode转换</p>
+<hr>
+<ul>
+<li>- (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic;</li>
+</ul>
+<p>如果你想自定义数据模型转换，那么你可以实现这个方法。在这个方法里你可以生成 mode 的实例，并根据 dic 对实例的属性赋值，记得创建成功后返回 YES</p>
+<ul>
+<li>- (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic;</li>
+</ul>
+<p>fixme 不知道干嘛</p>
+<h3 id="YYModelMeta"><a href="#YYModelMeta" class="headerlink" title="_YYModelMeta"></a>_YYModelMeta</h3><p>这是一个内部类，它主要用来保存类的信息，每一个类都有一个对应的 _YYModelMeta 实例。创建好的实例会被保存在一个静态字典缓存中 cache，以<code>clss -&gt; _YYModelMeta</code>的映射关系存储。如果缓存中没有该实例，则重新创建一个。看到这你是不是会觉得很像之前提到的<code>YYClassInfo</code>？简单点说，YYClassInfo 全盘记录了 class 的信息，_YYModelMeta 是对这些信息进行了加工整理。</p>
+<p>下面是 _YYModelMeta 的构造函数，代码比较多，可以直接跳到后面看分析：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)initWithClass:(Class)cls &#123;</span><br><span class="line">    YYClassInfo *classInfo = [YYClassInfo classInfoWithClass:cls];</span><br><span class="line">    if (!classInfo) return nil;</span><br><span class="line">    self = [super init];</span><br><span class="line">    </span><br><span class="line">    // 得到自定义黑名单</span><br><span class="line">    NSSet *blacklist = nil;</span><br><span class="line">    if ([cls respondsToSelector:@selector(modelPropertyBlacklist)]) &#123;</span><br><span class="line">        NSArray *properties = [(id&lt;YYModel&gt;)cls modelPropertyBlacklist];</span><br><span class="line">        if (properties) &#123;</span><br><span class="line">            blacklist = [NSSet setWithArray:properties];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 得到自定义白名单</span><br><span class="line">    NSSet *whitelist = nil;</span><br><span class="line">    if ([cls respondsToSelector:@selector(modelPropertyWhitelist)]) &#123;</span><br><span class="line">        NSArray *properties = [(id&lt;YYModel&gt;)cls modelPropertyWhitelist];</span><br><span class="line">        if (properties) &#123;</span><br><span class="line">            whitelist = [NSSet setWithArray:properties];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 自定义容器类属性的泛型</span><br><span class="line">    NSDictionary *genericMapper = nil;</span><br><span class="line">    if ([cls respondsToSelector:@selector(modelContainerPropertyGenericClass)]) &#123;</span><br><span class="line">        genericMapper = [(id&lt;YYModel&gt;)cls modelContainerPropertyGenericClass];</span><br><span class="line">        if (genericMapper) &#123;</span><br><span class="line">            NSMutableDictionary *tmp = [NSMutableDictionary new];</span><br><span class="line">            [genericMapper enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) &#123;</span><br><span class="line">                if (![key isKindOfClass:[NSString class]]) return;</span><br><span class="line">                Class meta = object_getClass(obj);</span><br><span class="line">                if (!meta) return;</span><br><span class="line">                if (class_isMetaClass(meta)) &#123;</span><br><span class="line">                    tmp[key] = obj;</span><br><span class="line">                &#125; else if ([obj isKindOfClass:[NSString class]]) &#123;</span><br><span class="line">                    Class cls = NSClassFromString(obj);</span><br><span class="line">                    if (cls) &#123;</span><br><span class="line">                        tmp[key] = cls;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;];</span><br><span class="line">            genericMapper = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 创建所有的元属性（不包括根类NSObject和NSProxy等属性）</span><br><span class="line">    NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];</span><br><span class="line">    YYClassInfo *curClassInfo = classInfo;</span><br><span class="line">    while (curClassInfo &amp;&amp; curClassInfo.superCls != nil) &#123; // recursive parse super class, but ignore root class (NSObject/NSProxy)</span><br><span class="line">        for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) &#123;</span><br><span class="line">            if (!propertyInfo.name) continue;</span><br><span class="line">            if (blacklist &amp;&amp; [blacklist containsObject:propertyInfo.name]) continue;</span><br><span class="line">            if (whitelist &amp;&amp; ![whitelist containsObject:propertyInfo.name]) continue;</span><br><span class="line">            _YYModelPropertyMeta *meta = [_YYModelPropertyMeta metaWithClassInfo:classInfo</span><br><span class="line">                                                                    propertyInfo:propertyInfo</span><br><span class="line">                                                                         generic:genericMapper[propertyInfo.name]];</span><br><span class="line">            if (!meta || !meta-&gt;_name) continue;</span><br><span class="line">            if (!meta-&gt;_getter || !meta-&gt;_setter) continue;</span><br><span class="line">            if (allPropertyMetas[meta-&gt;_name]) continue;</span><br><span class="line">            allPropertyMetas[meta-&gt;_name] = meta;</span><br><span class="line">        &#125;</span><br><span class="line">        curClassInfo = curClassInfo.superClassInfo;</span><br><span class="line">    &#125;</span><br><span class="line">    if (allPropertyMetas.count) _allPropertyMetas = allPropertyMetas.allValues.copy;</span><br><span class="line">    </span><br><span class="line">    NSMutableDictionary *mapper = [NSMutableDictionary new];</span><br><span class="line">    NSMutableArray *keyPathPropertyMetas = [NSMutableArray new];</span><br><span class="line">    NSMutableArray *multiKeysPropertyMetas = [NSMutableArray new];</span><br><span class="line">    </span><br><span class="line">    // 得到自定义数据字典key到mode属性之间的映射关系</span><br><span class="line">    if ([cls respondsToSelector:@selector(modelCustomPropertyMapper)]) &#123;</span><br><span class="line">        NSDictionary *customMapper = [(id &lt;YYModel&gt;)cls modelCustomPropertyMapper];</span><br><span class="line">        [customMapper enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *mappedToKey, BOOL *stop) &#123;</span><br><span class="line">            _YYModelPropertyMeta *propertyMeta = allPropertyMetas[propertyName];</span><br><span class="line">            if (!propertyMeta) return;</span><br><span class="line">            [allPropertyMetas removeObjectForKey:propertyName];</span><br><span class="line">            </span><br><span class="line">            if ([mappedToKey isKindOfClass:[NSString class]]) &#123;</span><br><span class="line">                if (mappedToKey.length == 0) return;</span><br><span class="line">                </span><br><span class="line">                propertyMeta-&gt;_mappedToKey = mappedToKey;</span><br><span class="line">                NSArray *keyPath = [mappedToKey componentsSeparatedByString:@&quot;.&quot;];</span><br><span class="line">                for (NSString *onePath in keyPath) &#123;</span><br><span class="line">                    if (onePath.length == 0) &#123;</span><br><span class="line">                        NSMutableArray *tmp = keyPath.mutableCopy;</span><br><span class="line">                        [tmp removeObject:@&quot;&quot;];</span><br><span class="line">                        keyPath = tmp;</span><br><span class="line">                        break;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                if (keyPath.count &gt; 1) &#123;</span><br><span class="line">                    propertyMeta-&gt;_mappedToKeyPath = keyPath;</span><br><span class="line">                    [keyPathPropertyMetas addObject:propertyMeta];</span><br><span class="line">                &#125;</span><br><span class="line">                propertyMeta-&gt;_next = mapper[mappedToKey] ?: nil;</span><br><span class="line">                mapper[mappedToKey] = propertyMeta;</span><br><span class="line">                </span><br><span class="line">            &#125; else if ([mappedToKey isKindOfClass:[NSArray class]]) &#123;</span><br><span class="line">                </span><br><span class="line">                NSMutableArray *mappedToKeyArray = [NSMutableArray new];</span><br><span class="line">                for (NSString *oneKey in ((NSArray *)mappedToKey)) &#123;</span><br><span class="line">                    if (![oneKey isKindOfClass:[NSString class]]) continue;</span><br><span class="line">                    if (oneKey.length == 0) continue;</span><br><span class="line">                    </span><br><span class="line">                    NSArray *keyPath = [oneKey componentsSeparatedByString:@&quot;.&quot;];</span><br><span class="line">                    if (keyPath.count &gt; 1) &#123;</span><br><span class="line">                        [mappedToKeyArray addObject:keyPath];</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        [mappedToKeyArray addObject:oneKey];</span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                    if (!propertyMeta-&gt;_mappedToKey) &#123;</span><br><span class="line">                        propertyMeta-&gt;_mappedToKey = oneKey;</span><br><span class="line">                        propertyMeta-&gt;_mappedToKeyPath = keyPath.count &gt; 1 ? keyPath : nil;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                if (!propertyMeta-&gt;_mappedToKey) return;</span><br><span class="line">                </span><br><span class="line">                propertyMeta-&gt;_mappedToKeyArray = mappedToKeyArray;</span><br><span class="line">                [multiKeysPropertyMetas addObject:propertyMeta];</span><br><span class="line">                </span><br><span class="line">                propertyMeta-&gt;_next = mapper[mappedToKey] ?: nil;</span><br><span class="line">                mapper[mappedToKey] = propertyMeta;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 对所有的元属性数据进行整理</span><br><span class="line">    [allPropertyMetas enumerateKeysAndObjectsUsingBlock:^(NSString *name, _YYModelPropertyMeta *propertyMeta, BOOL *stop) &#123;</span><br><span class="line">        propertyMeta-&gt;_mappedToKey = name;</span><br><span class="line">        propertyMeta-&gt;_next = mapper[name] ?: nil;</span><br><span class="line">        mapper[name] = propertyMeta;</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    // 将整理好的数据赋值给属性</span><br><span class="line">    if (mapper.count) _mapper = mapper;</span><br><span class="line">    if (keyPathPropertyMetas) _keyPathPropertyMetas = keyPathPropertyMetas;</span><br><span class="line">    if (multiKeysPropertyMetas) _multiKeysPropertyMetas = multiKeysPropertyMetas;</span><br><span class="line">    </span><br><span class="line">    _classInfo = classInfo;</span><br><span class="line">    _keyMappedCount = _allPropertyMetas.count;</span><br><span class="line">    _nsType = YYClassGetNSType(cls);</span><br><span class="line">    _hasCustomWillTransformFromDictionary = ([cls instancesRespondToSelector:@selector(modelCustomWillTransformFromDictionary:)]);</span><br><span class="line">    _hasCustomTransformFromDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformFromDictionary:)]);</span><br><span class="line">    _hasCustomTransformToDictionary = ([cls instancesRespondToSelector:@selector(modelCustomTransformToDictionary:)]);</span><br><span class="line">    _hasCustomClassFromDictionary = ([cls respondsToSelector:@selector(modelCustomClassForDictionary:)]);</span><br><span class="line">    </span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>创建一个 YYClassInfo 的实例 classInfo</li>
+<li>如果实现了协议<YYModel>的方法<code>modelPropertyBlacklist</code>，则得到黑名单列表 blacklist</li>
+<li>如果实现了协议<YYModel>的方法<code>modelPropertyWhitelist</code>，则得到白名单列表 whitelist</li>
+<li>如果实现了协议<YYModel>的方法<code>modelContainerPropertyGenericClass</code>，则得到容器类的泛型 genericMapper，映射关系为<code>property -&gt; class</code></li>
+<li>创建该类以及父类(不包括根类)所有的元属性 _YYModelPropertyMeta<ul>
+<li>遍历第一步中得到的 classInfo 的 propertyInfos 属性</li>
+<li>如果 blacklist 不为空，并且该属性的名字在里面，则 continue</li>
+<li>如果 whitelist 不为空，且该属性的名字不在里面，则 continue</li>
+<li>创建 _YYModelPropertyMeta 实例 meta，将 YYClassPropertyInfo 信息赋值给 meta，并添加到字典 allPropertyMetas 中，映射关系为<code>property name -&gt;_YYModelPropertyMeta</code></li>
+</ul>
+</li>
+<li>创建字典 mapper，其映射关系为<code>mappedToKey -&gt; _YYModelPropertyMeta</code>，mappedToKey 即json字典中的key。<ul>
+<li>如果实现了协议<YYModel>的方法<code>modelCustomPropertyMapper</code>，得到字典 customMapper，映射关系<code>property name -&gt; json key</code>。为了方便我们把 key 叫做 propertyName， value 叫做 mappedToKey</li>
+<li>遍历 customMapper。根据 propertyName 在 allPropertyMetas 中找到对应的 _YYModelPropertyMeta 实例 meta，如果 meta 不为空，则将其移出 allPropertyMetas</li>
+<li>如果 mappedToKey 是字符串类型，则将其赋值给 meta 的 _mappedToKey 属性。如果 mappedToKey 的格式使用的 keyPath(类似 @”json.key”)，则将该 mappedToKey 使用 @”.” 分割，将分割后等数组赋值给 mata 的 _mappedToKeyPath 属性，并且将 meta 添加到 keyPathPropertyMetas 数组。最后以<code>mappedToKey -&gt; meta</code>的映射将其添加到字典 mapper 中，</li>
+<li>如果 mappedToKey 是数组类型，则说明一个属性可能映射了多个json字典的key。此时需要遍历 mappedToKey，它的每一个元素为 oneKey，使用@”.”分割，来判断是否使用了keyPath，分割后得到数组 keyPath。如果 keyPath 的 count 大于1，则将数组 keyPath 添加到 mappedToKeyArray 数组，如果不是则将 oneKey 添加到 mappedToKeyArray，meta 的 _mappedToKey 取值于遍历时第一个 oneKey。当遍历结束，将 mappedToKeyArray 赋值给 meta 的 mappedToKeyArray。最后以<code>mappedToKey -&gt; meta</code>的映射关系将其添加到字典 mapper，将 meta 添加到数组 multiKeysPropertyMetas 中</li>
+<li>遍历第五步中的 allPropertyMetas，为了方便我们将字典中的 key 称为 key，value 称为 meta。 将 key 赋值给对应 meta 的 _mappedToKey，并且以<code>property name -&gt; meta</code>的映射添加到 mapper</li>
+<li>当一个json字典的key对应着多个属性时，你可以使用 _YYModelPropertyMeta 的 _next来处理 fixme</li>
+</ul>
+</li>
+<li>最后是为 _YYModelMeta 其它一些属性赋值</li>
+</ol>
+<p>从这个函数中我们可以看出，_YYModelMeta 处理了好几种情况下的数据模型转换问题</p>
+<ol>
+<li>当自定义了映射关系，一个属性对应多个 key 时，使用 _multiKeysPropertyMetas 来处理</li>
+<li>当自定义了映射关系，一个 key 对应多个属性时，使用 _YYModelPropertyMeta 的 _next 来处理</li>
+<li>_mapper 中包含了 key 跟 属性之间的映射关系</li>
+<li>默认情况下，key 即为属性名，此时使用 _allPropertyMetas 来处理</li>
+<li>通过一些bool值来表明 Class 实现了 》<YYModel>的哪几个方法</li>
+</ol>
+<p>通过下图的_YYModelPropertyMeta的属性说明，能帮助更好的理解这一点</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_classInfo</td>
+<td>对应YYClassInfo实例</td>
+</tr>
+<tr>
+<td>_mapper</td>
+<td>字典，映射关系：json字典key -&gt; 属性。如果一个key对应多个属性时，_mapper数量会小于属性数量</td>
+</tr>
+<tr>
+<td>_allPropertyMetas</td>
+<td>所有的_YYModelPropertyMeta实例数组</td>
+</tr>
+<tr>
+<td>_keyPathPropertyMetas</td>
+<td>使用了keyPath映射的_YYModelPropertyMeta实例数组</td>
+</tr>
+<tr>
+<td>_multiKeysPropertyMetas</td>
+<td>被多个key映射的_YYModelPropertyMeta实例数组</td>
+</tr>
+<tr>
+<td>_keyMappedCount</td>
+<td>等同于_mapper的count</td>
+</tr>
+<tr>
+<td>_nsType</td>
+<td>是 Founddation 的什么类，可能不是</td>
+</tr>
+<tr>
+<td>_hasCustomWillTransformFromDictionary</td>
+<td>是否实现了协议方法modelCustomWillTransformFromDictionary</td>
+</tr>
+<tr>
+<td>_hasCustomTransformFromDictionary</td>
+<td>是否实现了协议方法modelCustomTransformFromDictionary</td>
+</tr>
+<tr>
+<td>_hasCustomTransformToDictionary</td>
+<td>是否实现了协议方法modelCustomTransformToDictionary</td>
+</tr>
+<tr>
+<td>_hasCustomClassFromDictionary</td>
+<td>是否实现了协议方法modelCustomClassForDictionary</td>
+</tr>
+</tbody></table>
+<h3 id="数据模型转换"><a href="#数据模型转换" class="headerlink" title="数据模型转换"></a>数据模型转换</h3><p>通过 _YYModelMeta 生成实例的 modelMeta ，我们可以知道json字典跟属性之间的对应关系。所以，接下来要做的就是数据模型之间转换了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)yy_modelSetWithDictionary:(NSDictionary *)dic &#123;</span><br><span class="line">    if (!dic || dic == (id)kCFNull) return NO;</span><br><span class="line">    if (![dic isKindOfClass:[NSDictionary class]]) return NO;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    _YYModelMeta *modelMeta = [_YYModelMeta metaWithClass:object_getClass(self)];</span><br><span class="line">    if (modelMeta-&gt;_keyMappedCount == 0) return NO;</span><br><span class="line">    </span><br><span class="line">    if (modelMeta-&gt;_hasCustomWillTransformFromDictionary) &#123;</span><br><span class="line">        dic = [((id&lt;YYModel&gt;)self) modelCustomWillTransformFromDictionary:dic];</span><br><span class="line">        if (![dic isKindOfClass:[NSDictionary class]]) return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ModelSetContext context = &#123;0&#125;;</span><br><span class="line">    context.modelMeta = (__bridge void *)(modelMeta);</span><br><span class="line">    context.model = (__bridge void *)(self);</span><br><span class="line">    context.dictionary = (__bridge void *)(dic);</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    if (modelMeta-&gt;_keyMappedCount &gt;= CFDictionaryGetCount((CFDictionaryRef)dic)) &#123;</span><br><span class="line">        CFDictionaryApplyFunction((CFDictionaryRef)dic, ModelSetWithDictionaryFunction, &amp;context);</span><br><span class="line">        if (modelMeta-&gt;_keyPathPropertyMetas) &#123;</span><br><span class="line">            CFArrayApplyFunction((CFArrayRef)modelMeta-&gt;_keyPathPropertyMetas,</span><br><span class="line">                                 CFRangeMake(0, CFArrayGetCount((CFArrayRef)modelMeta-&gt;_keyPathPropertyMetas)),</span><br><span class="line">                                 ModelSetWithPropertyMetaArrayFunction,</span><br><span class="line">                                 &amp;context);</span><br><span class="line">        &#125;</span><br><span class="line">        if (modelMeta-&gt;_multiKeysPropertyMetas) &#123;</span><br><span class="line">            CFArrayApplyFunction((CFArrayRef)modelMeta-&gt;_multiKeysPropertyMetas,</span><br><span class="line">                                 CFRangeMake(0, CFArrayGetCount((CFArrayRef)modelMeta-&gt;_multiKeysPropertyMetas)),</span><br><span class="line">                                 ModelSetWithPropertyMetaArrayFunction,</span><br><span class="line">                                 &amp;context);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        CFArrayApplyFunction((CFArrayRef)modelMeta-&gt;_allPropertyMetas,</span><br><span class="line">                             CFRangeMake(0, modelMeta-&gt;_keyMappedCount),</span><br><span class="line">                             ModelSetWithPropertyMetaArrayFunction,</span><br><span class="line">                             &amp;context);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (modelMeta-&gt;_hasCustomTransformFromDictionary) &#123;</span><br><span class="line">        return [((id&lt;YYModel&gt;)self) modelCustomTransformFromDictionary:dic];</span><br><span class="line">    &#125;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先根据 modelMeta 的 _hasCustomClassFromDictionary 来判断是否自定义了mode的类型，如果是，则获得自定的 mode 类型cls，并根据cls得到对应的 _YYModelMeta 实例 modelMeta。根据 modelMeta 的 _hasCustomWillTransformFromDictionary 来判断是否在转换前json字典进行修改，如果修改了则使用修改后的字典来转换mode。随后生成一个结构体 context，用来存储转换时要用到的信息。</p>
+<p>比较 modelMeta 的 _keyMappedCount 与 json字典的 count 之间的大小</p>
+<ul>
+<li>_keyMappedCount 大于等于字典的 count，则首先遍历字典，对里面的键值对调用<code>ModelSetWithDictionaryFunction</code>方法。如果 modelMeta 的 _keyPathPropertyMetas 和 _multiKeysPropertyMetas 不为空，则对里面的每个元素调用<code>ModelSetWithPropertyMetaArrayFunction</code>方法</li>
+<li>_keyMappedCount 小于字典的 count，则对 _allPropertyMetas 里面的每个元素调用<code>ModelSetWithPropertyMetaArrayFunction</code>方法</li>
+</ul>
+<p>(应该是哪个少遍历哪个，减少开销。。。)</p>
+<hr>
+<p>首先让我们看一下上面提到的第一个方法<code>ModelSetWithDictionaryFunction</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static void ModelSetWithDictionaryFunction(const void *_key, const void *_value, void *_context) &#123;</span><br><span class="line">    ModelSetContext *context = _context;</span><br><span class="line">    __unsafe_unretained _YYModelMeta *meta = (__bridge _YYModelMeta *)(context-&gt;modelMeta);</span><br><span class="line">    __unsafe_unretained _YYModelPropertyMeta *propertyMeta = [meta-&gt;_mapper objectForKey:(__bridge id)(_key)];</span><br><span class="line">    __unsafe_unretained id model = (__bridge id)(context-&gt;model);</span><br><span class="line">    while (propertyMeta) &#123;</span><br><span class="line">        if (propertyMeta-&gt;_setter) &#123;</span><br><span class="line">            ModelSetValueForProperty(model, (__bridge __unsafe_unretained id)_value, propertyMeta);</span><br><span class="line">        &#125;</span><br><span class="line">        propertyMeta = propertyMeta-&gt;_next;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法比较简单，根据 key 在 meta 的 _mapper 中找到相应的 _YYModelPropertyMeta 实例，随后调用<code>ModelSetValueForProperty</code>方法为该属性赋值，这个方法稍后再提。因为存在一个 key 对应多个 属性的情况，所以对该属性赋值后，会沿着 _next 继续为其它对应的属性赋值。</p>
+<hr>
+<p>然后再看一下第二个方法<code>ModelSetWithPropertyMetaArrayFunction</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">static void ModelSetWithPropertyMetaArrayFunction(const void *_propertyMeta, void *_context) &#123;</span><br><span class="line">    ModelSetContext *context = _context;</span><br><span class="line">    __unsafe_unretained NSDictionary *dictionary = (__bridge NSDictionary *)(context-&gt;dictionary);</span><br><span class="line">    __unsafe_unretained _YYModelPropertyMeta *propertyMeta = (__bridge _YYModelPropertyMeta *)(_propertyMeta);</span><br><span class="line">    if (!propertyMeta-&gt;_setter) return;</span><br><span class="line">    id value = nil;</span><br><span class="line">    </span><br><span class="line">    if (propertyMeta-&gt;_mappedToKeyArray) &#123;</span><br><span class="line">        value = YYValueForMultiKeys(dictionary, propertyMeta-&gt;_mappedToKeyArray);</span><br><span class="line">    &#125; else if (propertyMeta-&gt;_mappedToKeyPath) &#123;</span><br><span class="line">        value = YYValueForKeyPath(dictionary, propertyMeta-&gt;_mappedToKeyPath);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        value = [dictionary objectForKey:propertyMeta-&gt;_mappedToKey];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (value) &#123;</span><br><span class="line">        __unsafe_unretained id model = (__bridge id)(context-&gt;model);</span><br><span class="line">        ModelSetValueForProperty(model, value, propertyMeta);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法里主要做了这么几件事情：</p>
+<ul>
+<li>找到json字典中的数据</li>
+<li>调用<code>ModelSetValueForProperty</code>方法将数据赋值给属性，是的，又是这个方法</li>
+</ul>
+<h4 id="如何取值"><a href="#如何取值" class="headerlink" title="如何取值"></a>如何取值</h4><p>当调用 ModelSetWithPropertyMetaArrayFunction 方法时，传入了上下文 context(里面包含了我们要用到的json字典<code>context-&gt;dictionary</code>)和元属性<code>_YYModelPropertyMeta *propertyMeta</code>。<br>接下来就是分不同的情况来取值了：</p>
+<ol>
+<li>如果有多个key对应同一个属性时，那么会取第一个key且相应json字典中value不为空时的value。例如，有一个json @{@”name” : @”11”, @”title” : @”222”}, 如果有 @”age”, @”name”, @”title” 这几个 key 对应同一个属性 name，那么只会取json中 @”name” 对应的值</li>
+<li>如果使用了 keyPath 来定义属性的映射，那么在json字典中会逐级获取数据(不知道怎么表达了。。。)，例如有一个json @{@”info” : @{@”name” : @”111”}}, 并且使用@”info.name”来映射属性，那么首先会取得 @”info”对应的字典 dic，然后再在dic中取得@”name”的值</li>
+<li>如果没有上述两种情况，则直接根据key在json字典中取值</li>
+</ol>
+<p>好了，是不是看了感觉还挺简单的，复杂的其实在赋值这一步！</p>
+<h4 id="如何赋值"><a href="#如何赋值" class="headerlink" title="如何赋值"></a>如何赋值</h4><p>赋值的过程比较复杂，且代码量比较多, 这里就不贴出来了。在这里我简单的分析一下过程：</p>
+<hr>
+<p>首先属性是基本数据类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (meta-&gt;_isCNumber) &#123;</span><br><span class="line">        NSNumber *num = YYNSNumberCreateFromID(value);</span><br><span class="line">        ModelSetNumberToProperty(model, num, meta);</span><br><span class="line">        if (num) [num class]; // hold the number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个比较简单。首先将从json字典得到的value进行处理，得到一个 NSNumber 类型的数据 num。然后将 num 转换成相应类型的数据，通过<code>objc_msgSend</code>消息发送赋值给该属性。由于在赋值的函数中参数的类型是<code>__unsafe_unretained</code>(类似weak)，所以需要在赋值成功前持有该数据，否则程序会因为 num 成为野指针而崩溃，所以在<code>ModelSetNumberToProperty</code>后面还有这样一行代码<code>if (num) [num class];</code>，看似没用，其实还是有点用的。如果你想对<code>__unsafe_unretained</code>了解深一点可以看孙源的<a target="_blank" rel="noopener" href="http://blog.sunnyxx.com/2015/01/17/self-in-arc/">这篇博客</a></p>
+<hr>
+<p>然后时属性属于 Foundation 类型时，会先将 value 转换成属性的类型<code>meta-&gt;_nsType</code>，然后通过<code>objc_msgSend</code>赋值给属性。<br>当属性属于数组（NSArray, NSMutableArray）和字典（NSDictionary, NSMutableDictionary）时复杂一点：</p>
+<ul>
+<li>数组<ul>
+<li>如果没有指定泛型，那么直接把value复制给属性</li>
+<li>会遍历数组value，将元素转换成相应的泛型，然后添加到一个新数组value中，最后将该value赋值给属性</li>
+</ul>
+</li>
+<li>字典 <ul>
+<li>如果没有指定泛型，那么直接把value复制给属性</li>
+<li>会遍历字典values，将value转化成相应的泛型，添加到一个新字典vlues中。最后将该values赋值给属性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>属性属于其它的类型，例如自定义的 objc 类，block，c的结构体，联合，数组等，转换过程跟之前也是差不多的。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>写了好几天，终于完成了。希望大家看完后对这个库的使用能够有所帮助。在这里可算是帮我解决了个疑问：<br>在自定义mode中就算为容器类指定了泛型，但转换的时候还是会失败, 原因是我们不能在类型编码中得到泛型的信息…</p>
+<p>引用：<a target="_blank" rel="noopener" href="https://github.com/ibireme/YYModel">YYModel</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>YYModel实现原理</p><p><a href="http://example.com/2019/07/30/YYModel实现原理/">http://example.com/2019/07/30/YYModel实现原理/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>千行</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2019-07-30</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-10-21</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/YYModel/">YYModel</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2019/08/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-JYSqlModel/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">如何使用 JYSqlModel</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2019/07/19/iOS%E5%BA%94%E7%94%A8-main-%E6%89%A7%E8%A1%8C%E5%89%8D%E5%8F%91%E7%94%9F%E7%9A%84%E4%BA%8B%E6%83%85/"><span class="level-item">iOS应用 main 执行前发生的事情</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://example.com/2019/07/30/YYModel%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/';
+            this.page.identifier = '2019/07/30/YYModel实现原理/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'qianxingdeblog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="千行"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">千行</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>杭州, 浙江</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">33</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">21</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/bug/"><span class="level-start"><span class="level-item">bug</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/cocoapods/"><span class="level-start"><span class="level-item">cocoapods</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/iOS%E6%9D%82/"><span class="level-start"><span class="level-item">iOS杂</span></span><span class="level-end"><span class="level-item tag">28</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%90%AD%E5%BB%BA/"><span class="level-start"><span class="level-item">搭建</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/EventKit/"><span class="tag">EventKit</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GCD/"><span class="tag">GCD</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NSError/"><span class="tag">NSError</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Runloop/"><span class="tag">Runloop</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tagged-Pointer/"><span class="tag">Tagged Pointer</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YTKNetwork/"><span class="tag">YTKNetwork</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/YYModel/"><span class="tag">YYModel</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/block/"><span class="tag">block</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/dyld/"><span class="tag">dyld</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/mach-o/"><span class="tag">mach-o</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/runtime/"><span class="tag">runtime</span><span class="tag">12</span></a></div><div class="control"><a class="tags has-addons" href="/tags/weak/"><span class="tag">weak</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/"><span class="tag">关联对象</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E5%B8%83/"><span class="tag">内存分布</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><span class="tag">多线程</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%AE%A1%E6%A0%B8/"><span class="tag">审核</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%B7%A5%E5%85%B7/"><span class="tag">工具</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/"><span class="tag">引用计数</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%9D%82/"><span class="tag">杂</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%BA%90%E7%A0%81/"><span class="tag">源码</span><span class="tag">4</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E9%94%81/"><span class="tag">锁</span><span class="tag">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="千行的博客" height="28"></a><p class="is-size-7"><span>&copy; 2022 千行</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
